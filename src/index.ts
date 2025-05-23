@@ -1,32 +1,42 @@
+import dotenv from "dotenv";
+dotenv.config(); // .env 파일의 환경 변수를 process.env로 로드합니다.
+
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-// import { z } from "zod"; // MCP SDK often uses zod for schema validation - Removed as not currently used
-import fetch from "node-fetch"; // For making HTTP requests to Redmine API
+// import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"; // No longer used
+import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js"; // Corrected import
+import { randomUUID } from "node:crypto"; // For sessionIdGenerator
+import { z } from "zod";
+import fetch from "node-fetch";
+import {
+  RedmineUser,
+  RedmineRole,
+  RedmineMembership,
+  RedmineProject,
+  RedmineTracker,
+  RedmineStatus,
+  RedminePriority,
+  RedmineCustomField,
+  RedmineJournalDetail,
+  RedmineJournal,
+  RedmineAttachment,
+  RedmineRelation,
+  RedmineIssue,
+  RedmineActivity,
+  RedmineTimeEntry,
+  RedmineGroup,
+} from "./types.js"; // Importing all Redmine types
 
-// TODO: Define interfaces for Redmine API responses (e.g., Project)
-interface RedmineProject {
-  id: number;
-  name: string;
-  identifier: string;
-  description: string;
-  status: number;
-  is_public: boolean;
-  created_on: string;
-  updated_on: string;
-  // Add other relevant fields based on API response and needs
-}
+// --- Interface Definitions have been moved to src/types.ts ---
 
-// TODO: Implement Redmine API interaction and MCP tools/resources
+// --- Main Application Logic ---
 
 async function main() {
   const server = new McpServer({
     name: "mcp-for-redmine",
     version: "0.1.0",
-    description:
-      "MCP Server for interacting with a Redmine instance. It allows managing projects, issues, users, and more via the Redmine REST API.",
+    description: "MCP Server for interacting with a Redmine instance.",
   });
 
-  // TODO: Add Redmine API Key configuration from environment variable
   const redmineApiKey = process.env.REDMINE_API_KEY;
   const redmineBaseUrl = process.env.REDMINE_BASE_URL;
 
@@ -41,66 +51,62 @@ async function main() {
 
   console.log(`Initializing MCP server for Redmine at: ${redmineBaseUrl}`);
 
-  // Tool to list all projects
+  // --- All MCP Tool definitions have been removed as per request ---
+  // You can start adding new tools here, one by one.
+  // Example of adding a simple tool:
+  /*
   server.tool(
-    "listProjects",
+    "exampleTool",
     {
-      // No input parameters for listing all projects initially
-      // We can add pagination params later: limit, offset
+      inputMessage: z.string(),
     },
-    async () => {
-      try {
-        const response = await fetch(`${redmineBaseUrl}/projects.json?limit=100`, {
-          // Default limit to 100 for now
-          method: "GET",
-          headers: {
-            "X-Redmine-API-Key": redmineApiKey,
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          const errorData = await response.text();
-          console.error(
-            `Error fetching projects: ${response.status} ${response.statusText}`,
-            errorData
-          );
-          return {
-            content: [
-              {
-                type: "text",
-                text: `Error fetching projects: ${response.status} ${response.statusText}. Details: ${errorData}`,
-              },
-            ],
-            isError: true,
-          };
-        }
-
-        const data = (await response.json()) as { projects: RedmineProject[] }; // Type assertion
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(data.projects, null, 2),
-            },
-          ],
-        };
-      } catch (error: any) {
-        console.error("Exception in listProjects tool:", error);
-        return {
-          content: [{ type: "text", text: `Exception in listProjects tool: ${error.message}` }],
-          isError: true,
-        };
-      }
+    async ({ inputMessage }) => {
+      // Tool logic here
+      const outputMessage = `Received: ${inputMessage}`;
+      console.log(`Example tool executed with: ${inputMessage}`);
+      return {
+        content: [{ type: "text", text: outputMessage }],
+      };
     }
   );
+  */
 
-  // TODO: Implement other tools and resources based on requirements.md
+  // Server startup logic - Changed to Streamable HTTP transport
+  const port = process.env.MCP_PORT ? parseInt(process.env.MCP_PORT, 10) : 3000;
+  console.log(`MCP server for Redmine starting on port: ${port}...`);
 
-  console.log("MCP server for Redmine starting...");
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
-  console.log("MCP server for Redmine connected and running. Ready to receive commands.");
+  const transport = new StreamableHTTPServerTransport({
+    sessionIdGenerator: () => randomUUID(),
+    onsessioninitialized: (sessionId) => {
+      console.log(`MCP Session initialized: ${sessionId}`);
+      // Here you might store the transport instance if managing multiple sessions, as shown in SDK guide with Express.
+      // For a single, global transport instance, this might not be strictly necessary unless you need to reference it by ID.
+    },
+    // NOTE: This transport is designed to be integrated with a web server framework like Express.
+    // Running it standalone like this might not expose an HTTP endpoint directly without further adapters
+    // or the SDK handling it internally, which is not explicitly shown for non-Express use in the guide.
+    // The port option is typically for the web server (e.g., app.listen(port) in Express).
+    // We are providing minimal required options for now.
+  });
+
+  // Attempt to connect. This might throw an error if the transport expects
+  // to be part of a larger web server setup that isn't present.
+  try {
+    await server.connect(transport);
+    console.log(`MCP server connected with StreamableHTTPServerTransport.`);
+    console.log(`However, to make it externally accessible via HTTP on port ${port},`);
+    console.log(
+      "you will likely need to integrate this transport with a web server like Express, as shown in the SDK documentation."
+    );
+    console.log(
+      "The transport itself might not start an HTTP listener on its own in this basic configuration."
+    );
+  } catch (e: any) {
+    console.error("Failed to connect server with StreamableHTTPServerTransport:", e.message);
+    console.error(
+      "This transport usually requires integration with a web framework (e.g., Express). Please check the SDK documentation."
+    );
+  }
 }
 
 main().catch((error) => {
