@@ -1,3 +1,8 @@
+export interface RedmineReference {
+  id: number;
+  name: string;
+}
+
 export interface RedmineUser {
   id: number;
   login: string;
@@ -13,7 +18,7 @@ export interface RedmineUser {
   api_key?: string;
   status?: number;
   memberships?: RedmineMembership[];
-  groups?: Array<{ id: number; name: string }>;
+  groups?: RedmineReference[];
   name?: string;
 }
 
@@ -27,9 +32,9 @@ export interface RedmineRole {
 
 export interface RedmineMembership {
   id: number;
-  project: { id: number; name: string };
+  project: RedmineReference;
   user?: RedmineUser;
-  group?: { id: number; name: string };
+  group?: RedmineReference;
   roles: RedmineRole[];
 }
 
@@ -61,6 +66,7 @@ export interface RedmineStatus {
 export interface RedminePriority {
   id: number;
   name: string;
+  is_default?: boolean;
 }
 
 export interface RedmineCustomField {
@@ -77,8 +83,8 @@ export interface RedmineCustomField {
   multiple?: boolean;
   default_value?: any;
   visible?: boolean;
-  trackers?: Array<{ id: number; name: string }>;
-  roles?: Array<{ id: number; name: string }>;
+  trackers?: RedmineReference[];
+  roles?: RedmineReference[];
   possible_values?: Array<{ value: string; label: string }>;
 }
 
@@ -119,12 +125,13 @@ export interface RedmineRelation {
 
 export interface RedmineIssue {
   id: number;
-  project: { id: number; name: string };
-  tracker: RedmineTracker;
-  status: RedmineStatus;
-  priority: RedminePriority;
-  author: RedmineUser;
-  assigned_to?: RedmineUser;
+  project: RedmineReference;
+  tracker: RedmineReference;
+  status: RedmineReference;
+  priority: RedmineReference;
+  author: RedmineReference;
+  assigned_to?: RedmineReference;
+  category?: RedmineReference;
   subject: string;
   description: string;
   start_date?: string;
@@ -149,14 +156,15 @@ export interface RedmineIssue {
 export interface RedmineActivity {
   id: number;
   name: string;
+  is_default?: boolean;
 }
 
 export interface RedmineTimeEntry {
   id: number;
-  project: { id: number; name: string };
+  project: RedmineReference;
   issue?: { id: number };
-  user: RedmineUser;
-  activity: RedmineActivity;
+  user: RedmineReference;
+  activity: RedmineReference;
   hours: number;
   comments?: string;
   spent_on: string;
@@ -169,4 +177,53 @@ export interface RedmineGroup {
   name: string;
   users?: RedmineUser[];
   memberships?: RedmineMembership[];
+}
+
+export interface RedmineIssueCategory {
+  id: number;
+  project: RedmineReference;
+  name: string;
+  assigned_to?: RedmineReference;
+}
+
+export interface RedmineVersion {
+  id: number;
+  project: RedmineReference;
+  name: string;
+  description: string;
+  status: "open" | "locked" | "closed";
+  due_date?: string;
+  sharing: "none" | "descendants" | "hierarchy" | "tree" | "system";
+  wiki_page_title?: string;
+  created_on: string;
+  updated_on: string;
+}
+
+export interface RedmineNews {
+  id: number;
+  project: RedmineReference;
+  author: RedmineUser;
+  title: string;
+  summary: string;
+  description: string;
+  created_on: string;
+}
+
+export interface RedmineWikiPage {
+  title: string;
+  text: string;
+  version: number;
+  author: RedmineUser;
+  comments?: string;
+  created_on: string;
+  updated_on: string;
+  attachments?: RedmineAttachment[];
+}
+
+export interface RedmineQuery {
+  id: number;
+  name: string;
+  is_public: boolean;
+  project_id?: number | null;
+  user_id?: number;
 }
