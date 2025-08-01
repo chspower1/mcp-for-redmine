@@ -1,27 +1,5 @@
 import { axiosInstance } from "../utils/axios.util";
-import { RedmineUser } from "../types/types";
-
-// types for request bodies
-interface UserCreatePayload {
-  user: {
-    login: string;
-    firstname: string;
-    lastname: string;
-    mail: string;
-    password?: string;
-    generate_password?: boolean;
-  };
-}
-
-interface UserUpdatePayload {
-  user: Partial<{
-    login: string;
-    firstname: string;
-    lastname: string;
-    mail: string;
-    password?: string;
-  }>;
-}
+import { CreateUserPayload, RedmineUser, UpdateUserPayload } from "../schema/user.schema";
 
 // response types
 interface UserResponse {
@@ -65,7 +43,7 @@ export const getUser = async (id: string): Promise<UserResponse> => {
  * Creates a new user.
  * @param userData The data for the new user.
  */
-export const createUser = async (userData: UserCreatePayload): Promise<UserResponse> => {
+export const createUser = async (userData: CreateUserPayload): Promise<UserResponse> => {
   const response = await axiosInstance.post("/users.json", userData);
   return response.data;
 };
@@ -75,7 +53,7 @@ export const createUser = async (userData: UserCreatePayload): Promise<UserRespo
  * @param id The ID of the user to update.
  * @param userData The data to update for the user.
  */
-export const updateUser = async (id: string, userData: UserUpdatePayload): Promise<void> => {
+export const updateUser = async (id: string, userData: UpdateUserPayload): Promise<void> => {
   await axiosInstance.put(`/users/${id}.json`, userData);
 };
 
