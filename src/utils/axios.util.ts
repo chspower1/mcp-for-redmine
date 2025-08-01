@@ -1,4 +1,6 @@
 import axios from "axios";
+import dotenv from "dotenv";
+dotenv.config();
 
 const REDMINE_API_KEY = process.env.REDMINE_API_KEY;
 const REDMINE_BASE_URL = process.env.REDMINE_BASE_URL;

@@ -1,6 +1,15 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import {
+  archiveProjectTool,
+  createProjectTool,
+  deleteProjectTool,
+  getProjectTool,
+  listProjectsTool,
+  unarchiveProjectTool,
+  updateProjectTool,
+} from "./tools/projects.tools";
+import {
   createUserTool,
   deleteUserTool,
   getUserTool,
@@ -13,6 +22,7 @@ export const server = new McpServer({
   version: "0.1.0",
 });
 
+// Test Tool
 server.registerTool(
   "test1",
   {
@@ -27,8 +37,22 @@ server.registerTool(
   }
 );
 
+// User Tools
 server.registerTool(createUserTool.name, createUserTool.config, createUserTool.execute);
 server.registerTool(getUserTool.name, getUserTool.config, getUserTool.execute);
 server.registerTool(listUsersTool.name, listUsersTool.config, listUsersTool.execute);
 server.registerTool(updateUserTool.name, updateUserTool.config, updateUserTool.execute);
 server.registerTool(deleteUserTool.name, deleteUserTool.config, deleteUserTool.execute);
+
+// Project Tools
+server.registerTool(listProjectsTool.name, listProjectsTool.config, listProjectsTool.execute);
+server.registerTool(getProjectTool.name, getProjectTool.config, getProjectTool.execute);
+server.registerTool(createProjectTool.name, createProjectTool.config, createProjectTool.execute);
+server.registerTool(updateProjectTool.name, updateProjectTool.config, updateProjectTool.execute);
+server.registerTool(archiveProjectTool.name, archiveProjectTool.config, archiveProjectTool.execute);
+server.registerTool(
+  unarchiveProjectTool.name,
+  unarchiveProjectTool.config,
+  unarchiveProjectTool.execute
+);
+server.registerTool(deleteProjectTool.name, deleteProjectTool.config, deleteProjectTool.execute);

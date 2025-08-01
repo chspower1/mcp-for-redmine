@@ -1,1 +1,1 @@
-export * from "./axios.util.js";
+export * from "./axios.util";
