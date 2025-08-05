@@ -49,6 +49,7 @@ import {
   getWikiPageTool,
   listWikiPagesTool,
 } from "./tools/wiki-pages.tools";
+import { listQueriesTool } from "./tools/queries.tools";
 
 export const server = new McpServer({
   name: "mcp-for-redmine",
@@ -165,3 +166,6 @@ server.registerTool(
   createOrUpdateWikiPageTool.execute
 );
 server.registerTool(deleteWikiPageTool.name, deleteWikiPageTool.config, deleteWikiPageTool.execute);
+
+// Query Tools
+server.registerTool(listQueriesTool.name, listQueriesTool.config, listQueriesTool.execute);
