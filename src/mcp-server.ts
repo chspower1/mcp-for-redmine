@@ -51,6 +51,7 @@ import {
 } from "./tools/wiki-pages.tools";
 import { listQueriesTool } from "./tools/queries.tools";
 import { deleteAttachmentTool, getAttachmentTool } from "./tools/attachments.tools";
+import { listFilesTool } from "./tools/files.tools";
 import { listIssueStatusesTool } from "./tools/issue-statuses.tools";
 import { listTrackersTool } from "./tools/trackers.tools";
 import {
@@ -199,6 +200,9 @@ server.registerTool(
   deleteAttachmentTool.config,
   deleteAttachmentTool.execute
 );
+
+// File Tools
+server.registerTool(listFilesTool.name, listFilesTool.config, listFilesTool.execute);
 
 // Issue Status Tools
 server.registerTool(
