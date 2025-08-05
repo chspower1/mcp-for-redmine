@@ -1,60 +1,50 @@
-import { z } from "zod";
 import {
-  listProjectVersions,
-  createProjectVersion,
-  getVersion,
-  updateVersion,
+  createVersion,
   deleteVersion,
+  getVersion,
+  listVersions,
+  updateVersion,
 } from "../api/versions.api";
-import { Tool } from "../types/types";
+import {
+  CreateVersionToolSchema,
+  DeleteVersionToolSchema,
+  GetVersionToolSchema,
+  ListVersionsToolSchema,
+  UpdateVersionToolSchema,
+} from "../schema/version.schema";
+import { McpTool } from "../types/types";
 
-export const listProjectVersionsTool: Tool = {
-  name: "redmine_list-project-versions",
-  description: "Lists versions available for a given project.",
-  parameters: z.object({
-    projectId: z.union([z.string(), z.number()]).describe("The ID or identifier of the project."),
-  }),
-  execute: async ({ projectId }) => {
+export const listVersionsTool: McpTool<typeof ListVersionsToolSchema.shape> = {
+  name: "versions_list",
+  config: {
+    description: "Retrieves a list of versions for a given project.",
+    inputSchema: ListVersionsToolSchema.shape,
+  },
+  execute: async ({ project_id }) => {
     try {
-      const result = await listProjectVersions(projectId);
-      return result.versions;
+      const result = await listVersions(project_id);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.versions) }],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
-      throw new Error(`Failed to list versions for project ${projectId}: ${errorMessage}`);
+      throw new Error(`Failed to list versions: ${errorMessage}`);
     }
   },
 };
 
-export const createProjectVersionTool: Tool = {
-  name: "redmine_create-project-version",
-  description: "Creates a new version for a project.",
-  parameters: z.object({
-    projectId: z.union([z.string(), z.number()]).describe("The ID or identifier of the project."),
-    name: z.string().describe("The name of the version."),
-    status: z.enum(["open", "locked", "closed"]).optional().describe("The status of the version."),
-    due_date: z.string().optional().describe("The due date in YYYY-MM-DD format."),
-  }),
-  execute: async ({ projectId, ...versionData }) => {
-    try {
-      const result = await createProjectVersion(projectId, { version: versionData });
-      return result.version;
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
-      throw new Error(`Failed to create version for project ${projectId}: ${errorMessage}`);
-    }
+export const getVersionTool: McpTool<typeof GetVersionToolSchema.shape> = {
+  name: "versions_get",
+  config: {
+    description: "Retrieves a single version by its ID.",
+    inputSchema: GetVersionToolSchema.shape,
   },
-};
-
-export const getVersionTool: Tool = {
-  name: "redmine_get-version",
-  description: "Retrieves a single version by its ID.",
-  parameters: z.object({
-    id: z.number().describe("The ID of the version."),
-  }),
   execute: async ({ id }) => {
     try {
       const result = await getVersion(id);
-      return result.version;
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.version) }],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to retrieve version ${id}: ${errorMessage}`);
@@ -62,22 +52,47 @@ export const getVersionTool: Tool = {
   },
 };
 
-export const updateVersionTool: Tool = {
-  name: "redmine_update-version",
-  description: "Updates a version.",
-  parameters: z.object({
-    id: z.number().describe("The ID of the version to update."),
-    name: z.string().optional().describe("The new name of the version."),
-    status: z
-      .enum(["open", "locked", "closed"])
-      .optional()
-      .describe("The new status of the version."),
-    due_date: z.string().optional().describe("The new due date in YYYY-MM-DD format."),
-  }),
-  execute: async ({ id, ...versionData }) => {
+export const createVersionTool: McpTool<typeof CreateVersionToolSchema.shape> = {
+  name: "versions_create",
+  config: {
+    description: "Creates a new version for a project.",
+    inputSchema: CreateVersionToolSchema.shape,
+  },
+  execute: async ({ project_id, ...versionData }) => {
+    const payload = { version: versionData };
     try {
-      await updateVersion(id, { version: versionData });
-      return { success: true, message: `Version ${id} updated successfully.` };
+      const result = await createVersion(project_id, payload);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.version) }],
+      };
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
+      throw new Error(`Failed to create version: ${errorMessage}`);
+    }
+  },
+};
+
+export const updateVersionTool: McpTool<typeof UpdateVersionToolSchema.shape> = {
+  name: "versions_update",
+  config: {
+    description: "Updates an existing version.",
+    inputSchema: UpdateVersionToolSchema.shape,
+  },
+  execute: async ({ id, ...updateData }) => {
+    const payload = { version: updateData };
+    try {
+      await updateVersion(id, payload);
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({
+              success: true,
+              message: `Version ${id} updated successfully.`,
+            }),
+          },
+        ],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to update version ${id}: ${errorMessage}`);
@@ -85,16 +100,26 @@ export const updateVersionTool: Tool = {
   },
 };
 
-export const deleteVersionTool: Tool = {
-  name: "redmine_delete-version",
-  description: "Deletes a version.",
-  parameters: z.object({
-    id: z.number().describe("The ID of the version to delete."),
-  }),
+export const deleteVersionTool: McpTool<typeof DeleteVersionToolSchema.shape> = {
+  name: "versions_delete",
+  config: {
+    description: "Deletes a version.",
+    inputSchema: DeleteVersionToolSchema.shape,
+  },
   execute: async ({ id }) => {
     try {
       await deleteVersion(id);
-      return { success: true, message: `Version ${id} deleted successfully.` };
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({
+              success: true,
+              message: `Version ${id} deleted successfully.`,
+            }),
+          },
+        ],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to delete version ${id}: ${errorMessage}`);
