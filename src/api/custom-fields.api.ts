@@ -1,7 +1,6 @@
 import { axiosInstance } from "../utils/axios.util";
-import { RedmineCustomField } from "../types/types";
+import { RedmineCustomField } from "../schema/custom-fields.schema";
 
-// Response
 interface CustomFieldListResponse {
   custom_fields: RedmineCustomField[];
 }

@@ -70,6 +70,7 @@ import {
   removeUserFromGroupTool,
   updateGroupTool,
 } from "./tools/groups.tools";
+import { listCustomFieldsTool } from "./tools/custom-fields.tools";
 
 export const server = new McpServer({
   name: "mcp-for-redmine",
@@ -250,4 +251,11 @@ server.registerTool(
   removeUserFromGroupTool.name,
   removeUserFromGroupTool.config,
   removeUserFromGroupTool.execute
+);
+
+// Custom Field Tools
+server.registerTool(
+  listCustomFieldsTool.name,
+  listCustomFieldsTool.config,
+  listCustomFieldsTool.execute
 );
