@@ -9,7 +9,7 @@ import {
 import { McpTool } from "../types/types";
 
 export const createUserTool: McpTool<typeof CreateUserToolSchema.shape> = {
-  name: "redmine_create-user",
+  name: "users_create",
   config: {
     description: "Creates a new user in Redmine.",
     inputSchema: CreateUserToolSchema.shape,
@@ -35,7 +35,7 @@ export const createUserTool: McpTool<typeof CreateUserToolSchema.shape> = {
 };
 
 export const getUserTool: McpTool<typeof GetUserToolSchema.shape> = {
-  name: "redmine_get-user",
+  name: "users_get",
   config: {
     description: "Retrieves a single user from Redmine by their ID.",
     inputSchema: GetUserToolSchema.shape,
@@ -52,7 +52,7 @@ export const getUserTool: McpTool<typeof GetUserToolSchema.shape> = {
 };
 
 export const listUsersTool: McpTool<typeof ListUsersToolSchema.shape> = {
-  name: "redmine_list-users",
+  name: "users_list",
   config: {
     description: "Retrieves a list of users from Redmine. This is an admin-only function.",
     inputSchema: ListUsersToolSchema.shape,
@@ -71,7 +71,7 @@ export const listUsersTool: McpTool<typeof ListUsersToolSchema.shape> = {
 };
 
 export const updateUserTool: McpTool<typeof UpdateUserToolSchema.shape> = {
-  name: "redmine_update-user",
+  name: "users_update",
   config: {
     description: "Updates an existing user in Redmine.",
     inputSchema: UpdateUserToolSchema.shape,
@@ -101,7 +101,7 @@ export const updateUserTool: McpTool<typeof UpdateUserToolSchema.shape> = {
 };
 
 export const deleteUserTool: McpTool<typeof DeleteUserToolSchema.shape> = {
-  name: "redmine_delete-user",
+  name: "users_delete",
   config: {
     description: "Deletes a user from Redmine.",
     inputSchema: DeleteUserToolSchema.shape,

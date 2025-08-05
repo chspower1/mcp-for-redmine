@@ -19,7 +19,7 @@ import { McpTool } from "../types/types";
 import { z } from "zod";
 
 export const listProjectsTool: McpTool<any> = {
-  name: "redmine_list-projects",
+  name: "projects_list",
   config: {
     description: "Retrieves a list of all projects.",
     inputSchema: z.object({}).shape,
@@ -31,7 +31,7 @@ export const listProjectsTool: McpTool<any> = {
 };
 
 export const getProjectTool: McpTool<typeof GetProjectToolSchema.shape> = {
-  name: "redmine_get-project",
+  name: "projects_get",
   config: {
     description: "Retrieves a single project by its ID or identifier.",
     inputSchema: GetProjectToolSchema.shape,
@@ -43,7 +43,7 @@ export const getProjectTool: McpTool<typeof GetProjectToolSchema.shape> = {
 };
 
 export const createProjectTool: McpTool<typeof CreateProjectToolSchema.shape> = {
-  name: "redmine_create-project",
+  name: "projects_create",
   config: {
     description: "Creates a new project.",
     inputSchema: CreateProjectToolSchema.shape,
@@ -55,7 +55,7 @@ export const createProjectTool: McpTool<typeof CreateProjectToolSchema.shape> = 
 };
 
 export const updateProjectTool: McpTool<typeof UpdateProjectToolSchema.shape> = {
-  name: "redmine_update-project",
+  name: "projects_update",
   config: {
     description: "Updates an existing project.",
     inputSchema: UpdateProjectToolSchema.shape,
@@ -77,7 +77,7 @@ export const updateProjectTool: McpTool<typeof UpdateProjectToolSchema.shape> = 
 };
 
 export const archiveProjectTool: McpTool<typeof ArchiveProjectToolSchema.shape> = {
-  name: "redmine_archive-project",
+  name: "projects_archive",
   config: {
     description: "Archives a project.",
     inputSchema: ArchiveProjectToolSchema.shape,
@@ -99,7 +99,7 @@ export const archiveProjectTool: McpTool<typeof ArchiveProjectToolSchema.shape> 
 };
 
 export const unarchiveProjectTool: McpTool<typeof UnarchiveProjectToolSchema.shape> = {
-  name: "redmine_unarchive-project",
+  name: "projects_unarchive",
   config: {
     description: "Unarchives a project.",
     inputSchema: UnarchiveProjectToolSchema.shape,
@@ -121,7 +121,7 @@ export const unarchiveProjectTool: McpTool<typeof UnarchiveProjectToolSchema.sha
 };
 
 export const deleteProjectTool: McpTool<typeof DeleteProjectToolSchema.shape> = {
-  name: "redmine_delete-project",
+  name: "projects_delete",
   config: {
     description: "Deletes a project.",
     inputSchema: DeleteProjectToolSchema.shape,
