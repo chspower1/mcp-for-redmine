@@ -1,27 +1,26 @@
 import { axiosInstance } from "../utils/axios.util";
-import { RedminePriority, RedmineActivity } from "../types/types";
+import { RedmineEnumeration } from "../schema/enumerations.schema";
 
-// Responses
-interface PriorityListResponse {
-  issue_priorities: RedminePriority[];
+interface IssuePrioritiesResponse {
+  issue_priorities: RedmineEnumeration[];
 }
 
-interface ActivityListResponse {
-  time_entry_activities: RedmineActivity[];
+interface TimeEntryActivitiesResponse {
+  time_entry_activities: RedmineEnumeration[];
 }
 
 /**
- * Retrieves the list of all issue priorities.
+ * Retrieves a list of issue priorities.
  */
-export const listIssuePriorities = async (): Promise<PriorityListResponse> => {
+export const listIssuePriorities = async (): Promise<IssuePrioritiesResponse> => {
   const response = await axiosInstance.get("/enumerations/issue_priorities.json");
   return response.data;
 };
 
 /**
- * Retrieves the list of all time entry activities.
+ * Retrieves a list of time entry activities.
  */
-export const listTimeEntryActivities = async (): Promise<ActivityListResponse> => {
+export const listTimeEntryActivities = async (): Promise<TimeEntryActivitiesResponse> => {
   const response = await axiosInstance.get("/enumerations/time_entry_activities.json");
   return response.data;
 };

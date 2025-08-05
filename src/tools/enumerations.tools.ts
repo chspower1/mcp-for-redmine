@@ -1,15 +1,22 @@
-import { z } from "zod";
 import { listIssuePriorities, listTimeEntryActivities } from "../api/enumerations.api";
-import { Tool } from "../types/types";
+import {
+  ListIssuePrioritiesToolSchema,
+  ListTimeEntryActivitiesToolSchema,
+} from "../schema/enumerations.schema";
+import { McpTool } from "../types/types";
 
-export const listIssuePrioritiesTool: Tool = {
-  name: "redmine_list-issue-priorities",
-  description: "Retrieves the list of all available issue priorities.",
-  parameters: z.object({}),
+export const listIssuePrioritiesTool: McpTool<typeof ListIssuePrioritiesToolSchema.shape> = {
+  name: "enumerations_issue_priorities_list",
+  config: {
+    description: "Retrieves a list of all issue priorities.",
+    inputSchema: ListIssuePrioritiesToolSchema.shape,
+  },
   execute: async () => {
     try {
       const result = await listIssuePriorities();
-      return result.issue_priorities;
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.issue_priorities) }],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to list issue priorities: ${errorMessage}`);
@@ -17,17 +24,27 @@ export const listIssuePrioritiesTool: Tool = {
   },
 };
 
-export const listTimeEntryActivitiesTool: Tool = {
-  name: "redmine_list-time-entry-activities",
-  description: "Retrieves the list of all available time entry activities.",
-  parameters: z.object({}),
-  execute: async () => {
-    try {
-      const result = await listTimeEntryActivities();
-      return result.time_entry_activities;
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
-      throw new Error(`Failed to list time entry activities: ${errorMessage}`);
-    }
-  },
-};
+export const listTimeEntryActivitiesTool: McpTool<typeof ListTimeEntryActivitiesToolSchema.shape> =
+  {
+    name: "enumerations_time_entry_activities_list",
+    config: {
+      description: "Retrieves a list of all time entry activities.",
+      inputSchema: ListTimeEntryActivitiesToolSchema.shape,
+    },
+    execute: async () => {
+      try {
+        const result = await listTimeEntryActivities();
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(result.time_entry_activities),
+            },
+          ],
+        };
+      } catch (error: any) {
+        const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
+        throw new Error(`Failed to list time entry activities: ${errorMessage}`);
+      }
+    },
+  };

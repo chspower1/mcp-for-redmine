@@ -23,6 +23,21 @@ import {
   listIssuesTool,
   updateIssueTool,
 } from "./tools/issues.tools";
+import {
+  createTimeEntryTool,
+  deleteTimeEntryTool,
+  getTimeEntryTool,
+  listTimeEntriesTool,
+  updateTimeEntryTool,
+} from "./tools/time-entries.tools";
+import {
+  createVersionTool,
+  deleteVersionTool,
+  getVersionTool,
+  listVersionsTool,
+  updateVersionTool,
+} from "./tools/versions.tools";
+import { listIssuePrioritiesTool, listTimeEntryActivitiesTool } from "./tools/enumerations.tools";
 
 export const server = new McpServer({
   name: "mcp-for-redmine",
@@ -70,3 +85,45 @@ server.registerTool(getIssueTool.name, getIssueTool.config, getIssueTool.execute
 server.registerTool(createIssueTool.name, createIssueTool.config, createIssueTool.execute);
 server.registerTool(updateIssueTool.name, updateIssueTool.config, updateIssueTool.execute);
 server.registerTool(deleteIssueTool.name, deleteIssueTool.config, deleteIssueTool.execute);
+
+// Time Entry Tools
+server.registerTool(
+  listTimeEntriesTool.name,
+  listTimeEntriesTool.config,
+  listTimeEntriesTool.execute
+);
+server.registerTool(getTimeEntryTool.name, getTimeEntryTool.config, getTimeEntryTool.execute);
+server.registerTool(
+  createTimeEntryTool.name,
+  createTimeEntryTool.config,
+  createTimeEntryTool.execute
+);
+server.registerTool(
+  updateTimeEntryTool.name,
+  updateTimeEntryTool.config,
+  updateTimeEntryTool.execute
+);
+server.registerTool(
+  deleteTimeEntryTool.name,
+  deleteTimeEntryTool.config,
+  deleteTimeEntryTool.execute
+);
+
+// Version Tools
+server.registerTool(listVersionsTool.name, listVersionsTool.config, listVersionsTool.execute);
+server.registerTool(getVersionTool.name, getVersionTool.config, getVersionTool.execute);
+server.registerTool(createVersionTool.name, createVersionTool.config, createVersionTool.execute);
+server.registerTool(updateVersionTool.name, updateVersionTool.config, updateVersionTool.execute);
+server.registerTool(deleteVersionTool.name, deleteVersionTool.config, deleteVersionTool.execute);
+
+// Enumeration Tools
+server.registerTool(
+  listIssuePrioritiesTool.name,
+  listIssuePrioritiesTool.config,
+  listIssuePrioritiesTool.execute
+);
+server.registerTool(
+  listTimeEntryActivitiesTool.name,
+  listTimeEntryActivitiesTool.config,
+  listTimeEntryActivitiesTool.execute
+);
