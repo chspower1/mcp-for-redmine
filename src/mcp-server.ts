@@ -73,6 +73,7 @@ import {
 } from "./tools/groups.tools";
 import { listCustomFieldsTool } from "./tools/custom-fields.tools";
 import { searchTool } from "./tools/search.tools";
+import { getMyAccountTool } from "./tools/my-account.tools";
 
 export const server = new McpServer({
   name: "mcp-for-redmine",
@@ -267,3 +268,6 @@ server.registerTool(
 
 // Search Tools
 server.registerTool(searchTool.name, searchTool.config, searchTool.execute);
+
+// My Account Tools
+server.registerTool(getMyAccountTool.name, getMyAccountTool.config, getMyAccountTool.execute);
