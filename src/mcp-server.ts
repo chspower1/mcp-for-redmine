@@ -2,78 +2,28 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import {
   archiveProjectTool,
-  createProjectTool,
-  deleteProjectTool,
-  getProjectTool,
-  listProjectsTool,
-  unarchiveProjectTool,
-  updateProjectTool,
-} from "./tools/projects.tools";
-import {
-  createUserTool,
-  deleteUserTool,
-  getUserTool,
-  listUsersTool,
-  updateUserTool,
-} from "./tools/users.tools";
-import {
   createIssueTool,
-  deleteIssueTool,
-  getIssueTool,
-  listIssuesTool,
-  updateIssueTool,
-} from "./tools/issues.tools";
-import {
+  createProjectTool,
   createTimeEntryTool,
+  createUserTool,
+  deleteIssueTool,
+  deleteProjectTool,
   deleteTimeEntryTool,
+  deleteUserTool,
+  getIssueTool,
+  getProjectTool,
   getTimeEntryTool,
+  getUserTool,
+  listIssuesTool,
+  listProjectsTool,
   listTimeEntriesTool,
+  listUsersTool,
+  unarchiveProjectTool,
+  updateIssueTool,
+  updateProjectTool,
   updateTimeEntryTool,
-} from "./tools/time-entries.tools";
-import {
-  createVersionTool,
-  deleteVersionTool,
-  getVersionTool,
-  listVersionsTool,
-  updateVersionTool,
-} from "./tools/versions.tools";
-import { listIssuePrioritiesTool, listTimeEntryActivitiesTool } from "./tools/enumerations.tools";
-import {
-  createIssueRelationTool,
-  deleteIssueRelationTool,
-  listIssueRelationsTool,
-} from "./tools/issue-relations.tools";
-import {
-  createOrUpdateWikiPageTool,
-  deleteWikiPageTool,
-  getWikiPageTool,
-  listWikiPagesTool,
-} from "./tools/wiki-pages.tools";
-import { listQueriesTool } from "./tools/queries.tools";
-import { deleteAttachmentTool, getAttachmentTool } from "./tools/attachments.tools";
-import { listFilesTool } from "./tools/files.tools";
-import { listIssueStatusesTool } from "./tools/issue-statuses.tools";
-import { listTrackersTool } from "./tools/trackers.tools";
-import {
-  createIssueCategoryTool,
-  deleteIssueCategoryTool,
-  getIssueCategoryTool,
-  listIssueCategoriesTool,
-  updateIssueCategoryTool,
-} from "./tools/issue-categories.tools";
-import { getRoleTool, listRolesTool } from "./tools/roles.tools";
-import {
-  addUserToGroupTool,
-  createGroupTool,
-  deleteGroupTool,
-  getGroupTool,
-  listGroupsTool,
-  removeUserFromGroupTool,
-  updateGroupTool,
-} from "./tools/groups.tools";
-import { listCustomFieldsTool } from "./tools/custom-fields.tools";
-import { searchTool } from "./tools/search.tools";
-import { getMyAccountTool } from "./tools/my-account.tools";
+  updateUserTool,
+} from "./tools";
 
 export const server = new McpServer({
   name: "mcp-for-redmine",
@@ -145,129 +95,129 @@ server.registerTool(
   deleteTimeEntryTool.execute
 );
 
-// Version Tools
-server.registerTool(listVersionsTool.name, listVersionsTool.config, listVersionsTool.execute);
-server.registerTool(getVersionTool.name, getVersionTool.config, getVersionTool.execute);
-server.registerTool(createVersionTool.name, createVersionTool.config, createVersionTool.execute);
-server.registerTool(updateVersionTool.name, updateVersionTool.config, updateVersionTool.execute);
-server.registerTool(deleteVersionTool.name, deleteVersionTool.config, deleteVersionTool.execute);
+// // Version Tools
+// server.registerTool(listVersionsTool.name, listVersionsTool.config, listVersionsTool.execute);
+// server.registerTool(getVersionTool.name, getVersionTool.config, getVersionTool.execute);
+// server.registerTool(createVersionTool.name, createVersionTool.config, createVersionTool.execute);
+// server.registerTool(updateVersionTool.name, updateVersionTool.config, updateVersionTool.execute);
+// server.registerTool(deleteVersionTool.name, deleteVersionTool.config, deleteVersionTool.execute);
 
-// Enumeration Tools
-server.registerTool(
-  listIssuePrioritiesTool.name,
-  listIssuePrioritiesTool.config,
-  listIssuePrioritiesTool.execute
-);
-server.registerTool(
-  listTimeEntryActivitiesTool.name,
-  listTimeEntryActivitiesTool.config,
-  listTimeEntryActivitiesTool.execute
-);
+// // Enumeration Tools
+// server.registerTool(
+//   listIssuePrioritiesTool.name,
+//   listIssuePrioritiesTool.config,
+//   listIssuePrioritiesTool.execute
+// );
+// server.registerTool(
+//   listTimeEntryActivitiesTool.name,
+//   listTimeEntryActivitiesTool.config,
+//   listTimeEntryActivitiesTool.execute
+// );
 
-// Issue Relation Tools
-server.registerTool(
-  listIssueRelationsTool.name,
-  listIssueRelationsTool.config,
-  listIssueRelationsTool.execute
-);
-server.registerTool(
-  createIssueRelationTool.name,
-  createIssueRelationTool.config,
-  createIssueRelationTool.execute
-);
-server.registerTool(
-  deleteIssueRelationTool.name,
-  deleteIssueRelationTool.config,
-  deleteIssueRelationTool.execute
-);
+// // Issue Relation Tools
+// server.registerTool(
+//   listIssueRelationsTool.name,
+//   listIssueRelationsTool.config,
+//   listIssueRelationsTool.execute
+// );
+// server.registerTool(
+//   createIssueRelationTool.name,
+//   createIssueRelationTool.config,
+//   createIssueRelationTool.execute
+// );
+// server.registerTool(
+//   deleteIssueRelationTool.name,
+//   deleteIssueRelationTool.config,
+//   deleteIssueRelationTool.execute
+// );
 
-// Wiki Page Tools
-server.registerTool(listWikiPagesTool.name, listWikiPagesTool.config, listWikiPagesTool.execute);
-server.registerTool(getWikiPageTool.name, getWikiPageTool.config, getWikiPageTool.execute);
-server.registerTool(
-  createOrUpdateWikiPageTool.name,
-  createOrUpdateWikiPageTool.config,
-  createOrUpdateWikiPageTool.execute
-);
-server.registerTool(deleteWikiPageTool.name, deleteWikiPageTool.config, deleteWikiPageTool.execute);
+// // Wiki Page Tools
+// server.registerTool(listWikiPagesTool.name, listWikiPagesTool.config, listWikiPagesTool.execute);
+// server.registerTool(getWikiPageTool.name, getWikiPageTool.config, getWikiPageTool.execute);
+// server.registerTool(
+//   createOrUpdateWikiPageTool.name,
+//   createOrUpdateWikiPageTool.config,
+//   createOrUpdateWikiPageTool.execute
+// );
+// server.registerTool(deleteWikiPageTool.name, deleteWikiPageTool.config, deleteWikiPageTool.execute);
 
-// Query Tools
-server.registerTool(listQueriesTool.name, listQueriesTool.config, listQueriesTool.execute);
+// // Query Tools
+// server.registerTool(listQueriesTool.name, listQueriesTool.config, listQueriesTool.execute);
 
-// Attachment Tools
-server.registerTool(getAttachmentTool.name, getAttachmentTool.config, getAttachmentTool.execute);
-server.registerTool(
-  deleteAttachmentTool.name,
-  deleteAttachmentTool.config,
-  deleteAttachmentTool.execute
-);
+// // Attachment Tools
+// server.registerTool(getAttachmentTool.name, getAttachmentTool.config, getAttachmentTool.execute);
+// server.registerTool(
+//   deleteAttachmentTool.name,
+//   deleteAttachmentTool.config,
+//   deleteAttachmentTool.execute
+// );
 
-// File Tools
-server.registerTool(listFilesTool.name, listFilesTool.config, listFilesTool.execute);
+// // File Tools
+// server.registerTool(listFilesTool.name, listFilesTool.config, listFilesTool.execute);
 
-// Issue Status Tools
-server.registerTool(
-  listIssueStatusesTool.name,
-  listIssueStatusesTool.config,
-  listIssueStatusesTool.execute
-);
+// // Issue Status Tools
+// server.registerTool(
+//   listIssueStatusesTool.name,
+//   listIssueStatusesTool.config,
+//   listIssueStatusesTool.execute
+// );
 
-// Tracker Tools
-server.registerTool(listTrackersTool.name, listTrackersTool.config, listTrackersTool.execute);
+// // Tracker Tools
+// server.registerTool(listTrackersTool.name, listTrackersTool.config, listTrackersTool.execute);
 
-// Issue Category Tools
-server.registerTool(
-  listIssueCategoriesTool.name,
-  listIssueCategoriesTool.config,
-  listIssueCategoriesTool.execute
-);
-server.registerTool(
-  createIssueCategoryTool.name,
-  createIssueCategoryTool.config,
-  createIssueCategoryTool.execute
-);
-server.registerTool(
-  getIssueCategoryTool.name,
-  getIssueCategoryTool.config,
-  getIssueCategoryTool.execute
-);
-server.registerTool(
-  updateIssueCategoryTool.name,
-  updateIssueCategoryTool.config,
-  updateIssueCategoryTool.execute
-);
-server.registerTool(
-  deleteIssueCategoryTool.name,
-  deleteIssueCategoryTool.config,
-  deleteIssueCategoryTool.execute
-);
+// // Issue Category Tools
+// server.registerTool(
+//   listIssueCategoriesTool.name,
+//   listIssueCategoriesTool.config,
+//   listIssueCategoriesTool.execute
+// );
+// server.registerTool(
+//   createIssueCategoryTool.name,
+//   createIssueCategoryTool.config,
+//   createIssueCategoryTool.execute
+// );
+// server.registerTool(
+//   getIssueCategoryTool.name,
+//   getIssueCategoryTool.config,
+//   getIssueCategoryTool.execute
+// );
+// server.registerTool(
+//   updateIssueCategoryTool.name,
+//   updateIssueCategoryTool.config,
+//   updateIssueCategoryTool.execute
+// );
+// server.registerTool(
+//   deleteIssueCategoryTool.name,
+//   deleteIssueCategoryTool.config,
+//   deleteIssueCategoryTool.execute
+// );
 
-// Role Tools
-server.registerTool(listRolesTool.name, listRolesTool.config, listRolesTool.execute);
-server.registerTool(getRoleTool.name, getRoleTool.config, getRoleTool.execute);
+// // Role Tools
+// server.registerTool(listRolesTool.name, listRolesTool.config, listRolesTool.execute);
+// server.registerTool(getRoleTool.name, getRoleTool.config, getRoleTool.execute);
 
-// Group Tools
-server.registerTool(listGroupsTool.name, listGroupsTool.config, listGroupsTool.execute);
-server.registerTool(getGroupTool.name, getGroupTool.config, getGroupTool.execute);
-server.registerTool(createGroupTool.name, createGroupTool.config, createGroupTool.execute);
-server.registerTool(updateGroupTool.name, updateGroupTool.config, updateGroupTool.execute);
-server.registerTool(deleteGroupTool.name, deleteGroupTool.config, deleteGroupTool.execute);
-server.registerTool(addUserToGroupTool.name, addUserToGroupTool.config, addUserToGroupTool.execute);
-server.registerTool(
-  removeUserFromGroupTool.name,
-  removeUserFromGroupTool.config,
-  removeUserFromGroupTool.execute
-);
+// // Group Tools
+// server.registerTool(listGroupsTool.name, listGroupsTool.config, listGroupsTool.execute);
+// server.registerTool(getGroupTool.name, getGroupTool.config, getGroupTool.execute);
+// server.registerTool(createGroupTool.name, createGroupTool.config, createGroupTool.execute);
+// server.registerTool(updateGroupTool.name, updateGroupTool.config, updateGroupTool.execute);
+// server.registerTool(deleteGroupTool.name, deleteGroupTool.config, deleteGroupTool.execute);
+// server.registerTool(addUserToGroupTool.name, addUserToGroupTool.config, addUserToGroupTool.execute);
+// server.registerTool(
+//   removeUserFromGroupTool.name,
+//   removeUserFromGroupTool.config,
+//   removeUserFromGroupTool.execute
+// );
 
-// Custom Field Tools
-server.registerTool(
-  listCustomFieldsTool.name,
-  listCustomFieldsTool.config,
-  listCustomFieldsTool.execute
-);
+// // Custom Field Tools
+// server.registerTool(
+//   listCustomFieldsTool.name,
+//   listCustomFieldsTool.config,
+//   listCustomFieldsTool.execute
+// );
 
-// Search Tools
-server.registerTool(searchTool.name, searchTool.config, searchTool.execute);
+// // Search Tools
+// server.registerTool(searchTool.name, searchTool.config, searchTool.execute);
 
-// My Account Tools
-server.registerTool(getMyAccountTool.name, getMyAccountTool.config, getMyAccountTool.execute);
+// // My Account Tools
+// server.registerTool(getMyAccountTool.name, getMyAccountTool.config, getMyAccountTool.execute);
