@@ -16,6 +16,13 @@ import {
   listUsersTool,
   updateUserTool,
 } from "./tools/users.tools";
+import {
+  createIssueTool,
+  deleteIssueTool,
+  getIssueTool,
+  listIssuesTool,
+  updateIssueTool,
+} from "./tools/issues.tools";
 
 export const server = new McpServer({
   name: "mcp-for-redmine",
@@ -56,3 +63,10 @@ server.registerTool(
   unarchiveProjectTool.execute
 );
 server.registerTool(deleteProjectTool.name, deleteProjectTool.config, deleteProjectTool.execute);
+
+// Issue Tools
+server.registerTool(listIssuesTool.name, listIssuesTool.config, listIssuesTool.execute);
+server.registerTool(getIssueTool.name, getIssueTool.config, getIssueTool.execute);
+server.registerTool(createIssueTool.name, createIssueTool.config, createIssueTool.execute);
+server.registerTool(updateIssueTool.name, updateIssueTool.config, updateIssueTool.execute);
+server.registerTool(deleteIssueTool.name, deleteIssueTool.config, deleteIssueTool.execute);

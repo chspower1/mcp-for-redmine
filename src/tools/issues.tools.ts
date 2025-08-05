@@ -1,28 +1,25 @@
-import { z } from "zod";
+import { createIssue, deleteIssue, getIssue, listIssues, updateIssue } from "../api/issues.api";
 import {
-  listIssues,
-  getIssue,
-  createIssue,
-  updateIssue,
-  deleteIssue,
-  addWatcher,
-  removeWatcher,
-} from "../api/issues.api";
-import { Tool } from "../types/types";
+  CreateIssueToolSchema,
+  DeleteIssueToolSchema,
+  GetIssueToolSchema,
+  ListIssuesToolSchema,
+  UpdateIssueToolSchema,
+} from "../schema/issue.schema";
+import { McpTool } from "../types/types";
 
-export const listIssuesTool: Tool = {
-  name: "redmine_list-issues",
-  description: "Retrieves a paginated list of issues, with optional filters.",
-  parameters: z.object({
-    project_id: z.number().optional().describe("Filter by project ID."),
-    status_id: z.number().optional().describe("Filter by status ID. Use '*' for any status."),
-    assigned_to_id: z.number().optional().describe("Filter by assigned user ID."),
-    offset: z.number().optional().describe("Offset for pagination."),
-    limit: z.number().optional().describe("Limit for pagination (max 100)."),
-  }),
+export const listIssuesTool: McpTool<typeof ListIssuesToolSchema.shape> = {
+  name: "issues_list",
+  config: {
+    description: "Retrieves a list of issues from Redmine, with optional filters.",
+    inputSchema: ListIssuesToolSchema.shape,
+  },
   execute: async (params) => {
     try {
-      return await listIssues(params);
+      const result = await listIssues(params);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.issues) }],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to list issues: ${errorMessage}`);
@@ -30,20 +27,18 @@ export const listIssuesTool: Tool = {
   },
 };
 
-export const getIssueTool: Tool = {
-  name: "redmine_get-issue",
-  description: "Retrieves a single issue by its ID.",
-  parameters: z.object({
-    id: z.number().describe("The ID of the issue."),
-    include: z
-      .string()
-      .optional()
-      .describe("Comma-separated list of associations to include (e.g., 'journals,attachments')."),
-  }),
+export const getIssueTool: McpTool<typeof GetIssueToolSchema.shape> = {
+  name: "issues_get",
+  config: {
+    description: "Retrieves a single issue from Redmine by its ID.",
+    inputSchema: GetIssueToolSchema.shape,
+  },
   execute: async ({ id, include }) => {
     try {
       const result = await getIssue(id, { include });
-      return result.issue;
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.issue) }],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to retrieve issue ${id}: ${errorMessage}`);
@@ -51,22 +46,19 @@ export const getIssueTool: Tool = {
   },
 };
 
-export const createIssueTool: Tool = {
-  name: "redmine_create-issue",
-  description: "Creates a new issue.",
-  parameters: z.object({
-    project_id: z.number().describe("The ID of the project."),
-    subject: z.string().describe("The subject of the issue."),
-    description: z.string().optional().describe("The description of the issue."),
-    tracker_id: z.number().optional().describe("The ID of the tracker."),
-    status_id: z.number().optional().describe("The ID of the status."),
-    priority_id: z.number().optional().describe("The ID of the priority."),
-    assigned_to_id: z.number().optional().describe("The ID of the user to assign the issue to."),
-  }),
-  execute: async (issueData) => {
+export const createIssueTool: McpTool<typeof CreateIssueToolSchema.shape> = {
+  name: "issues_create",
+  config: {
+    description: "Creates a new issue in Redmine.",
+    inputSchema: CreateIssueToolSchema.shape,
+  },
+  execute: async (args) => {
+    const payload = { issue: args };
     try {
-      const result = await createIssue({ issue: issueData });
-      return result.issue;
+      const result = await createIssue(payload);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.issue) }],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to create issue: ${errorMessage}`);
@@ -74,21 +66,29 @@ export const createIssueTool: Tool = {
   },
 };
 
-export const updateIssueTool: Tool = {
-  name: "redmine_update-issue",
-  description: "Updates an existing issue.",
-  parameters: z.object({
-    id: z.number().describe("The ID of the issue to update."),
-    subject: z.string().optional().describe("The new subject."),
-    description: z.string().optional().describe("The new description."),
-    status_id: z.number().optional().describe("The new status ID."),
-    assigned_to_id: z.number().optional().describe("The new assignee ID."),
-    notes: z.string().optional().describe("Private notes to add with the update."),
-  }),
+export const updateIssueTool: McpTool<typeof UpdateIssueToolSchema.shape> = {
+  name: "issues_update",
+  config: {
+    description: "Updates an existing issue in Redmine.",
+    inputSchema: UpdateIssueToolSchema.shape,
+  },
   execute: async ({ id, ...updateData }) => {
+    const payload = {
+      issue: updateData,
+    };
     try {
-      await updateIssue(id, { issue: updateData });
-      return { success: true, message: `Issue ${id} updated successfully.` };
+      await updateIssue(id, payload);
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({
+              success: true,
+              message: `Issue ${id} updated successfully.`,
+            }),
+          },
+        ],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to update issue ${id}: ${errorMessage}`);
@@ -96,55 +96,29 @@ export const updateIssueTool: Tool = {
   },
 };
 
-export const deleteIssueTool: Tool = {
-  name: "redmine_delete-issue",
-  description: "Deletes an issue.",
-  parameters: z.object({
-    id: z.number().describe("The ID of the issue to delete."),
-  }),
+export const deleteIssueTool: McpTool<typeof DeleteIssueToolSchema.shape> = {
+  name: "issues_delete",
+  config: {
+    description: "Deletes an issue from Redmine.",
+    inputSchema: DeleteIssueToolSchema.shape,
+  },
   execute: async ({ id }) => {
     try {
       await deleteIssue(id);
-      return { success: true, message: `Issue ${id} deleted successfully.` };
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({
+              success: true,
+              message: `Issue ${id} deleted successfully.`,
+            }),
+          },
+        ],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to delete issue ${id}: ${errorMessage}`);
-    }
-  },
-};
-
-export const addWatcherTool: Tool = {
-  name: "redmine_add-watcher",
-  description: "Adds a watcher to an issue.",
-  parameters: z.object({
-    issueId: z.number().describe("The ID of the issue."),
-    userId: z.number().describe("The ID of the user to add as a watcher."),
-  }),
-  execute: async ({ issueId, userId }) => {
-    try {
-      await addWatcher(issueId, userId);
-      return { success: true, message: `User ${userId} is now watching issue ${issueId}.` };
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
-      throw new Error(`Failed to add watcher to issue ${issueId}: ${errorMessage}`);
-    }
-  },
-};
-
-export const removeWatcherTool: Tool = {
-  name: "redmine_remove-watcher",
-  description: "Removes a watcher from an issue.",
-  parameters: z.object({
-    issueId: z.number().describe("The ID of the issue."),
-    userId: z.number().describe("The ID of the user to remove."),
-  }),
-  execute: async ({ issueId, userId }) => {
-    try {
-      await removeWatcher(issueId, userId);
-      return { success: true, message: `User ${userId} is no longer watching issue ${issueId}.` };
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
-      throw new Error(`Failed to remove watcher from issue ${issueId}: ${errorMessage}`);
     }
   },
 };
