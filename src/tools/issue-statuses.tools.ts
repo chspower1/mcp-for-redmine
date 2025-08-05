@@ -1,15 +1,19 @@
-import { z } from "zod";
 import { listIssueStatuses } from "../api/issue-statuses.api";
-import { Tool } from "../types/types";
+import { ListIssueStatusesToolSchema } from "../schema/issue-status.schema";
+import { McpTool } from "../types/types";
 
-export const listIssueStatusesTool: Tool = {
-  name: "redmine_list-issue-statuses",
-  description: "Retrieves the list of all available issue statuses.",
-  parameters: z.object({}),
+export const listIssueStatusesTool: McpTool<typeof ListIssueStatusesToolSchema.shape> = {
+  name: "issue_statuses_list",
+  config: {
+    description: "Retrieves a list of all issue statuses.",
+    inputSchema: ListIssueStatusesToolSchema.shape,
+  },
   execute: async () => {
     try {
       const result = await listIssueStatuses();
-      return result.issue_statuses;
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.issue_statuses) }],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to list issue statuses: ${errorMessage}`);

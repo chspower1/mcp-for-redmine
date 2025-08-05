@@ -1,15 +1,14 @@
 import { axiosInstance } from "../utils/axios.util";
-import { RedmineStatus } from "../types/types";
+import { RedmineIssueStatus } from "../schema/issue-status.schema";
 
-// Response
-interface StatusListResponse {
-  issue_statuses: RedmineStatus[];
+interface IssueStatusListResponse {
+  issue_statuses: RedmineIssueStatus[];
 }
 
 /**
- * Retrieves the list of all issue statuses.
+ * Retrieves a list of all issue statuses.
  */
-export const listIssueStatuses = async (): Promise<StatusListResponse> => {
+export const listIssueStatuses = async (): Promise<IssueStatusListResponse> => {
   const response = await axiosInstance.get("/issue_statuses.json");
   return response.data;
 };

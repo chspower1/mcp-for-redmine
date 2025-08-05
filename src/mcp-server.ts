@@ -51,6 +51,7 @@ import {
 } from "./tools/wiki-pages.tools";
 import { listQueriesTool } from "./tools/queries.tools";
 import { deleteAttachmentTool, getAttachmentTool } from "./tools/attachments.tools";
+import { listIssueStatusesTool } from "./tools/issue-statuses.tools";
 
 export const server = new McpServer({
   name: "mcp-for-redmine",
@@ -177,4 +178,11 @@ server.registerTool(
   deleteAttachmentTool.name,
   deleteAttachmentTool.config,
   deleteAttachmentTool.execute
+);
+
+// Issue Status Tools
+server.registerTool(
+  listIssueStatusesTool.name,
+  listIssueStatusesTool.config,
+  listIssueStatusesTool.execute
 );
