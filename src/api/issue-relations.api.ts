@@ -1,50 +1,40 @@
 import { axiosInstance } from "../utils/axios.util";
-import { RedmineRelation } from "../types/types";
+import { CreateIssueRelationPayload, RedmineIssueRelation } from "../schema/issue-relation.schema";
 
-// Payloads
-interface RelationCreatePayload {
-  relation: {
-    issue_to_id: number;
-    relation_type: "relates" | "duplicates" | "blocks" | "precedes" | "follows" | string;
-    delay?: number;
-  };
+interface IssueRelationListResponse {
+  relations: RedmineIssueRelation[];
 }
 
-// Responses
-interface RelationListResponse {
-  relations: RedmineRelation[];
-}
-
-interface RelationResponse {
-  relation: RedmineRelation;
+interface IssueRelationResponse {
+  relation: RedmineIssueRelation;
 }
 
 /**
- * Lists relations for a given issue.
+ * Retrieves a list of relations for a given issue.
  * @param issueId The ID of the issue.
  */
-export const listIssueRelations = async (issueId: number): Promise<RelationListResponse> => {
+export const listIssueRelations = async (issueId: string): Promise<IssueRelationListResponse> => {
   const response = await axiosInstance.get(`/issues/${issueId}/relations.json`);
   return response.data;
 };
 
 /**
- * Creates a new relation for an issue.
- * @param issueId The ID of the issue to create a relation from.
- * @param relationData The relation details.
+ * Creates a new relation for a given issue.
+ * @param issueId The ID of the issue to create the relation from.
+ * @param relationData The data for the new relation.
  */
 export const createIssueRelation = async (
-  issueId: number,
-  relationData: RelationCreatePayload
-): Promise<RelationResponse> => {
+  issueId: string,
+  relationData: CreateIssueRelationPayload
+): Promise<IssueRelationResponse> => {
   const response = await axiosInstance.post(`/issues/${issueId}/relations.json`, relationData);
   return response.data;
 };
 
 /**
- * Deletes a relation.
+ * Deletes an issue relation by its ID.
  * @param id The ID of the relation to delete.
  */
-export const deleteRelation = async (id: number): Promise<void> => {
+export const deleteIssueRelation = async (id: string): Promise<void> => {
   await axiosInstance.delete(`/relations/${id}.json`);
 };

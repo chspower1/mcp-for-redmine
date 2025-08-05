@@ -1,65 +1,77 @@
-import { z } from "zod";
 import {
-  listIssueRelations,
   createIssueRelation,
-  deleteRelation,
+  deleteIssueRelation,
+  listIssueRelations,
 } from "../api/issue-relations.api";
-import { Tool } from "../types/types";
+import {
+  CreateIssueRelationToolSchema,
+  DeleteIssueRelationToolSchema,
+  ListIssueRelationsToolSchema,
+} from "../schema/issue-relation.schema";
+import { McpTool } from "../types/types";
 
-export const listIssueRelationsTool: Tool = {
-  name: "redmine_list-issue-relations",
-  description: "Lists relations for a given issue.",
-  parameters: z.object({
-    issueId: z.number().describe("The ID of the issue."),
-  }),
-  execute: async ({ issueId }) => {
+export const listIssueRelationsTool: McpTool<typeof ListIssueRelationsToolSchema.shape> = {
+  name: "issue_relations_list",
+  config: {
+    description: "Retrieves a list of relations for a given issue.",
+    inputSchema: ListIssueRelationsToolSchema.shape,
+  },
+  execute: async ({ issue_id }) => {
     try {
-      const result = await listIssueRelations(issueId);
-      return result.relations;
+      const result = await listIssueRelations(issue_id);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.relations) }],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
-      throw new Error(`Failed to list relations for issue ${issueId}: ${errorMessage}`);
+      throw new Error(`Failed to list issue relations: ${errorMessage}`);
     }
   },
 };
 
-export const createIssueRelationTool: Tool = {
-  name: "redmine_create-issue-relation",
-  description: "Creates a new relation between two issues.",
-  parameters: z.object({
-    issueId: z.number().describe("The ID of the issue to create a relation from."),
-    issueToId: z.number().describe("The ID of the issue to relate to."),
-    relationType: z
-      .enum(["relates", "duplicates", "blocks", "precedes", "follows"])
-      .describe("The type of the relation."),
-    delay: z.number().optional().describe('The delay in days for a "precedes" relation.'),
-  }),
-  execute: async ({ issueId, issueToId, relationType, delay }) => {
+export const createIssueRelationTool: McpTool<typeof CreateIssueRelationToolSchema.shape> = {
+  name: "issue_relations_create",
+  config: {
+    description: "Creates a new relation for an issue.",
+    inputSchema: CreateIssueRelationToolSchema.shape,
+  },
+  execute: async ({ issue_id, ...relationData }) => {
+    const payload = { relation: relationData };
     try {
-      const result = await createIssueRelation(issueId, {
-        relation: { issue_to_id: issueToId, relation_type: relationType, delay },
-      });
-      return result.relation;
+      const result = await createIssueRelation(issue_id, payload);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.relation) }],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
-      throw new Error(`Failed to create relation for issue ${issueId}: ${errorMessage}`);
+      throw new Error(`Failed to create issue relation: ${errorMessage}`);
     }
   },
 };
 
-export const deleteRelationTool: Tool = {
-  name: "redmine_delete-relation",
-  description: "Deletes an issue relation.",
-  parameters: z.object({
-    relationId: z.number().describe("The ID of the relation to delete."),
-  }),
-  execute: async ({ relationId }) => {
+export const deleteIssueRelationTool: McpTool<typeof DeleteIssueRelationToolSchema.shape> = {
+  name: "issue_relations_delete",
+  config: {
+    description: "Deletes an issue relation.",
+    inputSchema: DeleteIssueRelationToolSchema.shape,
+  },
+  execute: async ({ id }) => {
     try {
-      await deleteRelation(relationId);
-      return { success: true, message: `Relation ${relationId} deleted successfully.` };
+      await deleteIssueRelation(id);
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({
+              success: true,
+              message: `Issue relation ${id} deleted successfully.`,
+            }),
+          },
+        ],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
-      throw new Error(`Failed to delete relation ${relationId}: ${errorMessage}`);
+      throw new Error(`Failed to delete issue relation: ${errorMessage}`);
     }
   },
 };

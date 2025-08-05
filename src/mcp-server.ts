@@ -38,6 +38,11 @@ import {
   updateVersionTool,
 } from "./tools/versions.tools";
 import { listIssuePrioritiesTool, listTimeEntryActivitiesTool } from "./tools/enumerations.tools";
+import {
+  createIssueRelationTool,
+  deleteIssueRelationTool,
+  listIssueRelationsTool,
+} from "./tools/issue-relations.tools";
 
 export const server = new McpServer({
   name: "mcp-for-redmine",
@@ -126,4 +131,21 @@ server.registerTool(
   listTimeEntryActivitiesTool.name,
   listTimeEntryActivitiesTool.config,
   listTimeEntryActivitiesTool.execute
+);
+
+// Issue Relation Tools
+server.registerTool(
+  listIssueRelationsTool.name,
+  listIssueRelationsTool.config,
+  listIssueRelationsTool.execute
+);
+server.registerTool(
+  createIssueRelationTool.name,
+  createIssueRelationTool.config,
+  createIssueRelationTool.execute
+);
+server.registerTool(
+  deleteIssueRelationTool.name,
+  deleteIssueRelationTool.config,
+  deleteIssueRelationTool.execute
 );
