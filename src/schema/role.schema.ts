@@ -9,3 +9,10 @@ export const RedmineRoleSchema = z.object({
 });
 
 export type RedmineRole = z.infer<typeof RedmineRoleSchema>;
+
+// Tool Parameter Schemas
+export const ListRolesToolSchema = z.object({});
+
+export const GetRoleToolSchema = z.object({
+  id: z.string().describe("The numeric ID of the role."),
+});

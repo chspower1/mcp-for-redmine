@@ -60,6 +60,7 @@ import {
   listIssueCategoriesTool,
   updateIssueCategoryTool,
 } from "./tools/issue-categories.tools";
+import { getRoleTool, listRolesTool } from "./tools/roles.tools";
 
 export const server = new McpServer({
   name: "mcp-for-redmine",
@@ -224,3 +225,7 @@ server.registerTool(
   deleteIssueCategoryTool.config,
   deleteIssueCategoryTool.execute
 );
+
+// Role Tools
+server.registerTool(listRolesTool.name, listRolesTool.config, listRolesTool.execute);
+server.registerTool(getRoleTool.name, getRoleTool.config, getRoleTool.execute);

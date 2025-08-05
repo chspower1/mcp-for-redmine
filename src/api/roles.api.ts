@@ -1,7 +1,6 @@
 import { axiosInstance } from "../utils/axios.util";
-import { RedmineRole } from "../types/types";
+import { RedmineRole } from "../schema/role.schema";
 
-// Responses
 interface RoleListResponse {
   roles: RedmineRole[];
 }
@@ -20,9 +19,9 @@ export const listRoles = async (): Promise<RoleListResponse> => {
 
 /**
  * Retrieves a single role by its ID.
- * @param id The ID of the role to retrieve.
+ * @param id The ID of the role.
  */
-export const getRole = async (id: number): Promise<RoleResponse> => {
+export const getRole = async (id: string): Promise<RoleResponse> => {
   const response = await axiosInstance.get(`/roles/${id}.json`);
   return response.data;
 };

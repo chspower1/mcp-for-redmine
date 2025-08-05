@@ -1,15 +1,19 @@
-import { z } from "zod";
 import { listRoles, getRole } from "../api/roles.api";
-import { Tool } from "../types/types";
+import { ListRolesToolSchema, GetRoleToolSchema } from "../schema/role.schema";
+import { McpTool } from "../types/types";
 
-export const listRolesTool: Tool = {
-  name: "redmine_list-roles",
-  description: "Retrieves a list of all roles.",
-  parameters: z.object({}),
+export const listRolesTool: McpTool<typeof ListRolesToolSchema.shape> = {
+  name: "roles_list",
+  config: {
+    description: "Retrieves a list of all roles.",
+    inputSchema: ListRolesToolSchema.shape,
+  },
   execute: async () => {
     try {
       const result = await listRoles();
-      return result.roles;
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.roles) }],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to list roles: ${errorMessage}`);
@@ -17,16 +21,18 @@ export const listRolesTool: Tool = {
   },
 };
 
-export const getRoleTool: Tool = {
-  name: "redmine_get-role",
-  description: "Retrieves a single role by its ID.",
-  parameters: z.object({
-    id: z.number().describe("The ID of the role to retrieve."),
-  }),
+export const getRoleTool: McpTool<typeof GetRoleToolSchema.shape> = {
+  name: "roles_get",
+  config: {
+    description: "Retrieves a single role by its ID.",
+    inputSchema: GetRoleToolSchema.shape,
+  },
   execute: async ({ id }) => {
     try {
       const result = await getRole(id);
-      return result.role;
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.role) }],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to retrieve role ${id}: ${errorMessage}`);
