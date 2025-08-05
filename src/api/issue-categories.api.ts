@@ -1,48 +1,38 @@
 import { axiosInstance } from "../utils/axios.util";
-import { RedmineIssueCategory } from "../types/types";
+import {
+  CreateIssueCategoryPayload,
+  RedmineIssueCategory,
+  UpdateIssueCategoryPayload,
+} from "../schema/issue-category.schema";
 
-// Payloads
-interface CategoryCreatePayload {
-  issue_category: {
-    name: string;
-    assigned_to_id?: number;
-  };
-}
-
-type CategoryUpdatePayload = Partial<CategoryCreatePayload>;
-
-// Responses
-interface CategoryListResponse {
+interface IssueCategoryListResponse {
   issue_categories: RedmineIssueCategory[];
-  total_count: number;
-  offset: number;
-  limit: number;
 }
 
-interface CategoryResponse {
+interface IssueCategoryResponse {
   issue_category: RedmineIssueCategory;
 }
 
 /**
- * Returns the list of issue categories for a given project.
+ * Retrieves a list of all issue categories for a given project.
  * @param projectId The ID or identifier of the project.
  */
-export const listProjectIssueCategories = async (
+export const listIssueCategories = async (
   projectId: string | number
-): Promise<CategoryListResponse> => {
+): Promise<IssueCategoryListResponse> => {
   const response = await axiosInstance.get(`/projects/${projectId}/issue_categories.json`);
   return response.data;
 };
 
 /**
- * Creates an issue category for a project.
+ * Creates a new issue category for a project.
  * @param projectId The ID or identifier of the project.
  * @param categoryData The data for the new category.
  */
 export const createIssueCategory = async (
   projectId: string | number,
-  categoryData: CategoryCreatePayload
-): Promise<CategoryResponse> => {
+  categoryData: CreateIssueCategoryPayload
+): Promise<IssueCategoryResponse> => {
   const response = await axiosInstance.post(
     `/projects/${projectId}/issue_categories.json`,
     categoryData
@@ -51,10 +41,10 @@ export const createIssueCategory = async (
 };
 
 /**
- * Returns a single issue category.
+ * Retrieves a single issue category by its ID.
  * @param id The ID of the issue category.
  */
-export const getIssueCategory = async (id: number): Promise<CategoryResponse> => {
+export const getIssueCategory = async (id: string): Promise<IssueCategoryResponse> => {
   const response = await axiosInstance.get(`/issue_categories/${id}.json`);
   return response.data;
 };
@@ -65,8 +55,8 @@ export const getIssueCategory = async (id: number): Promise<CategoryResponse> =>
  * @param categoryData The data to update.
  */
 export const updateIssueCategory = async (
-  id: number,
-  categoryData: CategoryUpdatePayload
+  id: string,
+  categoryData: UpdateIssueCategoryPayload
 ): Promise<void> => {
   await axiosInstance.put(`/issue_categories/${id}.json`, categoryData);
 };
@@ -75,6 +65,6 @@ export const updateIssueCategory = async (
  * Deletes an issue category.
  * @param id The ID of the issue category.
  */
-export const deleteIssueCategory = async (id: number): Promise<void> => {
+export const deleteIssueCategory = async (id: string): Promise<void> => {
   await axiosInstance.delete(`/issue_categories/${id}.json`);
 };

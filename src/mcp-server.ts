@@ -52,6 +52,14 @@ import {
 import { listQueriesTool } from "./tools/queries.tools";
 import { deleteAttachmentTool, getAttachmentTool } from "./tools/attachments.tools";
 import { listIssueStatusesTool } from "./tools/issue-statuses.tools";
+import { listTrackersTool } from "./tools/trackers.tools";
+import {
+  createIssueCategoryTool,
+  deleteIssueCategoryTool,
+  getIssueCategoryTool,
+  listIssueCategoriesTool,
+  updateIssueCategoryTool,
+} from "./tools/issue-categories.tools";
 
 export const server = new McpServer({
   name: "mcp-for-redmine",
@@ -185,4 +193,34 @@ server.registerTool(
   listIssueStatusesTool.name,
   listIssueStatusesTool.config,
   listIssueStatusesTool.execute
+);
+
+// Tracker Tools
+server.registerTool(listTrackersTool.name, listTrackersTool.config, listTrackersTool.execute);
+
+// Issue Category Tools
+server.registerTool(
+  listIssueCategoriesTool.name,
+  listIssueCategoriesTool.config,
+  listIssueCategoriesTool.execute
+);
+server.registerTool(
+  createIssueCategoryTool.name,
+  createIssueCategoryTool.config,
+  createIssueCategoryTool.execute
+);
+server.registerTool(
+  getIssueCategoryTool.name,
+  getIssueCategoryTool.config,
+  getIssueCategoryTool.execute
+);
+server.registerTool(
+  updateIssueCategoryTool.name,
+  updateIssueCategoryTool.config,
+  updateIssueCategoryTool.execute
+);
+server.registerTool(
+  deleteIssueCategoryTool.name,
+  deleteIssueCategoryTool.config,
+  deleteIssueCategoryTool.execute
 );

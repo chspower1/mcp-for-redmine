@@ -1,62 +1,70 @@
-import { z } from "zod";
 import {
-  listProjectIssueCategories,
   createIssueCategory,
-  getIssueCategory,
-  updateIssueCategory,
   deleteIssueCategory,
+  getIssueCategory,
+  listIssueCategories,
+  updateIssueCategory,
 } from "../api/issue-categories.api";
-import { Tool } from "../types/types";
+import {
+  CreateIssueCategoryToolSchema,
+  DeleteIssueCategoryToolSchema,
+  GetIssueCategoryToolSchema,
+  ListIssueCategoriesToolSchema,
+  UpdateIssueCategoryToolSchema,
+} from "../schema/issue-category.schema";
+import { McpTool } from "../types/types";
 
-export const listProjectIssueCategoriesTool: Tool = {
-  name: "redmine_list-project-issue-categories",
-  description: "Returns the list of issue categories for a given project.",
-  parameters: z.object({
-    projectId: z.union([z.string(), z.number()]).describe("The ID or identifier of the project."),
-  }),
-  execute: async ({ projectId }) => {
+export const listIssueCategoriesTool: McpTool<typeof ListIssueCategoriesToolSchema.shape> = {
+  name: "issue_categories_list",
+  config: {
+    description: "Retrieves a list of issue categories for a given project.",
+    inputSchema: ListIssueCategoriesToolSchema.shape,
+  },
+  execute: async ({ project_id }) => {
     try {
-      const result = await listProjectIssueCategories(projectId);
-      return result.issue_categories;
+      const result = await listIssueCategories(project_id);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.issue_categories) }],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
-      throw new Error(`Failed to list issue categories for project ${projectId}: ${errorMessage}`);
+      throw new Error(`Failed to list issue categories: ${errorMessage}`);
     }
   },
 };
 
-export const createIssueCategoryTool: Tool = {
-  name: "redmine_create-issue-category",
-  description: "Creates an issue category for a project.",
-  parameters: z.object({
-    projectId: z.union([z.string(), z.number()]).describe("The ID or identifier of the project."),
-    name: z.string().describe("The name of the new category."),
-    assigned_to_id: z
-      .number()
-      .optional()
-      .describe("The ID of the user to assign to this category by default."),
-  }),
-  execute: async ({ projectId, ...categoryData }) => {
+export const createIssueCategoryTool: McpTool<typeof CreateIssueCategoryToolSchema.shape> = {
+  name: "issue_categories_create",
+  config: {
+    description: "Creates a new issue category for a project.",
+    inputSchema: CreateIssueCategoryToolSchema.shape,
+  },
+  execute: async ({ project_id, ...categoryData }) => {
+    const payload = { issue_category: categoryData };
     try {
-      const result = await createIssueCategory(projectId, { issue_category: categoryData });
-      return result.issue_category;
+      const result = await createIssueCategory(project_id, payload);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.issue_category) }],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
-      throw new Error(`Failed to create issue category in project ${projectId}: ${errorMessage}`);
+      throw new Error(`Failed to create issue category: ${errorMessage}`);
     }
   },
 };
 
-export const getIssueCategoryTool: Tool = {
-  name: "redmine_get-issue-category",
-  description: "Returns a single issue category by its ID.",
-  parameters: z.object({
-    id: z.number().describe("The ID of the issue category."),
-  }),
+export const getIssueCategoryTool: McpTool<typeof GetIssueCategoryToolSchema.shape> = {
+  name: "issue_categories_get",
+  config: {
+    description: "Retrieves a single issue category by its ID.",
+    inputSchema: GetIssueCategoryToolSchema.shape,
+  },
   execute: async ({ id }) => {
     try {
       const result = await getIssueCategory(id);
-      return result.issue_category;
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.issue_category) }],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to retrieve issue category ${id}: ${errorMessage}`);
@@ -64,17 +72,27 @@ export const getIssueCategoryTool: Tool = {
   },
 };
 
-export const updateIssueCategoryTool: Tool = {
-  name: "redmine_update-issue-category",
-  description: "Updates an issue category.",
-  parameters: z.object({
-    id: z.number().describe("The ID of the issue category to update."),
-    name: z.string().optional().describe("The new name for the category."),
-  }),
+export const updateIssueCategoryTool: McpTool<typeof UpdateIssueCategoryToolSchema.shape> = {
+  name: "issue_categories_update",
+  config: {
+    description: "Updates an existing issue category.",
+    inputSchema: UpdateIssueCategoryToolSchema.shape,
+  },
   execute: async ({ id, ...categoryData }) => {
+    const payload = { issue_category: categoryData };
     try {
-      await updateIssueCategory(id, { issue_category: categoryData });
-      return { success: true, message: `Issue category ${id} updated successfully.` };
+      await updateIssueCategory(id, payload);
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({
+              success: true,
+              message: `Issue category ${id} updated successfully.`,
+            }),
+          },
+        ],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to update issue category ${id}: ${errorMessage}`);
@@ -82,16 +100,26 @@ export const updateIssueCategoryTool: Tool = {
   },
 };
 
-export const deleteIssueCategoryTool: Tool = {
-  name: "redmine_delete-issue-category",
-  description: "Deletes an issue category.",
-  parameters: z.object({
-    id: z.number().describe("The ID of the issue category to delete."),
-  }),
+export const deleteIssueCategoryTool: McpTool<typeof DeleteIssueCategoryToolSchema.shape> = {
+  name: "issue_categories_delete",
+  config: {
+    description: "Deletes an issue category.",
+    inputSchema: DeleteIssueCategoryToolSchema.shape,
+  },
   execute: async ({ id }) => {
     try {
       await deleteIssueCategory(id);
-      return { success: true, message: `Issue category ${id} deleted successfully.` };
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({
+              success: true,
+              message: `Issue category ${id} deleted successfully.`,
+            }),
+          },
+        ],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to delete issue category ${id}: ${errorMessage}`);
