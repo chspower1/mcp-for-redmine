@@ -43,6 +43,12 @@ import {
   deleteIssueRelationTool,
   listIssueRelationsTool,
 } from "./tools/issue-relations.tools";
+import {
+  createOrUpdateWikiPageTool,
+  deleteWikiPageTool,
+  getWikiPageTool,
+  listWikiPagesTool,
+} from "./tools/wiki-pages.tools";
 
 export const server = new McpServer({
   name: "mcp-for-redmine",
@@ -149,3 +155,13 @@ server.registerTool(
   deleteIssueRelationTool.config,
   deleteIssueRelationTool.execute
 );
+
+// Wiki Page Tools
+server.registerTool(listWikiPagesTool.name, listWikiPagesTool.config, listWikiPagesTool.execute);
+server.registerTool(getWikiPageTool.name, getWikiPageTool.config, getWikiPageTool.execute);
+server.registerTool(
+  createOrUpdateWikiPageTool.name,
+  createOrUpdateWikiPageTool.config,
+  createOrUpdateWikiPageTool.execute
+);
+server.registerTool(deleteWikiPageTool.name, deleteWikiPageTool.config, deleteWikiPageTool.execute);

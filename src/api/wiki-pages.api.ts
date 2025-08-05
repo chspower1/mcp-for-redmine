@@ -1,25 +1,8 @@
 import { axiosInstance } from "../utils/axios.util";
-import { RedmineWikiPage, RedmineAttachment } from "../types/types";
+import { CreateOrUpdateWikiPagePayload, RedmineWikiPage } from "../schema/wiki-page.schema";
 
-// Payloads
-interface WikiPageCreatePayload {
-  wiki_page: {
-    text: string;
-    comments?: string;
-    version?: number;
-    attachments?: Array<{
-      token: string;
-      filename: string;
-      content_type: string;
-    }>;
-  };
-}
-
-type WikiPageUpdatePayload = WikiPageCreatePayload;
-
-// Responses
 interface WikiPageListResponse {
-  wiki_pages: Pick<RedmineWikiPage, "title" | "version" | "created_on" | "updated_on">[];
+  wiki_pages: { title: string }[];
 }
 
 interface WikiPageResponse {
@@ -27,7 +10,7 @@ interface WikiPageResponse {
 }
 
 /**
- * Retrieves the list of all pages in a project wiki.
+ * Retrieves a list of all wiki pages for a given project.
  * @param projectId The ID or identifier of the project.
  */
 export const listWikiPages = async (projectId: string | number): Promise<WikiPageListResponse> => {
@@ -36,10 +19,10 @@ export const listWikiPages = async (projectId: string | number): Promise<WikiPag
 };
 
 /**
- * Retrieves a wiki page with its content.
+ * Retrieves a specific wiki page from a project.
  * @param projectId The ID or identifier of the project.
  * @param title The title of the wiki page.
- * @param version Optional version of the page to retrieve.
+ * @param version Optional. The version of the wiki page to retrieve.
  */
 export const getWikiPage = async (
   projectId: string | number,
@@ -57,12 +40,12 @@ export const getWikiPage = async (
  * Creates or updates a wiki page.
  * @param projectId The ID or identifier of the project.
  * @param title The title of the wiki page.
- * @param pageData The content and other details of the page.
+ * @param pageData The data for the wiki page.
  */
-export const updateWikiPage = async (
+export const createOrUpdateWikiPage = async (
   projectId: string | number,
   title: string,
-  pageData: WikiPageUpdatePayload
+  pageData: CreateOrUpdateWikiPagePayload
 ): Promise<WikiPageResponse> => {
   const response = await axiosInstance.put(`/projects/${projectId}/wiki/${title}.json`, pageData);
   return response.data;
