@@ -1,23 +1,35 @@
-import { z } from "zod";
 import {
-  listGroups,
-  getGroup,
-  createGroup,
-  updateGroup,
-  deleteGroup,
   addUserToGroup,
+  createGroup,
+  deleteGroup,
+  getGroup,
+  listGroups,
   removeUserFromGroup,
+  updateGroup,
 } from "../api/groups.api";
-import { Tool } from "../types/types";
+import {
+  AddUserToGroupToolSchema,
+  CreateGroupToolSchema,
+  DeleteGroupToolSchema,
+  GetGroupToolSchema,
+  ListGroupsToolSchema,
+  RemoveUserFromGroupToolSchema,
+  UpdateGroupToolSchema,
+} from "../schema/group.schema";
+import { McpTool } from "../types/types";
 
-export const listGroupsTool: Tool = {
-  name: "redmine_list-groups",
-  description: "Retrieves a list of all groups. Admin only.",
-  parameters: z.object({}),
+export const listGroupsTool: McpTool<typeof ListGroupsToolSchema.shape> = {
+  name: "groups_list",
+  config: {
+    description: "Retrieves a list of all groups.",
+    inputSchema: ListGroupsToolSchema.shape,
+  },
   execute: async () => {
     try {
       const result = await listGroups();
-      return result.groups;
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.groups) }],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to list groups: ${errorMessage}`);
@@ -25,18 +37,18 @@ export const listGroupsTool: Tool = {
   },
 };
 
-export const getGroupTool: Tool = {
-  name: "redmine_get-group",
-  description:
-    "Retrieves a single group by its ID. Includes users if 'include' is set to 'users'. Admin only.",
-  parameters: z.object({
-    id: z.number().describe("The ID of the group."),
-    include: z.string().optional().describe("Set to 'users' to include user details."),
-  }),
+export const getGroupTool: McpTool<typeof GetGroupToolSchema.shape> = {
+  name: "groups_get",
+  config: {
+    description: "Retrieves a single group by its ID.",
+    inputSchema: GetGroupToolSchema.shape,
+  },
   execute: async ({ id, include }) => {
     try {
       const result = await getGroup(id, { include });
-      return result.group;
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.group) }],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to retrieve group ${id}: ${errorMessage}`);
@@ -44,17 +56,19 @@ export const getGroupTool: Tool = {
   },
 };
 
-export const createGroupTool: Tool = {
-  name: "redmine_create-group",
-  description: "Creates a new group. Admin only.",
-  parameters: z.object({
-    name: z.string().describe("The name of the new group."),
-    user_ids: z.array(z.number()).optional().describe("An array of user IDs to add to the group."),
-  }),
+export const createGroupTool: McpTool<typeof CreateGroupToolSchema.shape> = {
+  name: "groups_create",
+  config: {
+    description: "Creates a new group.",
+    inputSchema: CreateGroupToolSchema.shape,
+  },
   execute: async (groupData) => {
+    const payload = { group: groupData };
     try {
-      const result = await createGroup({ group: groupData });
-      return result.group;
+      const result = await createGroup(payload);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.group) }],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to create group: ${errorMessage}`);
@@ -62,17 +76,27 @@ export const createGroupTool: Tool = {
   },
 };
 
-export const updateGroupTool: Tool = {
-  name: "redmine_update-group",
-  description: "Updates a group. Admin only.",
-  parameters: z.object({
-    id: z.number().describe("The ID of the group to update."),
-    name: z.string().optional().describe("The new name for the group."),
-  }),
-  execute: async ({ id, ...updateData }) => {
+export const updateGroupTool: McpTool<typeof UpdateGroupToolSchema.shape> = {
+  name: "groups_update",
+  config: {
+    description: "Updates an existing group.",
+    inputSchema: UpdateGroupToolSchema.shape,
+  },
+  execute: async ({ id, ...groupData }) => {
+    const payload = { group: groupData };
     try {
-      await updateGroup(id, { group: updateData });
-      return { success: true, message: `Group ${id} updated successfully.` };
+      await updateGroup(id, payload);
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({
+              success: true,
+              message: `Group ${id} updated successfully.`,
+            }),
+          },
+        ],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to update group ${id}: ${errorMessage}`);
@@ -80,16 +104,26 @@ export const updateGroupTool: Tool = {
   },
 };
 
-export const deleteGroupTool: Tool = {
-  name: "redmine_delete-group",
-  description: "Deletes a group. Admin only.",
-  parameters: z.object({
-    id: z.number().describe("The ID of the group to delete."),
-  }),
+export const deleteGroupTool: McpTool<typeof DeleteGroupToolSchema.shape> = {
+  name: "groups_delete",
+  config: {
+    description: "Deletes a group.",
+    inputSchema: DeleteGroupToolSchema.shape,
+  },
   execute: async ({ id }) => {
     try {
       await deleteGroup(id);
-      return { success: true, message: `Group ${id} deleted successfully.` };
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({
+              success: true,
+              message: `Group ${id} deleted successfully.`,
+            }),
+          },
+        ],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to delete group ${id}: ${errorMessage}`);
@@ -97,17 +131,27 @@ export const deleteGroupTool: Tool = {
   },
 };
 
-export const addUserToGroupTool: Tool = {
-  name: "redmine_add-user-to-group",
-  description: "Adds a user to a group. Admin only.",
-  parameters: z.object({
-    groupId: z.number().describe("The ID of the group."),
-    userId: z.number().describe("The ID of the user to add."),
-  }),
-  execute: async ({ groupId, userId }) => {
+export const addUserToGroupTool: McpTool<typeof AddUserToGroupToolSchema.shape> = {
+  name: "groups_add_user",
+  config: {
+    description: "Adds a user to a group.",
+    inputSchema: AddUserToGroupToolSchema.shape,
+  },
+  execute: async ({ group_id, user_id }) => {
+    const payload = { user_id };
     try {
-      await addUserToGroup(groupId, userId);
-      return { success: true, message: `User ${userId} added to group ${groupId}.` };
+      await addUserToGroup(group_id, payload);
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({
+              success: true,
+              message: `User ${user_id} added to group ${group_id} successfully.`,
+            }),
+          },
+        ],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to add user to group: ${errorMessage}`);
@@ -115,17 +159,26 @@ export const addUserToGroupTool: Tool = {
   },
 };
 
-export const removeUserFromGroupTool: Tool = {
-  name: "redmine_remove-user-from-group",
-  description: "Removes a user from a group. Admin only.",
-  parameters: z.object({
-    groupId: z.number().describe("The ID of the group."),
-    userId: z.number().describe("The ID of the user to remove."),
-  }),
-  execute: async ({ groupId, userId }) => {
+export const removeUserFromGroupTool: McpTool<typeof RemoveUserFromGroupToolSchema.shape> = {
+  name: "groups_remove_user",
+  config: {
+    description: "Removes a user from a group.",
+    inputSchema: RemoveUserFromGroupToolSchema.shape,
+  },
+  execute: async ({ group_id, user_id }) => {
     try {
-      await removeUserFromGroup(groupId, userId);
-      return { success: true, message: `User ${userId} removed from group ${groupId}.` };
+      await removeUserFromGroup(group_id, user_id);
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({
+              success: true,
+              message: `User ${user_id} removed from group ${group_id} successfully.`,
+            }),
+          },
+        ],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to remove user from group: ${errorMessage}`);

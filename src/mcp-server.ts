@@ -61,6 +61,15 @@ import {
   updateIssueCategoryTool,
 } from "./tools/issue-categories.tools";
 import { getRoleTool, listRolesTool } from "./tools/roles.tools";
+import {
+  addUserToGroupTool,
+  createGroupTool,
+  deleteGroupTool,
+  getGroupTool,
+  listGroupsTool,
+  removeUserFromGroupTool,
+  updateGroupTool,
+} from "./tools/groups.tools";
 
 export const server = new McpServer({
   name: "mcp-for-redmine",
@@ -229,3 +238,16 @@ server.registerTool(
 // Role Tools
 server.registerTool(listRolesTool.name, listRolesTool.config, listRolesTool.execute);
 server.registerTool(getRoleTool.name, getRoleTool.config, getRoleTool.execute);
+
+// Group Tools
+server.registerTool(listGroupsTool.name, listGroupsTool.config, listGroupsTool.execute);
+server.registerTool(getGroupTool.name, getGroupTool.config, getGroupTool.execute);
+server.registerTool(createGroupTool.name, createGroupTool.config, createGroupTool.execute);
+server.registerTool(updateGroupTool.name, updateGroupTool.config, updateGroupTool.execute);
+server.registerTool(deleteGroupTool.name, deleteGroupTool.config, deleteGroupTool.execute);
+server.registerTool(addUserToGroupTool.name, addUserToGroupTool.config, addUserToGroupTool.execute);
+server.registerTool(
+  removeUserFromGroupTool.name,
+  removeUserFromGroupTool.config,
+  removeUserFromGroupTool.execute
+);

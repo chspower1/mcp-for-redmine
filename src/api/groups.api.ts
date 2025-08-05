@@ -1,24 +1,13 @@
 import { axiosInstance } from "../utils/axios.util";
-import { RedmineGroup } from "../types/types";
+import {
+  AddUserToGroupPayload,
+  CreateGroupPayload,
+  RedmineGroup,
+  UpdateGroupPayload,
+} from "../schema/group.schema";
 
-// Payloads
-interface GroupCreatePayload {
-  group: {
-    name: string;
-    user_ids?: number[];
-  };
-}
-
-interface GroupUpdatePayload {
-  group: Partial<GroupCreatePayload["group"]>;
-}
-
-// Responses
 interface GroupListResponse {
   groups: RedmineGroup[];
-  total_count: number;
-  offset: number;
-  limit: number;
 }
 
 interface GroupResponse {
@@ -26,7 +15,7 @@ interface GroupResponse {
 }
 
 /**
- * Retrieves a list of all groups. Admin only.
+ * Retrieves a list of all groups.
  */
 export const listGroups = async (): Promise<GroupListResponse> => {
   const response = await axiosInstance.get("/groups.json");
@@ -34,12 +23,12 @@ export const listGroups = async (): Promise<GroupListResponse> => {
 };
 
 /**
- * Retrieves a single group by its ID. Admin only.
+ * Retrieves a single group by its ID.
  * @param id The ID of the group.
- * @param params Optional parameters like 'include' to fetch users.
+ * @param params Optional parameters (e.g., include).
  */
 export const getGroup = async (
-  id: number,
+  id: string,
   params?: { include?: string }
 ): Promise<GroupResponse> => {
   const response = await axiosInstance.get(`/groups/${id}.json`, { params });
@@ -47,45 +36,48 @@ export const getGroup = async (
 };
 
 /**
- * Creates a new group. Admin only.
+ * Creates a new group.
  * @param groupData The data for the new group.
  */
-export const createGroup = async (groupData: GroupCreatePayload): Promise<GroupResponse> => {
+export const createGroup = async (groupData: CreateGroupPayload): Promise<GroupResponse> => {
   const response = await axiosInstance.post("/groups.json", groupData);
   return response.data;
 };
 
 /**
- * Updates a group. Admin only.
- * @param id The ID of the group to update.
+ * Updates an existing group.
+ * @param id The ID of the group.
  * @param groupData The data to update.
  */
-export const updateGroup = async (id: number, groupData: GroupUpdatePayload): Promise<void> => {
+export const updateGroup = async (id: string, groupData: UpdateGroupPayload): Promise<void> => {
   await axiosInstance.put(`/groups/${id}.json`, groupData);
 };
 
 /**
- * Deletes a group. Admin only.
- * @param id The ID of the group to delete.
+ * Deletes a group.
+ * @param id The ID of the group.
  */
-export const deleteGroup = async (id: number): Promise<void> => {
+export const deleteGroup = async (id: string): Promise<void> => {
   await axiosInstance.delete(`/groups/${id}.json`);
 };
 
 /**
- * Adds a user to a group. Admin only.
+ * Adds a user to a group.
  * @param groupId The ID of the group.
- * @param userId The ID of the user to add.
+ * @param userData The user ID to add.
  */
-export const addUserToGroup = async (groupId: number, userId: number): Promise<void> => {
-  await axiosInstance.post(`/groups/${groupId}/users.json`, { user_id: userId });
+export const addUserToGroup = async (
+  groupId: string,
+  userData: AddUserToGroupPayload
+): Promise<void> => {
+  await axiosInstance.post(`/groups/${groupId}/users.json`, userData);
 };
 
 /**
- * Removes a user from a group. Admin only.
+ * Removes a user from a group.
  * @param groupId The ID of the group.
  * @param userId The ID of the user to remove.
  */
-export const removeUserFromGroup = async (groupId: number, userId: number): Promise<void> => {
+export const removeUserFromGroup = async (groupId: string, userId: string): Promise<void> => {
   await axiosInstance.delete(`/groups/${groupId}/users/${userId}.json`);
 };
