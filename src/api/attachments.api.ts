@@ -1,5 +1,5 @@
 import { axiosInstance } from "../utils/axios.util";
-import { RedmineAttachment } from "../types/types";
+import { RedmineAttachment } from "../schema/attachment.schema";
 
 // Response for upload
 interface UploadResponse {
@@ -37,7 +37,7 @@ export const uploadFile = async (
  * Retrieves the details of an attachment.
  * @param id The ID of the attachment.
  */
-export const getAttachment = async (id: number): Promise<AttachmentResponse> => {
+export const getAttachment = async (id: string): Promise<AttachmentResponse> => {
   const response = await axiosInstance.get(`/attachments/${id}.json`);
   return response.data;
 };
@@ -46,6 +46,6 @@ export const getAttachment = async (id: number): Promise<AttachmentResponse> => 
  * Deletes an attachment. (Added in Redmine 4.0.0)
  * @param id The ID of the attachment.
  */
-export const deleteAttachment = async (id: number): Promise<void> => {
+export const deleteAttachment = async (id: string): Promise<void> => {
   await axiosInstance.delete(`/attachments/${id}.json`);
 };

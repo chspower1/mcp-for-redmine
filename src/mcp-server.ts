@@ -50,6 +50,7 @@ import {
   listWikiPagesTool,
 } from "./tools/wiki-pages.tools";
 import { listQueriesTool } from "./tools/queries.tools";
+import { deleteAttachmentTool, getAttachmentTool } from "./tools/attachments.tools";
 
 export const server = new McpServer({
   name: "mcp-for-redmine",
@@ -169,3 +170,11 @@ server.registerTool(deleteWikiPageTool.name, deleteWikiPageTool.config, deleteWi
 
 // Query Tools
 server.registerTool(listQueriesTool.name, listQueriesTool.config, listQueriesTool.execute);
+
+// Attachment Tools
+server.registerTool(getAttachmentTool.name, getAttachmentTool.config, getAttachmentTool.execute);
+server.registerTool(
+  deleteAttachmentTool.name,
+  deleteAttachmentTool.config,
+  deleteAttachmentTool.execute
+);
