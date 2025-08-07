@@ -1,7 +1,7 @@
 import MockAdapter from "axios-mock-adapter";
 import { axiosInstance } from "../../utils/axios.util";
 import { listUsers, getUser, createUser, updateUser, deleteUser } from "../users.api";
-import { RedmineUser } from "../../types/types";
+import { RedmineUser } from "../../schema";
 
 describe("Redmine Users API", () => {
   let mock: MockAdapter;

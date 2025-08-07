@@ -1,5 +1,5 @@
-import { axiosInstance } from "../utils/axios.util";
-import { RedmineSearchResult } from "../schema/search.schema";
+import { axiosInstance } from "@/utils/axios.util";
+import { RedmineSearchResult } from "@/schema/search.schema";
 
 interface SearchResponse {
   search: {

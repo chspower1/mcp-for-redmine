@@ -1,5 +1,5 @@
-import { axiosInstance } from "../utils/axios.util";
-import { RedmineUser } from "../schema/user.schema";
+import { axiosInstance } from "@/utils/axios.util";
+import { RedmineUser } from "@/schema/user.schema";
 
 interface MyAccountResponse {
   user: RedmineUser;

@@ -1,6 +1,6 @@
-import { listCustomFields } from "../api/custom-fields.api";
-import { ListCustomFieldsToolSchema } from "../schema/custom-fields.schema";
-import { McpTool } from "../types/types";
+import { listCustomFields } from "@/api/custom-fields.api";
+import { ListCustomFieldsToolSchema } from "@/schema/custom-fields.schema";
+import { McpTool } from "@/types/types";
 
 export const listCustomFieldsTool: McpTool<typeof ListCustomFieldsToolSchema.shape> = {
   name: "custom_fields_list",

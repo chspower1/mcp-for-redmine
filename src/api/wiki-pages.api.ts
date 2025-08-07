@@ -1,5 +1,5 @@
-import { axiosInstance } from "../utils/axios.util";
-import { CreateOrUpdateWikiPagePayload, RedmineWikiPage } from "../schema/wiki-page.schema";
+import { axiosInstance } from "@/utils/axios.util";
+import { CreateOrUpdateWikiPagePayload, RedmineWikiPage } from "@/schema/wiki-page.schema";
 
 interface WikiPageListResponse {
   wiki_pages: { title: string }[];

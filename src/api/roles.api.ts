@@ -1,5 +1,5 @@
-import { axiosInstance } from "../utils/axios.util";
-import { RedmineRole } from "../schema/role.schema";
+import { axiosInstance } from "@/utils/axios.util";
+import { RedmineRole } from "@/schema/role.schema";
 
 interface RoleListResponse {
   roles: RedmineRole[];

@@ -1,6 +1,6 @@
-import { getAttachment, deleteAttachment } from "../api/attachments.api";
-import { GetAttachmentToolSchema, DeleteAttachmentToolSchema } from "../schema/attachment.schema";
-import { McpTool } from "../types/types";
+import { getAttachment, deleteAttachment } from "@/api/attachments.api";
+import { GetAttachmentToolSchema, DeleteAttachmentToolSchema } from "@/schema/attachment.schema";
+import { McpTool } from "@/types/types";
 
 export const getAttachmentTool: McpTool<typeof GetAttachmentToolSchema.shape> = {
   name: "attachments_get",

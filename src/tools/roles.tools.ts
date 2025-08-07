@@ -1,6 +1,6 @@
-import { listRoles, getRole } from "../api/roles.api";
-import { ListRolesToolSchema, GetRoleToolSchema } from "../schema/role.schema";
-import { McpTool } from "../types/types";
+import { listRoles, getRole } from "@/api/roles.api";
+import { ListRolesToolSchema, GetRoleToolSchema } from "@/schema/role.schema";
+import { McpTool } from "@/types/types";
 
 export const listRolesTool: McpTool<typeof ListRolesToolSchema.shape> = {
   name: "roles_list",

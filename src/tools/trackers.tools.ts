@@ -1,6 +1,6 @@
-import { listTrackers } from "../api/trackers.api";
-import { ListTrackersToolSchema } from "../schema/tracker.schema";
-import { McpTool } from "../types/types";
+import { listTrackers } from "@/api/trackers.api";
+import { ListTrackersToolSchema } from "@/schema/tracker.schema";
+import { McpTool } from "@/types/types";
 
 export const listTrackersTool: McpTool<typeof ListTrackersToolSchema.shape> = {
   name: "trackers_list",

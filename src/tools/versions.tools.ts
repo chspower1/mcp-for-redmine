@@ -4,15 +4,15 @@ import {
   getVersion,
   listVersions,
   updateVersion,
-} from "../api/versions.api";
+} from "@/api/versions.api";
 import {
   CreateVersionToolSchema,
   DeleteVersionToolSchema,
   GetVersionToolSchema,
   ListVersionsToolSchema,
   UpdateVersionToolSchema,
-} from "../schema/version.schema";
-import { McpTool } from "../types/types";
+} from "@/schema/version.schema";
+import { McpTool } from "@/types/types";
 
 export const listVersionsTool: McpTool<typeof ListVersionsToolSchema.shape> = {
   name: "versions_list",

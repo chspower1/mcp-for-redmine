@@ -1,9 +1,9 @@
-import { listIssuePriorities, listTimeEntryActivities } from "../api/enumerations.api";
+import { listIssuePriorities, listTimeEntryActivities } from "@/api/enumerations.api";
 import {
   ListIssuePrioritiesToolSchema,
   ListTimeEntryActivitiesToolSchema,
-} from "../schema/enumerations.schema";
-import { McpTool } from "../types/types";
+} from "@/schema/enumerations.schema";
+import { McpTool } from "@/types/types";
 
 export const listIssuePrioritiesTool: McpTool<typeof ListIssuePrioritiesToolSchema.shape> = {
   name: "enumerations_issue_priorities_list",

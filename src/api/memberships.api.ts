@@ -1,5 +1,5 @@
-import { axiosInstance } from "../utils/axios.util";
-import { RedmineMembership } from "../types/types";
+import { RedmineMembership } from "@/schema";
+import { axiosInstance } from "@/utils/axios.util";
 
 // Payloads
 interface MembershipCreatePayload {

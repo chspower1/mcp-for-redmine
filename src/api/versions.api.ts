@@ -1,9 +1,9 @@
-import { axiosInstance } from "../utils/axios.util";
+import { axiosInstance } from "@/utils/axios.util";
 import {
   CreateVersionPayload,
   RedmineVersion,
   UpdateVersionPayload,
-} from "../schema/version.schema";
+} from "@/schema/version.schema";
 
 interface VersionListResponse {
   versions: RedmineVersion[];

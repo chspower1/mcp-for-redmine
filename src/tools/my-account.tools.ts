@@ -1,6 +1,6 @@
-import { getMyAccount } from "../api/my-account.api";
-import { GetMyAccountToolSchema } from "../schema/my-account.schema";
-import { McpTool } from "../types/types";
+import { getMyAccount } from "@/api/my-account.api";
+import { GetMyAccountToolSchema } from "@/schema/my-account.schema";
+import { McpTool } from "@/types/types";
 
 export const getMyAccountTool: McpTool<typeof GetMyAccountToolSchema.shape> = {
   name: "my_account_get",

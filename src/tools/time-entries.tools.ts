@@ -4,15 +4,15 @@ import {
   getTimeEntry,
   listTimeEntries,
   updateTimeEntry,
-} from "../api/time-entries.api";
+} from "@/api/time-entries.api";
 import {
   CreateTimeEntryToolSchema,
   DeleteTimeEntryToolSchema,
   GetTimeEntryToolSchema,
   ListTimeEntriesToolSchema,
   UpdateTimeEntryToolSchema,
-} from "../schema/time-entry.schema";
-import { McpTool } from "../types/types";
+} from "@/schema/time-entry.schema";
+import { McpTool } from "@/types/types";
 
 export const listTimeEntriesTool: McpTool<typeof ListTimeEntriesToolSchema.shape> = {
   name: "time_entries_list",

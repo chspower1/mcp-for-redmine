@@ -1,5 +1,5 @@
-import { axiosInstance } from "../utils/axios.util";
-import { RedmineFile } from "../schema/file.schema";
+import { axiosInstance } from "@/utils/axios.util";
+import { RedmineFile } from "@/schema/file.schema";
 
 interface FileListResponse {
   files: RedmineFile[];

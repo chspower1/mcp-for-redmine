@@ -4,15 +4,15 @@ import {
   getIssueCategory,
   listIssueCategories,
   updateIssueCategory,
-} from "../api/issue-categories.api";
+} from "@/api/issue-categories.api";
 import {
   CreateIssueCategoryToolSchema,
   DeleteIssueCategoryToolSchema,
   GetIssueCategoryToolSchema,
   ListIssueCategoriesToolSchema,
   UpdateIssueCategoryToolSchema,
-} from "../schema/issue-category.schema";
-import { McpTool } from "../types/types";
+} from "@/schema/issue-category.schema";
+import { McpTool } from "@/types/types";
 
 export const listIssueCategoriesTool: McpTool<typeof ListIssueCategoriesToolSchema.shape> = {
   name: "issue_categories_list",

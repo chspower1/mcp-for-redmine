@@ -4,8 +4,8 @@ import {
   createProjectMembership,
   updateMembership,
   deleteMembership,
-} from "../api/memberships.api";
-import { Tool } from "../types/types";
+} from "@/api/memberships.api";
+import { Tool } from "@/types/types";
 
 export const listProjectMembershipsTool: Tool = {
   name: "redmine_list-project-memberships",

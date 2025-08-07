@@ -6,7 +6,7 @@ import {
   listGroups,
   removeUserFromGroup,
   updateGroup,
-} from "../api/groups.api";
+} from "@/api/groups.api";
 import {
   AddUserToGroupToolSchema,
   CreateGroupToolSchema,
@@ -15,8 +15,8 @@ import {
   ListGroupsToolSchema,
   RemoveUserFromGroupToolSchema,
   UpdateGroupToolSchema,
-} from "../schema/group.schema";
-import { McpTool } from "../types/types";
+} from "@/schema/group.schema";
+import { McpTool } from "@/types/types";
 
 export const listGroupsTool: McpTool<typeof ListGroupsToolSchema.shape> = {
   name: "groups_list",

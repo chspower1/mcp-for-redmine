@@ -1,9 +1,9 @@
-import { axiosInstance } from "../utils/axios.util";
+import { axiosInstance } from "@/utils/axios.util";
 import {
   CreateProjectPayload,
   RedmineProject,
   UpdateProjectPayload,
-} from "../schema/project.schema";
+} from "@/schema/project.schema";
 
 interface ProjectListResponse {
   projects: RedmineProject[];

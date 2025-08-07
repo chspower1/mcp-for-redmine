@@ -1,5 +1,5 @@
-import { axiosInstance } from "../utils/axios.util";
-import { RedmineAttachment } from "../schema/attachment.schema";
+import { axiosInstance } from "@/utils/axios.util";
+import { RedmineAttachment } from "@/schema/attachment.schema";
 
 // Response for upload
 interface UploadResponse {

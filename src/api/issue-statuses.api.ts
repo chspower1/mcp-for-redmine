@@ -1,5 +1,5 @@
-import { axiosInstance } from "../utils/axios.util";
-import { RedmineIssueStatus } from "../schema/issue-status.schema";
+import { axiosInstance } from "@/utils/axios.util";
+import { RedmineIssueStatus } from "@/schema/issue-status.schema";
 
 interface IssueStatusListResponse {
   issue_statuses: RedmineIssueStatus[];

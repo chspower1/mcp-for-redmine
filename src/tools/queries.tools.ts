@@ -1,6 +1,6 @@
-import { listQueries } from "../api/queries.api";
-import { ListQueriesToolSchema } from "../schema/query.schema";
-import { McpTool } from "../types/types";
+import { listQueries } from "@/api/queries.api";
+import { ListQueriesToolSchema } from "@/schema/query.schema";
+import { McpTool } from "@/types/types";
 
 export const listQueriesTool: McpTool<typeof ListQueriesToolSchema.shape> = {
   name: "queries_list",

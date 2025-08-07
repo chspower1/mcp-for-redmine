@@ -3,14 +3,14 @@ import {
   deleteWikiPage,
   getWikiPage,
   listWikiPages,
-} from "../api/wiki-pages.api";
+} from "@/api/wiki-pages.api";
 import {
   CreateOrUpdateWikiPageToolSchema,
   DeleteWikiPageToolSchema,
   GetWikiPageToolSchema,
   ListWikiPagesToolSchema,
-} from "../schema/wiki-page.schema";
-import { McpTool } from "../types/types";
+} from "@/schema/wiki-page.schema";
+import { McpTool } from "@/types/types";
 
 export const listWikiPagesTool: McpTool<typeof ListWikiPagesToolSchema.shape> = {
   name: "wiki_pages_list",

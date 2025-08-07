@@ -1,5 +1,5 @@
-import { axiosInstance } from "../utils/axios.util";
-import { CreateIssuePayload, RedmineIssue, UpdateIssuePayload } from "../schema/issue.schema";
+import { axiosInstance } from "@/utils/axios.util";
+import { CreateIssuePayload, RedmineIssue, UpdateIssuePayload } from "@/schema/issue.schema";
 
 interface IssueResponse {
   issue: RedmineIssue;

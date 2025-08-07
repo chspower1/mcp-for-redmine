@@ -1,5 +1,5 @@
-import { axiosInstance } from "../utils/axios.util";
-import { CreateUserPayload, RedmineUser, UpdateUserPayload } from "../schema/user.schema";
+import { axiosInstance } from "@/utils/axios.util";
+import { CreateUserPayload, RedmineUser, UpdateUserPayload } from "@/schema/user.schema";
 
 // response types
 interface UserResponse {

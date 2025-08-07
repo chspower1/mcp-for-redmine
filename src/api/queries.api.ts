@@ -1,5 +1,5 @@
-import { axiosInstance } from "../utils/axios.util";
-import { RedmineQuery } from "../schema/query.schema";
+import { axiosInstance } from "@/utils/axios.util";
+import { RedmineQuery } from "@/schema/query.schema";
 
 interface QueryListResponse {
   queries: RedmineQuery[];

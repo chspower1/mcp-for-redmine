@@ -1,12 +1,12 @@
-import { createIssue, deleteIssue, getIssue, listIssues, updateIssue } from "../api/issues.api";
+import { createIssue, deleteIssue, getIssue, listIssues, updateIssue } from "@/api/issues.api";
 import {
   CreateIssueToolSchema,
   DeleteIssueToolSchema,
   GetIssueToolSchema,
   ListIssuesToolSchema,
   UpdateIssueToolSchema,
-} from "../schema/issue.schema";
-import { McpTool } from "../types/types";
+} from "@/schema/issue.schema";
+import { McpTool } from "@/types/types";
 
 export const listIssuesTool: McpTool<typeof ListIssuesToolSchema.shape> = {
   name: "issues_list",

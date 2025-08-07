@@ -1,9 +1,9 @@
-import { axiosInstance } from "../utils/axios.util";
+import { axiosInstance } from "@/utils/axios.util";
 import {
   CreateIssueCategoryPayload,
   RedmineIssueCategory,
   UpdateIssueCategoryPayload,
-} from "../schema/issue-category.schema";
+} from "@/schema/issue-category.schema";
 
 interface IssueCategoryListResponse {
   issue_categories: RedmineIssueCategory[];

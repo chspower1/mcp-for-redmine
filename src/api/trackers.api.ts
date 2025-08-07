@@ -1,5 +1,5 @@
-import { axiosInstance } from "../utils/axios.util";
-import { RedmineTracker } from "../schema/tracker.schema";
+import { axiosInstance } from "@/utils/axios.util";
+import { RedmineTracker } from "@/schema/tracker.schema";
 
 interface TrackerListResponse {
   trackers: RedmineTracker[];

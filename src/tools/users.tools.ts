@@ -1,12 +1,12 @@
-import { createUser, deleteUser, getUser, listUsers, updateUser } from "../api/users.api";
+import { createUser, deleteUser, getUser, listUsers, updateUser } from "@/api/users.api";
 import {
   CreateUserToolSchema,
   DeleteUserToolSchema,
   GetUserToolSchema,
   ListUsersToolSchema,
   UpdateUserToolSchema,
-} from "../schema/user.schema";
-import { McpTool } from "../types/types";
+} from "@/schema/user.schema";
+import { McpTool } from "@/types/types";
 
 export const createUserTool: McpTool<typeof CreateUserToolSchema.shape> = {
   name: "users_create",

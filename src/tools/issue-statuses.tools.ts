@@ -1,6 +1,6 @@
-import { listIssueStatuses } from "../api/issue-statuses.api";
-import { ListIssueStatusesToolSchema } from "../schema/issue-status.schema";
-import { McpTool } from "../types/types";
+import { listIssueStatuses } from "@/api/issue-statuses.api";
+import { ListIssueStatusesToolSchema } from "@/schema/issue-status.schema";
+import { McpTool } from "@/types/types";
 
 export const listIssueStatusesTool: McpTool<typeof ListIssueStatusesToolSchema.shape> = {
   name: "issue_statuses_list",

@@ -6,7 +6,7 @@ import {
   listProjects,
   unarchiveProject,
   updateProject,
-} from "../api/projects.api";
+} from "@/api/projects.api";
 import {
   ArchiveProjectToolSchema,
   CreateProjectToolSchema,
@@ -14,8 +14,8 @@ import {
   GetProjectToolSchema,
   UnarchiveProjectToolSchema,
   UpdateProjectToolSchema,
-} from "../schema/project.schema";
-import { McpTool } from "../types/types";
+} from "@/schema/project.schema";
+import { McpTool } from "@/types/types";
 import { z } from "zod";
 
 export const listProjectsTool: McpTool<any> = {

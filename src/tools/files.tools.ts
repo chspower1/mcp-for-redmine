@@ -1,6 +1,6 @@
-import { listFiles } from "../api/files.api";
-import { ListFilesToolSchema } from "../schema/file.schema";
-import { McpTool } from "../types/types";
+import { listFiles } from "@/api/files.api";
+import { ListFilesToolSchema } from "@/schema/file.schema";
+import { McpTool } from "@/types/types";
 
 export const listFilesTool: McpTool<typeof ListFilesToolSchema.shape> = {
   name: "files_list",

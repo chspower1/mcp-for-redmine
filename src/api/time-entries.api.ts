@@ -1,9 +1,9 @@
-import { axiosInstance } from "../utils/axios.util";
+import { axiosInstance } from "@/utils/axios.util";
 import {
   CreateTimeEntryPayload,
   RedmineTimeEntry,
   UpdateTimeEntryPayload,
-} from "../schema/time-entry.schema";
+} from "@/schema/time-entry.schema";
 
 interface TimeEntryResponse {
   time_entry: RedmineTimeEntry;

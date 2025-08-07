@@ -1,10 +1,10 @@
-import { axiosInstance } from "../utils/axios.util";
+import { axiosInstance } from "@/utils/axios.util";
 import {
   AddUserToGroupPayload,
   CreateGroupPayload,
   RedmineGroup,
   UpdateGroupPayload,
-} from "../schema/group.schema";
+} from "@/schema/group.schema";
 
 interface GroupListResponse {
   groups: RedmineGroup[];

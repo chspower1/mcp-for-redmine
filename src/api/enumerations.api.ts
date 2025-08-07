@@ -1,5 +1,5 @@
-import { axiosInstance } from "../utils/axios.util";
-import { RedmineEnumeration } from "../schema/enumerations.schema";
+import { axiosInstance } from "@/utils/axios.util";
+import { RedmineEnumeration } from "@/schema/enumerations.schema";
 
 interface IssuePrioritiesResponse {
   issue_priorities: RedmineEnumeration[];

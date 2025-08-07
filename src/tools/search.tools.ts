@@ -1,6 +1,6 @@
-import { search } from "../api/search.api";
-import { SearchToolSchema } from "../schema/search.schema";
-import { McpTool } from "../types/types";
+import { search } from "@/api/search.api";
+import { SearchToolSchema } from "@/schema/search.schema";
+import { McpTool } from "@/types/types";
 
 export const searchTool: McpTool<typeof SearchToolSchema.shape> = {
   name: "search",
