@@ -1,5 +1,5 @@
 {
-  "name": "mcp-for-redmine",
+  "name": "@chspower1/mcp-for-redmine",
   "version": "0.1.0",
   "description": "MCP Server for interacting with a Redmine instance.",
   "main": "dist/index.js",
@@ -10,26 +10,33 @@
     "dev": "tsx watch src/index.ts",
     "test": "jest"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chspower1/mcp-for-redmine"
+  },
   "keywords": [
     "mcp",
     "redmine",
     "typescript"
   ],
-  "author": "",
-  "license": "ISC",
+  "author": "chs",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "mcp-for-redmine": "dist/index.js"
+  },
+  "homepage": "https://github.com/chspower1/mcp-for-redmine#readme",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.7.0",
     "axios": "^1.10.0",
-    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "express": "^5.1.0",
     "node-fetch": "^3.3.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.19",
     "@types/dotenv": "^6.1.1",
-    "@types/express": "^5.0.3",
     "@types/jest": "^30.0.0",
     "@types/node": "^20.11.20",
     "@types/node-fetch": "^2.6.11",
