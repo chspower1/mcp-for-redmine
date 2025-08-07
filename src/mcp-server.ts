@@ -30,21 +30,6 @@ export const server = new McpServer({
   version: "0.1.0",
 });
 
-// Test Tool
-server.registerTool(
-  "test1",
-  {
-    inputSchema: {
-      name: z.string(),
-    },
-  },
-  async ({ name }) => {
-    return {
-      content: [{ type: "text", text: `Hello, ${name}!` }],
-    };
-  }
-);
-
 // User Tools
 server.registerTool(createUserTool.name, createUserTool.config, createUserTool.execute);
 server.registerTool(getUserTool.name, getUserTool.config, getUserTool.execute);
