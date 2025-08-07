@@ -1,22 +1,37 @@
 import { z } from "zod";
-import { RedmineReference, RedmineReferenceSchema } from "./reference.schema";
-import { RedmineUser, RedmineUserSchema } from "./user.schema";
-import { RedmineGroup, RedmineGroupSchema } from "./group.schema";
-import { RedmineRole, RedmineRoleSchema } from "./role.schema";
+import { RedmineReferenceSchema, RedmineReference } from "./reference.schema";
 
-const BaseRedmineMembershipSchema = z.object({
+// Base Membership Schema
+export const RedmineMembershipSchema = z.object({
   id: z.number(),
   project: RedmineReferenceSchema,
-  roles: z.array(RedmineRoleSchema),
+  user: RedmineReferenceSchema.optional(),
+  group: RedmineReferenceSchema.optional(),
+  roles: z.array(RedmineReferenceSchema),
 });
 
-export type RedmineMembership = z.infer<typeof BaseRedmineMembershipSchema> & {
-  user?: RedmineUser;
-  group?: RedmineGroup;
-};
+export type RedmineMembership = z.infer<typeof RedmineMembershipSchema>;
 
-export const RedmineMembershipSchema: z.ZodType<RedmineMembership> =
-  BaseRedmineMembershipSchema.extend({
-    user: z.lazy(() => RedmineUserSchema).optional(),
-    group: z.lazy(() => RedmineGroupSchema).optional(),
-  });
+// Tool Parameter Schemas
+export const ListProjectMembershipsToolSchema = z.object({
+  projectId: z.union([z.string(), z.number()]).describe("The ID or identifier of the project."),
+});
+
+export const GetMembershipToolSchema = z.object({
+  membershipId: z.number().describe("The ID of the membership to retrieve."),
+});
+
+export const CreateProjectMembershipToolSchema = z.object({
+  projectId: z.union([z.string(), z.number()]).describe("The ID or identifier of the project."),
+  userId: z.number().describe("The ID of the user to add."),
+  roleIds: z.array(z.number()).describe("An array of role IDs to assign to the user."),
+});
+
+export const UpdateMembershipToolSchema = z.object({
+  membershipId: z.number().describe("The ID of the membership to update."),
+  roleIds: z.array(z.number()).describe("The new array of role IDs."),
+});
+
+export const DeleteMembershipToolSchema = z.object({
+  membershipId: z.number().describe("The ID of the membership to delete."),
+});

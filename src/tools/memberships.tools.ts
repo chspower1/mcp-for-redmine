@@ -1,22 +1,29 @@
-import { z } from "zod";
 import {
   listProjectMemberships,
   createProjectMembership,
   updateMembership,
   deleteMembership,
+  getMembership,
 } from "@/api/memberships.api";
-import { Tool } from "@/types/types";
+import {
+  CreateProjectMembershipToolSchema,
+  DeleteMembershipToolSchema,
+  GetMembershipToolSchema,
+  ListProjectMembershipsToolSchema,
+  UpdateMembershipToolSchema,
+} from "../schema/membership.schema";
+import { McpTool } from "../types/types";
 
-export const listProjectMembershipsTool: Tool = {
-  name: "redmine_list-project-memberships",
-  description: "Returns the list of memberships for a given project.",
-  parameters: z.object({
-    projectId: z.union([z.string(), z.number()]).describe("The ID or identifier of the project."),
-  }),
+export const listProjectMembershipsTool: McpTool<typeof ListProjectMembershipsToolSchema.shape> = {
+  name: "memberships_list_project_memberships",
+  config: {
+    description: "Returns the list of memberships for a given project.",
+    inputSchema: ListProjectMembershipsToolSchema.shape,
+  },
   execute: async ({ projectId }) => {
     try {
       const result = await listProjectMemberships(projectId);
-      return result.memberships;
+      return { content: [{ type: "text", text: JSON.stringify(result.memberships) }] };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to list memberships for project ${projectId}: ${errorMessage}`);
@@ -24,40 +31,65 @@ export const listProjectMembershipsTool: Tool = {
   },
 };
 
-export const createProjectMembershipTool: Tool = {
-  name: "redmine_create-project-membership",
-  description: "Adds a member to a project.",
-  parameters: z.object({
-    projectId: z.union([z.string(), z.number()]).describe("The ID or identifier of the project."),
-    userId: z.number().describe("The ID of the user to add."),
-    roleIds: z.array(z.number()).describe("An array of role IDs to assign to the user."),
-  }),
-  execute: async ({ projectId, userId, roleIds }) => {
+export const getMembershipTool: McpTool<typeof GetMembershipToolSchema.shape> = {
+  name: "memberships_get",
+  config: {
+    description: "Retrieves a single membership by its ID.",
+    inputSchema: GetMembershipToolSchema.shape,
+  },
+  execute: async ({ membershipId }) => {
     try {
-      const result = await createProjectMembership(projectId, {
-        membership: { user_id: userId, role_ids: roleIds },
-      });
-      return result.membership;
+      const result = await getMembership(membershipId);
+      return { content: [{ type: "text", text: JSON.stringify(result.membership) }] };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
-      throw new Error(`Failed to add member to project ${projectId}: ${errorMessage}`);
+      throw new Error(`Failed to retrieve membership ${membershipId}: ${errorMessage}`);
     }
   },
 };
 
-export const updateMembershipTool: Tool = {
-  name: "redmine_update-membership",
-  description: "Updates a membership with new roles.",
-  parameters: z.object({
-    membershipId: z.number().describe("The ID of the membership to update."),
-    roleIds: z.array(z.number()).describe("The new array of role IDs."),
-  }),
+export const createProjectMembershipTool: McpTool<typeof CreateProjectMembershipToolSchema.shape> =
+  {
+    name: "memberships_create",
+    config: {
+      description: "Adds a member to a project.",
+      inputSchema: CreateProjectMembershipToolSchema.shape,
+    },
+    execute: async ({ projectId, userId, roleIds }) => {
+      try {
+        const result = await createProjectMembership(projectId, {
+          membership: { user_id: userId, role_ids: roleIds },
+        });
+        return { content: [{ type: "text", text: JSON.stringify(result.membership) }] };
+      } catch (error: any) {
+        const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
+        throw new Error(`Failed to add member to project ${projectId}: ${errorMessage}`);
+      }
+    },
+  };
+
+export const updateMembershipTool: McpTool<typeof UpdateMembershipToolSchema.shape> = {
+  name: "memberships_update",
+  config: {
+    description: "Updates a membership with new roles.",
+    inputSchema: UpdateMembershipToolSchema.shape,
+  },
   execute: async ({ membershipId, roleIds }) => {
     try {
       await updateMembership(membershipId, {
         membership: { role_ids: roleIds },
       });
-      return { success: true, message: `Membership ${membershipId} updated successfully.` };
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({
+              success: true,
+              message: `Membership ${membershipId} updated successfully.`,
+            }),
+          },
+        ],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to update membership ${membershipId}: ${errorMessage}`);
@@ -65,16 +97,26 @@ export const updateMembershipTool: Tool = {
   },
 };
 
-export const deleteMembershipTool: Tool = {
-  name: "redmine_delete-membership",
-  description: "Deletes a membership.",
-  parameters: z.object({
-    membershipId: z.number().describe("The ID of the membership to delete."),
-  }),
+export const deleteMembershipTool: McpTool<typeof DeleteMembershipToolSchema.shape> = {
+  name: "memberships_delete",
+  config: {
+    description: "Deletes a membership.",
+    inputSchema: DeleteMembershipToolSchema.shape,
+  },
   execute: async ({ membershipId }) => {
     try {
       await deleteMembership(membershipId);
-      return { success: true, message: `Membership ${membershipId} deleted successfully.` };
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({
+              success: true,
+              message: `Membership ${membershipId} deleted successfully.`,
+            }),
+          },
+        ],
+      };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to delete membership ${membershipId}: ${errorMessage}`);
