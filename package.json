@@ -1,11 +1,11 @@
 {
   "name": "@chspower1/mcp-for-redmine",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "MCP Server for interacting with a Redmine instance.",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc-alias && tsc-esm-fix",
     "start": "node dist/cli.js",
     "dev": "tsx watch src/cli.ts",
     "test": "jest"
@@ -45,6 +45,8 @@
     "concurrently": "^9.1.2",
     "jest": "^30.0.5",
     "ts-jest": "^29.4.0",
+    "tsc-alias": "^1.8.16",
+    "tsc-esm-fix": "^3.1.2",
     "tsx": "^4.20.3",
     "typescript": "^5.3.3"
   }

@@ -27,7 +27,7 @@ import {
 
 export const server = new McpServer({
   name: "mcp-for-redmine",
-  version: "0.1.1",
+  version: "0.1.2",
 });
 
 // User Tools
