@@ -1,18 +1,26 @@
 import axios from "axios";
-import dotenv from "dotenv";
-dotenv.config();
+import "dotenv/config";
 
-const REDMINE_API_KEY = process.env.REDMINE_API_KEY;
-const REDMINE_BASE_URL = process.env.REDMINE_BASE_URL;
+export const axiosInstance = axios.create();
 
-if (!REDMINE_API_KEY || !REDMINE_BASE_URL) {
-  throw new Error("Redmine API Key or Base URL is not defined in environment variables.");
-}
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const REDMINE_API_KEY = process.env.REDMINE_API_KEY;
+    const REDMINE_BASE_URL = process.env.REDMINE_BASE_URL;
 
-export const axiosInstance = axios.create({
-  baseURL: REDMINE_BASE_URL,
-  headers: {
-    "X-Redmine-API-Key": REDMINE_API_KEY,
-    "Content-Type": "application/json",
+    if (!REDMINE_API_KEY || !REDMINE_BASE_URL) {
+      throw new Error(
+        "Redmine API Key or Base URL is not defined. Please configure them in your .env file."
+      );
+    }
+
+    config.baseURL = REDMINE_BASE_URL;
+    config.headers["X-Redmine-API-Key"] = REDMINE_API_KEY;
+    config.headers["Content-Type"] = "application/json";
+
+    return config;
   },
-});
+  (error) => {
+    return Promise.reject(error);
+  }
+);
