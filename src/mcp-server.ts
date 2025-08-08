@@ -18,6 +18,7 @@ import {
   listProjectsTool,
   listTimeEntriesTool,
   listUsersTool,
+  searchTool,
   unarchiveProjectTool,
   updateIssueTool,
   updateProjectTool,
@@ -201,8 +202,8 @@ server.registerTool(
 //   listCustomFieldsTool.execute
 // );
 
-// // Search Tools
-// server.registerTool(searchTool.name, searchTool.config, searchTool.execute);
+// Search Tools
+server.registerTool(searchTool.name, searchTool.config, searchTool.execute);
 
 // // My Account Tools
 // server.registerTool(getMyAccountTool.name, getMyAccountTool.config, getMyAccountTool.execute);
