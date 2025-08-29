@@ -1,7 +1,8 @@
-import { createUser, deleteUser, getUser, listUsers, updateUser } from "@/api/users.api";
+import { createUser, deleteUser, getCurrentUser, getUser, listUsers, updateUser } from "@/api/users.api";
 import {
   CreateUserToolSchema,
   DeleteUserToolSchema,
+  GetCurrentUserToolSchema,
   GetUserToolSchema,
   ListUsersToolSchema,
   UpdateUserToolSchema,
@@ -47,6 +48,24 @@ export const getUserTool: McpTool<typeof GetUserToolSchema.shape> = {
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to retrieve user ${id}: ${errorMessage}`);
+    }
+  },
+};
+
+export const getCurrentUserTool: McpTool<typeof GetCurrentUserToolSchema.shape> = {
+  name: "users_current",
+  config: {
+    description: "Retrieves the currently logged-in user account from Redmine.",
+    inputSchema: GetCurrentUserToolSchema.shape,
+  },
+  execute: async ({ include }) => {
+    try {
+      const params = include ? { include } : undefined;
+      const result = await getCurrentUser(params);
+      return { content: [{ type: "text", text: JSON.stringify(result.user) }] };
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
+      throw new Error(`Failed to retrieve current user: ${errorMessage}`);
     }
   },
 };

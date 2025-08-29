@@ -10,6 +10,7 @@ import {
   deleteProjectTool,
   deleteTimeEntryTool,
   deleteUserTool,
+  getCurrentUserTool,
   getIssueTool,
   getProjectTool,
   getTimeEntryTool,
@@ -34,6 +35,7 @@ export const server = new McpServer({
 // User Tools
 server.registerTool(createUserTool.name, createUserTool.config, createUserTool.execute);
 server.registerTool(getUserTool.name, getUserTool.config, getUserTool.execute);
+server.registerTool(getCurrentUserTool.name, getCurrentUserTool.config, getCurrentUserTool.execute);
 server.registerTool(listUsersTool.name, listUsersTool.config, listUsersTool.execute);
 server.registerTool(updateUserTool.name, updateUserTool.config, updateUserTool.execute);
 server.registerTool(deleteUserTool.name, deleteUserTool.config, deleteUserTool.execute);

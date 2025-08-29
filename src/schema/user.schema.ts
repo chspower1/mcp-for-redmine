@@ -101,3 +101,10 @@ export const UpdateUserToolSchema = z.object({
 export const DeleteUserToolSchema = z.object({
   id: z.string().describe("The ID of the user to delete."),
 });
+
+export const GetCurrentUserToolSchema = z.object({
+  include: z
+    .string()
+    .optional()
+    .describe("Comma-separated list of related data to include, e.g., 'memberships,groups'."),
+});
