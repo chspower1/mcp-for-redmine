@@ -13,7 +13,7 @@ import { McpTool } from "@/types/types";
 export const listIssueRelationsTool: McpTool<typeof ListIssueRelationsToolSchema.shape> = {
   name: "issue_relations_list",
   config: {
-    description: "Retrieves a list of relations for a given issue.",
+    description: "Retrieves all relationships for an issue including dependencies and associations. Shows relation types, target issues, and delay values. API Status: Alpha (v1.3).",
     inputSchema: ListIssueRelationsToolSchema.shape,
   },
   execute: async ({ issue_id }) => {
@@ -32,7 +32,7 @@ export const listIssueRelationsTool: McpTool<typeof ListIssueRelationsToolSchema
 export const createIssueRelationTool: McpTool<typeof CreateIssueRelationToolSchema.shape> = {
   name: "issue_relations_create",
   config: {
-    description: "Creates a new relation for an issue.",
+    description: "Creates a new relationship between issues for dependency tracking. Supports blocks, precedes, duplicates, and other relation types. API Status: Alpha (v1.3).",
     inputSchema: CreateIssueRelationToolSchema.shape,
   },
   execute: async ({ issue_id, ...relationData }) => {
@@ -52,7 +52,7 @@ export const createIssueRelationTool: McpTool<typeof CreateIssueRelationToolSche
 export const deleteIssueRelationTool: McpTool<typeof DeleteIssueRelationToolSchema.shape> = {
   name: "issue_relations_delete",
   config: {
-    description: "Deletes an issue relation.",
+    description: "Removes an issue relationship without affecting the related issues. Deletes bidirectional relationships completely. API Status: Alpha (v1.3).",
     inputSchema: DeleteIssueRelationToolSchema.shape,
   },
   execute: async ({ id }) => {
