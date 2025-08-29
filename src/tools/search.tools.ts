@@ -5,7 +5,7 @@ import { McpTool } from "@/types/types";
 export const searchTool: McpTool<typeof SearchToolSchema.shape> = {
   name: "search",
   config: {
-    description: "Performs a search across Redmine.",
+    description: "Performs a global search across Redmine resources including issues, projects, wiki pages, documents, and forum messages. Supports project-scoped search and various filtering options.",
     inputSchema: SearchToolSchema.shape,
   },
   execute: async (params) => {
