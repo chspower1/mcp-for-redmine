@@ -39,37 +39,42 @@ export const AddUserToGroupRequestSchema = z.object({
 export type AddUserToGroupPayload = z.infer<typeof AddUserToGroupRequestSchema>;
 
 // Tool Parameter Schemas
-export const ListGroupsToolSchema = z.object({});
-
-export const GetGroupToolSchema = z.object({
-  id: z.string().describe("The numeric ID of the group."),
+export const ListGroupsToolSchema = z.object({
   include: z
     .string()
     .optional()
-    .describe("Comma-separated list of associations to include (e.g., 'users,memberships')."),
+    .describe("Comma-separated list of associations to include: 'users' (group members), 'memberships' (project memberships). Example: 'users,memberships'."),
+});
+
+export const GetGroupToolSchema = z.object({
+  id: z.string().describe("The numeric ID of the group to retrieve."),
+  include: z
+    .string()
+    .optional()
+    .describe("Comma-separated list of associations to include: 'users' (group members with details), 'memberships' (project memberships). Example: 'users,memberships'."),
 });
 
 export const CreateGroupToolSchema = GroupRequestObjectSchema.extend({
-  name: z.string().describe("The name of the new group."),
-  user_ids: z.array(z.number()).optional().describe("Array of user IDs to add to the group."),
-}).describe("Creates a new group.");
+  name: z.string().describe("The name of the new group. Must be unique across the system."),
+  user_ids: z.array(z.number()).optional().describe("Array of user IDs to add to the group during creation. Users can also be added later using add_user_to_group."),
+}).describe("Creates a new group. Requires administrator privileges. API Status: Alpha (v2.1).");
 
 export const UpdateGroupToolSchema = UpdateGroupRequestSchema.shape.group
   .extend({
-    id: z.string().describe("The ID of the group to update."),
+    id: z.string().describe("The numeric ID of the group to update."),
   })
-  .describe("Updates an existing group.");
+  .describe("Updates an existing group. Requires administrator privileges. API Status: Alpha (v2.1).");
 
 export const DeleteGroupToolSchema = z.object({
-  id: z.string().describe("The ID of the group to delete."),
+  id: z.string().describe("The numeric ID of the group to delete. Warning: This action is permanent and affects user permissions."),
 });
 
 export const AddUserToGroupToolSchema = z.object({
-  group_id: z.string().describe("The ID of the group."),
-  user_id: z.number().describe("The ID of the user to add."),
+  group_id: z.string().describe("The numeric ID of the group to add the user to."),
+  user_id: z.number().describe("The numeric ID of the user to add to the group."),
 });
 
 export const RemoveUserFromGroupToolSchema = z.object({
-  group_id: z.string().describe("The ID of the group."),
-  user_id: z.string().describe("The ID of the user to remove."),
+  group_id: z.string().describe("The numeric ID of the group to remove the user from."),
+  user_id: z.string().describe("The numeric ID of the user to remove from the group."),
 });

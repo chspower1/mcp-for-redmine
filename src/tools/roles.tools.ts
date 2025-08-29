@@ -5,7 +5,7 @@ import { McpTool } from "@/types/types";
 export const listRolesTool: McpTool<typeof ListRolesToolSchema.shape> = {
   name: "roles_list",
   config: {
-    description: "Retrieves a list of all roles.",
+    description: "Retrieves a list of all system roles with basic information (ID and name). API Status: Alpha (v1.4).",
     inputSchema: ListRolesToolSchema.shape,
   },
   execute: async () => {
@@ -24,7 +24,7 @@ export const listRolesTool: McpTool<typeof ListRolesToolSchema.shape> = {
 export const getRoleTool: McpTool<typeof GetRoleToolSchema.shape> = {
   name: "roles_get",
   config: {
-    description: "Retrieves a single role by its ID.",
+    description: "Retrieves detailed role information including all permissions, assignability, and visibility settings. Requires Redmine v2.2.0+. API Status: Alpha (v1.4).",
     inputSchema: GetRoleToolSchema.shape,
   },
   execute: async ({ id }) => {
