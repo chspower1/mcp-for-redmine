@@ -15,7 +15,7 @@ import { McpTool } from "@/types/types";
 export const listWikiPagesTool: McpTool<typeof ListWikiPagesToolSchema.shape> = {
   name: "wiki_pages_list",
   config: {
-    description: "Retrieves a list of all wiki pages for a given project.",
+    description: "Retrieves all wiki page titles for a project. Shows available documentation pages without content. API Status: Alpha (v2.2).",
     inputSchema: ListWikiPagesToolSchema.shape,
   },
   execute: async ({ project_id }) => {
@@ -34,7 +34,7 @@ export const listWikiPagesTool: McpTool<typeof ListWikiPagesToolSchema.shape> = 
 export const getWikiPageTool: McpTool<typeof GetWikiPageToolSchema.shape> = {
   name: "wiki_pages_get",
   config: {
-    description: "Retrieves a specific wiki page from a project.",
+    description: "Retrieves a specific wiki page with full content and metadata. Can fetch historical versions and includes author information. API Status: Alpha (v2.2).",
     inputSchema: GetWikiPageToolSchema.shape,
   },
   execute: async ({ project_id, title, version }) => {
@@ -53,7 +53,7 @@ export const getWikiPageTool: McpTool<typeof GetWikiPageToolSchema.shape> = {
 export const createOrUpdateWikiPageTool: McpTool<typeof CreateOrUpdateWikiPageToolSchema.shape> = {
   name: "wiki_pages_create_or_update",
   config: {
-    description: "Creates or updates a wiki page.",
+    description: "Creates or updates wiki page content with version control. Supports optimistic locking and change tracking. Use version parameter to prevent conflicts. API Status: Alpha (v2.2).",
     inputSchema: CreateOrUpdateWikiPageToolSchema.shape,
   },
   execute: async ({ project_id, title, ...pageData }) => {
@@ -73,7 +73,7 @@ export const createOrUpdateWikiPageTool: McpTool<typeof CreateOrUpdateWikiPageTo
 export const deleteWikiPageTool: McpTool<typeof DeleteWikiPageToolSchema.shape> = {
   name: "wiki_pages_delete",
   config: {
-    description: "Deletes a wiki page.",
+    description: "Permanently deletes a wiki page and all its version history. Warning: This action removes all page data and attachments irreversibly. API Status: Alpha (v2.2).",
     inputSchema: DeleteWikiPageToolSchema.shape,
   },
   execute: async ({ project_id, title }) => {
