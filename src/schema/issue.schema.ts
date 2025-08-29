@@ -125,12 +125,32 @@ export const ListIssuesToolSchema = z.object({
     .union([z.string(), z.number()])
     .optional()
     .describe("Filter by assigned user ID. Can be a specific ID or 'me' for the current user."),
+  priority_id: z.number().optional().describe("Filter by priority ID."),
+  category_id: z.number().optional().describe("Filter by issue category ID."),
+  fixed_version_id: z.number().optional().describe("Filter by target version ID."),
+  parent_id: z.number().optional().describe("Filter by parent issue ID (for subtasks)."),
+  created_on: z
+    .string()
+    .optional()
+    .describe("Filter by creation date. Use '>=' or '<=' followed by date (YYYY-MM-DD)."),
+  updated_on: z
+    .string()
+    .optional()
+    .describe("Filter by update date. Use '>=' or '<=' followed by date (YYYY-MM-DD)."),
+  closed_on: z
+    .string()
+    .optional()
+    .describe("Filter by closed date. Use '>=' or '<=' followed by date (YYYY-MM-DD)."),
   limit: z.number().optional().describe("Number of issues to return (default 25, max 100)."),
   offset: z.number().optional().describe("Offset for pagination."),
   sort: z
     .string()
     .optional()
     .describe("Comma-separated list of fields for sorting, e.g., 'priority:desc,updated_on:desc'."),
+  include: z
+    .string()
+    .optional()
+    .describe("Comma-separated list of associations to include in the response."),
 });
 
 export const CreateIssueToolSchema = CreateIssueRequestObjectSchema.extend({

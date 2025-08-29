@@ -11,7 +11,7 @@ import { McpTool } from "@/types/types";
 export const listIssuesTool: McpTool<typeof ListIssuesToolSchema.shape> = {
   name: "issues_list",
   config: {
-    description: "Retrieves a list of issues from Redmine, with optional filters.",
+    description: "Retrieves a list of issues from Redmine with comprehensive filtering and pagination. Supports filtering by project, status, assignee, dates, and many other criteria.",
     inputSchema: ListIssuesToolSchema.shape,
   },
   execute: async (params) => {
@@ -30,7 +30,7 @@ export const listIssuesTool: McpTool<typeof ListIssuesToolSchema.shape> = {
 export const getIssueTool: McpTool<typeof GetIssueToolSchema.shape> = {
   name: "issues_get",
   config: {
-    description: "Retrieves a single issue from Redmine by its ID.",
+    description: "Retrieves a single issue from Redmine by its ID. Can include related data like attachments, comments, watchers, and child issues.",
     inputSchema: GetIssueToolSchema.shape,
   },
   execute: async ({ id, include }) => {
@@ -49,7 +49,7 @@ export const getIssueTool: McpTool<typeof GetIssueToolSchema.shape> = {
 export const createIssueTool: McpTool<typeof CreateIssueToolSchema.shape> = {
   name: "issues_create",
   config: {
-    description: "Creates a new issue in Redmine.",
+    description: "Creates a new issue in Redmine. Requires project_id and subject. Can set assignee, priority, due date, and custom fields.",
     inputSchema: CreateIssueToolSchema.shape,
   },
   execute: async (args) => {
@@ -69,7 +69,7 @@ export const createIssueTool: McpTool<typeof CreateIssueToolSchema.shape> = {
 export const updateIssueTool: McpTool<typeof UpdateIssueToolSchema.shape> = {
   name: "issues_update",
   config: {
-    description: "Updates an existing issue in Redmine.",
+    description: "Updates an existing issue in Redmine. All fields are optional. Use 'notes' field to add comments with the update.",
     inputSchema: UpdateIssueToolSchema.shape,
   },
   execute: async ({ id, ...updateData }) => {
@@ -99,7 +99,7 @@ export const updateIssueTool: McpTool<typeof UpdateIssueToolSchema.shape> = {
 export const deleteIssueTool: McpTool<typeof DeleteIssueToolSchema.shape> = {
   name: "issues_delete",
   config: {
-    description: "Deletes an issue from Redmine.",
+    description: "Deletes an issue from Redmine. Requires deletion permissions. Warning: This action is permanent and cannot be undone.",
     inputSchema: DeleteIssueToolSchema.shape,
   },
   execute: async ({ id }) => {
