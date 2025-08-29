@@ -5,7 +5,7 @@ import { McpTool } from "@/types/types";
 export const listQueriesTool: McpTool<typeof ListQueriesToolSchema.shape> = {
   name: "queries_list",
   config: {
-    description: "Retrieves a list of all available custom queries.",
+    description: "Retrieves all custom queries visible to the user including public and private queries. Use query IDs with Issues API for filtered results. API Status: Alpha (v1.3).",
     inputSchema: ListQueriesToolSchema.shape,
   },
   execute: async () => {
