@@ -5,7 +5,7 @@ import { McpTool } from "@/types/types";
 export const listFilesTool: McpTool<typeof ListFilesToolSchema.shape> = {
   name: "files_list",
   config: {
-    description: "Retrieves a list of files for a given project from Redmine.",
+    description: "Retrieves all files uploaded to a project's Files section. Shows file metadata, download statistics, version associations, and author information. API Status: Alpha (v3.4).",
     inputSchema: ListFilesToolSchema.shape,
   },
   execute: async ({ project_id }) => {
