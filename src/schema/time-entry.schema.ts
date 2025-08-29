@@ -45,8 +45,21 @@ export const ListTimeEntriesToolSchema = z.object({
     .union([z.string(), z.number()])
     .optional()
     .describe("Filter by project ID or identifier."),
-  user_id: z.union([z.string(), z.number()]).optional().describe("Filter by user ID or 'me'."),
+  user_id: z.union([z.string(), z.number()]).optional().describe("Filter by user ID or 'me' for current user."),
   issue_id: z.string().optional().describe("Filter by issue ID."),
+  spent_on: z
+    .string()
+    .optional()
+    .describe("Filter by specific date when time was spent (YYYY-MM-DD format)."),
+  from: z
+    .string()
+    .optional()
+    .describe("Filter entries from this date onwards (YYYY-MM-DD format)."),
+  to: z
+    .string()
+    .optional()
+    .describe("Filter entries up to this date (YYYY-MM-DD format)."),
+  activity_id: z.number().optional().describe("Filter by time tracking activity ID."),
   limit: z.number().optional().describe("Number of entries to return (default 25, max 100)."),
   offset: z.number().optional().describe("Offset for pagination."),
 });
@@ -56,8 +69,27 @@ export const GetTimeEntryToolSchema = z.object({
 });
 
 export const CreateTimeEntryToolSchema = TimeEntryRequestObjectSchema.extend({
-  spent_on: z.string().describe("Date the time was spent, e.g., 'YYYY-MM-DD'."),
-}).describe("Creates a new time entry.");
+  spent_on: z
+    .string()
+    .describe("Date the time was spent in YYYY-MM-DD format. Defaults to current date if not provided."),
+  hours: z
+    .number()
+    .positive()
+    .describe("Number of hours spent. Use decimal format for partial hours (e.g., 1.5 for 1 hour 30 minutes)."),
+  comments: z
+    .string()
+    .max(255)
+    .optional()
+    .describe("Description of the work performed. Maximum 255 characters."),
+  activity_id: z
+    .number()
+    .optional()
+    .describe("Time tracking activity ID. If not provided, default activity will be used."),
+  user_id: z
+    .number()
+    .optional()
+    .describe("User ID for logging time on behalf of another user (requires permissions)."),
+}).describe("Creates a new time entry. Requires either issue_id or project_id, plus hours.");
 
 export const UpdateTimeEntryToolSchema = UpdateTimeEntryRequestSchema.shape.time_entry
   .extend({

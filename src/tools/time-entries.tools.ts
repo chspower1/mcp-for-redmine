@@ -17,7 +17,7 @@ import { McpTool } from "@/types/types";
 export const listTimeEntriesTool: McpTool<typeof ListTimeEntriesToolSchema.shape> = {
   name: "time_entries_list",
   config: {
-    description: "Retrieves a list of time entries, with optional filters.",
+    description: "Retrieves a list of time entries with optional filtering by project, user, issue, date ranges, and activity. Supports pagination.",
     inputSchema: ListTimeEntriesToolSchema.shape,
   },
   execute: async (params) => {
@@ -36,7 +36,7 @@ export const listTimeEntriesTool: McpTool<typeof ListTimeEntriesToolSchema.shape
 export const getTimeEntryTool: McpTool<typeof GetTimeEntryToolSchema.shape> = {
   name: "time_entries_get",
   config: {
-    description: "Retrieves a single time entry by its ID.",
+    description: "Retrieves a single time entry by its ID. Returns detailed information about time spent, activity, and comments.",
     inputSchema: GetTimeEntryToolSchema.shape,
   },
   execute: async ({ id }) => {
@@ -55,7 +55,7 @@ export const getTimeEntryTool: McpTool<typeof GetTimeEntryToolSchema.shape> = {
 export const createTimeEntryTool: McpTool<typeof CreateTimeEntryToolSchema.shape> = {
   name: "time_entries_create",
   config: {
-    description: "Creates a new time entry.",
+    description: "Creates a new time entry in Redmine. Requires either project_id or issue_id, plus hours spent. Can include activity, comments (max 255 chars), and specific date.",
     inputSchema: CreateTimeEntryToolSchema.shape,
   },
   execute: async (args) => {
@@ -75,7 +75,7 @@ export const createTimeEntryTool: McpTool<typeof CreateTimeEntryToolSchema.shape
 export const updateTimeEntryTool: McpTool<typeof UpdateTimeEntryToolSchema.shape> = {
   name: "time_entries_update",
   config: {
-    description: "Updates an existing time entry.",
+    description: "Updates an existing time entry. All fields are optional. Can modify hours, activity, comments, or date. Comments are limited to 255 characters.",
     inputSchema: UpdateTimeEntryToolSchema.shape,
   },
   execute: async ({ id, ...updateData }) => {
@@ -105,7 +105,7 @@ export const updateTimeEntryTool: McpTool<typeof UpdateTimeEntryToolSchema.shape
 export const deleteTimeEntryTool: McpTool<typeof DeleteTimeEntryToolSchema.shape> = {
   name: "time_entries_delete",
   config: {
-    description: "Deletes a time entry.",
+    description: "Deletes a time entry from Redmine. Users can typically only delete their own entries. Warning: This action is permanent.",
     inputSchema: DeleteTimeEntryToolSchema.shape,
   },
   execute: async ({ id }) => {
