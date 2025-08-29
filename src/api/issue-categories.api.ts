@@ -15,7 +15,19 @@ interface IssueCategoryResponse {
 
 /**
  * Retrieves a list of all issue categories for a given project.
- * @param projectId The ID or identifier of the project.
+ * 
+ * **Note**: 
+ * - API Status: Alpha (v1.3) - Major functionality in place, may change
+ * - Categories help organize and classify issues within projects
+ * - Categories can have assigned users for automatic issue assignment
+ * 
+ * Response includes:
+ * - Category ID and name
+ * - Project reference information
+ * - Optional assigned user (if configured for automatic assignment)
+ * 
+ * @param projectId - The numeric ID or string identifier of the project
+ * @returns Promise containing the list of project-specific issue categories
  */
 export const listIssueCategories = async (
   projectId: string | number
@@ -26,8 +38,22 @@ export const listIssueCategories = async (
 
 /**
  * Creates a new issue category for a project.
- * @param projectId The ID or identifier of the project.
- * @param categoryData The data for the new category.
+ * 
+ * **Note**: 
+ * - API Status: Alpha (v1.3) - Major functionality in place, may change
+ * - Requires project administration permissions
+ * - Category names must be unique within the project
+ * 
+ * Required fields:
+ * - name: Category name (must be unique within project)
+ * 
+ * Optional fields:
+ * - assigned_to_id: User ID for automatic issue assignment
+ * 
+ * @param projectId - The numeric ID or string identifier of the project
+ * @param categoryData - The issue category data containing name and optional assigned user
+ * @returns Promise containing the created issue category information
+ * @throws 422 Unprocessable Entity if validation fails (e.g., duplicate name)
  */
 export const createIssueCategory = async (
   projectId: string | number,
@@ -41,8 +67,15 @@ export const createIssueCategory = async (
 };
 
 /**
- * Retrieves a single issue category by its ID.
- * @param id The ID of the issue category.
+ * Retrieves detailed information about a specific issue category.
+ * 
+ * **Note**: 
+ * - API Status: Alpha (v1.3) - Major functionality in place, may change
+ * - Returns complete category information including project and assigned user
+ * - Cross-project category access depending on user permissions
+ * 
+ * @param id - The numeric ID of the issue category to retrieve
+ * @returns Promise containing detailed issue category information
  */
 export const getIssueCategory = async (id: string): Promise<IssueCategoryResponse> => {
   const response = await axiosInstance.get(`/issue_categories/${id}.json`);
@@ -50,9 +83,18 @@ export const getIssueCategory = async (id: string): Promise<IssueCategoryRespons
 };
 
 /**
- * Updates an issue category.
- * @param id The ID of the issue category.
- * @param categoryData The data to update.
+ * Updates an existing issue category's properties.
+ * 
+ * **Note**: 
+ * - API Status: Alpha (v1.3) - Major functionality in place, may change
+ * - Requires project administration permissions
+ * - Can update category name and assigned user
+ * - Category name must remain unique within project
+ * 
+ * @param id - The numeric ID of the issue category to update
+ * @param categoryData - The issue category data with fields to update
+ * @returns Promise that resolves when the update is successful
+ * @throws 422 Unprocessable Entity if validation fails
  */
 export const updateIssueCategory = async (
   id: string,
@@ -62,9 +104,21 @@ export const updateIssueCategory = async (
 };
 
 /**
- * Deletes an issue category.
- * @param id The ID of the issue category.
+ * Deletes an issue category from the system.
+ * 
+ * **Note**: 
+ * - API Status: Alpha (v1.3) - Major functionality in place, may change
+ * - Requires project administration permissions
+ * - Optional reassign_to_id parameter can redirect existing issues to another category
+ * - Without reassignment, issues lose their category assignment
+ * 
+ * **Warning**: This action affects all issues currently assigned to this category.
+ * 
+ * @param id - The numeric ID of the issue category to delete
+ * @param reassignToId - Optional category ID to reassign existing issues to
+ * @returns Promise that resolves when the deletion is successful
  */
-export const deleteIssueCategory = async (id: string): Promise<void> => {
-  await axiosInstance.delete(`/issue_categories/${id}.json`);
+export const deleteIssueCategory = async (id: string, reassignToId?: number): Promise<void> => {
+  const params = reassignToId ? { reassign_to_id: reassignToId } : {};
+  await axiosInstance.delete(`/issue_categories/${id}.json`, { params });
 };
