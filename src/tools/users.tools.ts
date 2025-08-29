@@ -12,7 +12,7 @@ import { McpTool } from "@/types/types";
 export const createUserTool: McpTool<typeof CreateUserToolSchema.shape> = {
   name: "users_create",
   config: {
-    description: "Creates a new user in Redmine.",
+    description: "Creates a new user in Redmine. Requires administrator privileges. Either 'password' or 'generate_password' must be provided.",
     inputSchema: CreateUserToolSchema.shape,
   },
   execute: async (args) => {
@@ -38,12 +38,13 @@ export const createUserTool: McpTool<typeof CreateUserToolSchema.shape> = {
 export const getUserTool: McpTool<typeof GetUserToolSchema.shape> = {
   name: "users_get",
   config: {
-    description: "Retrieves a single user from Redmine by their ID.",
+    description: "Retrieves a single user from Redmine by their ID. Admins see full details, non-admins see limited info. Can include memberships and groups.",
     inputSchema: GetUserToolSchema.shape,
   },
-  execute: async ({ id }) => {
+  execute: async ({ id, include }) => {
     try {
-      const result = await getUser(id);
+      const params = include ? { include } : undefined;
+      const result = await getUser(id, params);
       return { content: [{ type: "text", text: JSON.stringify(result.user) }] };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
@@ -55,7 +56,7 @@ export const getUserTool: McpTool<typeof GetUserToolSchema.shape> = {
 export const getCurrentUserTool: McpTool<typeof GetCurrentUserToolSchema.shape> = {
   name: "users_current",
   config: {
-    description: "Retrieves the currently logged-in user account from Redmine.",
+    description: "Retrieves the currently authenticated user's account information. Returns details about the user associated with the current API key or session.",
     inputSchema: GetCurrentUserToolSchema.shape,
   },
   execute: async ({ include }) => {
@@ -73,12 +74,12 @@ export const getCurrentUserTool: McpTool<typeof GetCurrentUserToolSchema.shape> 
 export const listUsersTool: McpTool<typeof ListUsersToolSchema.shape> = {
   name: "users_list",
   config: {
-    description: "Retrieves a list of users from Redmine. This is an admin-only function.",
+    description: "Retrieves a list of users from Redmine. Requires administrator privileges. Supports filtering by status, name, and group membership.",
     inputSchema: ListUsersToolSchema.shape,
   },
-  execute: async () => {
+  execute: async (params) => {
     try {
-      const result = await listUsers();
+      const result = await listUsers(params);
       return {
         content: [{ type: "text", text: JSON.stringify(result.users) }],
       };
@@ -92,7 +93,7 @@ export const listUsersTool: McpTool<typeof ListUsersToolSchema.shape> = {
 export const updateUserTool: McpTool<typeof UpdateUserToolSchema.shape> = {
   name: "users_update",
   config: {
-    description: "Updates an existing user in Redmine.",
+    description: "Updates an existing user in Redmine. Requires administrator privileges. All fields are optional - only provide fields to update.",
     inputSchema: UpdateUserToolSchema.shape,
   },
   execute: async ({ id, ...updateData }) => {
@@ -122,7 +123,7 @@ export const updateUserTool: McpTool<typeof UpdateUserToolSchema.shape> = {
 export const deleteUserTool: McpTool<typeof DeleteUserToolSchema.shape> = {
   name: "users_delete",
   config: {
-    description: "Deletes a user from Redmine.",
+    description: "Deletes a user from Redmine. Requires administrator privileges. Warning: This action is permanent and cannot be undone.",
     inputSchema: DeleteUserToolSchema.shape,
   },
   execute: async ({ id }) => {
