@@ -1,27 +1,28 @@
 import { z } from "zod";
 import { RedmineReferenceSchema } from "./reference.schema";
 
-// Base Version Schema for Redmine
+// Base Version Schema for Redmine (v1.3 Alpha)
 export const RedmineVersionSchema = z.object({
-  id: z.number(),
-  project: RedmineReferenceSchema,
-  name: z.string(),
-  description: z.string(),
-  status: z.enum(["open", "locked", "closed"]),
-  due_date: z.string().nullable(), // date
-  sharing: z.string(),
-  created_on: z.string().datetime(),
-  updated_on: z.string().datetime(),
+  id: z.number().describe("Unique numeric identifier for the version"),
+  project: RedmineReferenceSchema.describe("Project this version belongs to"),
+  name: z.string().describe("Human-readable version name (must be unique within project)"),
+  description: z.string().describe("Version description and release notes"),
+  status: z.enum(["open", "locked", "closed"]).describe("Version status: open (active), locked (read-only), closed (completed)"),
+  due_date: z.string().nullable().describe("Target completion date in YYYY-MM-DD format"),
+  sharing: z.string().describe("Sharing scope: none, descendants, hierarchy, tree, or system"),
+  created_on: z.string().datetime().describe("Version creation timestamp"),
+  updated_on: z.string().datetime().describe("Last modification timestamp"),
 });
 export type RedmineVersion = z.infer<typeof RedmineVersionSchema>;
 
-// API Request Schemas
+// API Request Schemas for Versions (v1.3 Alpha)
 const VersionRequestObjectSchema = z.object({
-  name: z.string(),
-  status: z.enum(["open", "locked", "closed"]).optional(),
-  sharing: z.enum(["none", "descendants", "hierarchy", "tree", "system"]).optional(),
-  due_date: z.string().optional().describe("The version due date, e.g., 'YYYY-MM-DD'."),
-  description: z.string().optional(),
+  name: z.string().describe("Version name (required, must be unique within project)"),
+  status: z.enum(["open", "locked", "closed"]).optional().describe("Version status (default: open)"),
+  sharing: z.enum(["none", "descendants", "hierarchy", "tree", "system"]).optional().describe("Version sharing scope (default: none)"),
+  due_date: z.string().optional().describe("Target completion date in YYYY-MM-DD format"),
+  description: z.string().optional().describe("Version description and release notes"),
+  wiki_page_title: z.string().optional().describe("Associated wiki page title"),
 });
 
 export const CreateVersionRequestSchema = z.object({
@@ -34,29 +35,29 @@ export const UpdateVersionRequestSchema = z.object({
 });
 export type UpdateVersionPayload = z.infer<typeof UpdateVersionRequestSchema>;
 
-// Tool Parameter Schemas
+// Tool Parameter Schemas for Versions API (v1.3 Alpha)
 export const ListVersionsToolSchema = z.object({
   project_id: z
     .union([z.string(), z.number()])
-    .describe("The ID or identifier of the project to list versions for."),
-});
+    .describe("The numeric ID or string identifier of the project to list versions for"),
+}).describe("Retrieve all versions for a project including shared versions from other projects");
 
 export const GetVersionToolSchema = z.object({
-  id: z.string().describe("The numeric ID of the version."),
-});
+  id: z.string().describe("The numeric ID of the version to retrieve detailed information for"),
+}).describe("Retrieve detailed information about a specific version including sharing settings");
 
 export const CreateVersionToolSchema = VersionRequestObjectSchema.extend({
   project_id: z
     .union([z.string(), z.number()])
-    .describe("The ID or identifier of the project to create the version in."),
-}).describe("Creates a new version for a project.");
+    .describe("The numeric ID or string identifier of the project to create the version in"),
+}).describe("Create a new version for project milestone tracking and issue organization");
 
 export const UpdateVersionToolSchema = UpdateVersionRequestSchema.shape.version
   .extend({
-    id: z.string().describe("The ID of the version to update."),
+    id: z.string().describe("The numeric ID of the version to update"),
   })
-  .describe("Updates an existing version.");
+  .describe("Update an existing version's status, dates, description, or sharing settings");
 
 export const DeleteVersionToolSchema = z.object({
-  id: z.string().describe("The ID of the version to delete."),
-});
+  id: z.string().describe("The numeric ID of the version to delete"),
+}).describe("Delete a version and unassign it from all related issues");
