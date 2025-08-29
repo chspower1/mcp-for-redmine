@@ -5,7 +5,7 @@ import { McpTool } from "@/types/types";
 export const getMyAccountTool: McpTool<typeof GetMyAccountToolSchema.shape> = {
   name: "my_account_get",
   config: {
-    description: "Retrieves the currently logged-in user account from Redmine.",
+    description: "Retrieves current user's account information including profile, API key, and permissions. Can include memberships and group associations. API Status: Alpha (v4.1).",
     inputSchema: GetMyAccountToolSchema.shape,
   },
   execute: async (params) => {
