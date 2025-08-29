@@ -5,7 +5,7 @@ import { McpTool } from "@/types/types";
 export const listCustomFieldsTool: McpTool<typeof ListCustomFieldsToolSchema.shape> = {
   name: "custom_fields_list",
   config: {
-    description: "Retrieves a list of all custom fields.",
+    description: "Retrieves all custom field definitions with complete configuration. Requires administrator privileges. Shows field types, validation rules, and visibility settings. API Status: Alpha (v2.4).",
     inputSchema: ListCustomFieldsToolSchema.shape,
   },
   execute: async () => {
