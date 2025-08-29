@@ -47,7 +47,7 @@ export const GetProjectToolSchema = z.object({
     .string()
     .optional()
     .describe(
-      "Comma-separated list of related data to include, e.g., 'trackers,issue_categories'."
+      "Comma-separated list of associations to include: 'trackers' (issue trackers), 'issue_categories' (categories), 'enabled_modules' (enabled modules), 'time_entry_activities' (time activities)."
     ),
 });
 
