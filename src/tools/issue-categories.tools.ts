@@ -17,7 +17,8 @@ import { McpTool } from "@/types/types";
 export const listIssueCategoriesTool: McpTool<typeof ListIssueCategoriesToolSchema.shape> = {
   name: "issue_categories_list",
   config: {
-    description: "Retrieves a list of issue categories for a project. Shows category names, assigned users, and organization structure. API Status: Alpha (v1.3).",
+    description:
+      "Retrieves a list of issue categories for a project. Shows category names and assigned users. API Status: Alpha (v1.3). Docs: https://www.redmine.org/projects/redmine/wiki/Rest_IssueCategories",
     inputSchema: ListIssueCategoriesToolSchema.shape,
   },
   execute: async ({ project_id }) => {
@@ -36,7 +37,8 @@ export const listIssueCategoriesTool: McpTool<typeof ListIssueCategoriesToolSche
 export const createIssueCategoryTool: McpTool<typeof CreateIssueCategoryToolSchema.shape> = {
   name: "issue_categories_create",
   config: {
-    description: "Creates a new issue category for project organization. Requires project admin permissions. Category names must be unique within project. API Status: Alpha (v1.3).",
+    description:
+      "Creates a new issue category. Requires project admin permissions. Unique name within project. API Status: Alpha (v1.3). Docs: https://www.redmine.org/projects/redmine/wiki/Rest_IssueCategories#POST",
     inputSchema: CreateIssueCategoryToolSchema.shape,
   },
   execute: async ({ project_id, ...categoryData }) => {
@@ -56,7 +58,8 @@ export const createIssueCategoryTool: McpTool<typeof CreateIssueCategoryToolSche
 export const getIssueCategoryTool: McpTool<typeof GetIssueCategoryToolSchema.shape> = {
   name: "issue_categories_get",
   config: {
-    description: "Retrieves detailed information about a specific issue category. Shows project association, assigned user, and category configuration. API Status: Alpha (v1.3).",
+    description:
+      "Retrieves a specific issue category by numeric id. API Status: Alpha (v1.3). Docs: https://www.redmine.org/projects/redmine/wiki/Rest_IssueCategories#GET",
     inputSchema: GetIssueCategoryToolSchema.shape,
   },
   execute: async ({ id }) => {
@@ -75,7 +78,8 @@ export const getIssueCategoryTool: McpTool<typeof GetIssueCategoryToolSchema.sha
 export const updateIssueCategoryTool: McpTool<typeof UpdateIssueCategoryToolSchema.shape> = {
   name: "issue_categories_update",
   config: {
-    description: "Updates an existing issue category's name or assigned user. Requires project admin permissions. Category names must remain unique within project. API Status: Alpha (v1.3).",
+    description:
+      "Updates an issue category's name or assigned user. Requires project admin. API Status: Alpha (v1.3). Docs: https://www.redmine.org/projects/redmine/wiki/Rest_IssueCategories#PUT",
     inputSchema: UpdateIssueCategoryToolSchema.shape,
   },
   execute: async ({ id, ...categoryData }) => {
@@ -103,12 +107,13 @@ export const updateIssueCategoryTool: McpTool<typeof UpdateIssueCategoryToolSche
 export const deleteIssueCategoryTool: McpTool<typeof DeleteIssueCategoryToolSchema.shape> = {
   name: "issue_categories_delete",
   config: {
-    description: "Deletes an issue category with optional issue reassignment. Requires project admin permissions. Warning: Affects all issues in this category. API Status: Alpha (v1.3).",
+    description:
+      "Deletes an issue category with optional reassignment. Requires project admin. Warning: affects issues in this category. API Status: Alpha (v1.3). Docs: https://www.redmine.org/projects/redmine/wiki/Rest_IssueCategories#DELETE",
     inputSchema: DeleteIssueCategoryToolSchema.shape,
   },
-  execute: async ({ id }) => {
+  execute: async ({ id, reassign_to_id }) => {
     try {
-      await deleteIssueCategory(id);
+      await deleteIssueCategory(id, reassign_to_id);
       return {
         content: [
           {
