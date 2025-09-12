@@ -43,38 +43,64 @@ export const ListGroupsToolSchema = z.object({
   include: z
     .string()
     .optional()
-    .describe("Comma-separated list of associations to include: 'users' (group members), 'memberships' (project memberships). Example: 'users,memberships'."),
+    .describe(
+      "Comma-separated list of associations to include: 'users' (group members), 'memberships' (project memberships). Example: 'users,memberships'."
+    ),
+  offset: z
+    .number()
+    .int()
+    .min(0)
+    .optional()
+    .describe("Offset of the first group to return for pagination."),
+  limit: z.number().int().min(1).optional().describe("Number of groups per page (page size)."),
 });
 
 export const GetGroupToolSchema = z.object({
-  id: z.string().describe("The numeric ID of the group to retrieve."),
+  id: z.union([z.string(), z.number()]).describe("The numeric ID of the group to retrieve."),
   include: z
     .string()
     .optional()
-    .describe("Comma-separated list of associations to include: 'users' (group members with details), 'memberships' (project memberships). Example: 'users,memberships'."),
+    .describe(
+      "Comma-separated list of associations to include: 'users' (group members with details), 'memberships' (project memberships). Example: 'users,memberships'."
+    ),
 });
 
 export const CreateGroupToolSchema = GroupRequestObjectSchema.extend({
   name: z.string().describe("The name of the new group. Must be unique across the system."),
-  user_ids: z.array(z.number()).optional().describe("Array of user IDs to add to the group during creation. Users can also be added later using add_user_to_group."),
+  user_ids: z
+    .array(z.number())
+    .optional()
+    .describe(
+      "Array of user IDs to add to the group during creation. Users can also be added later using add_user_to_group."
+    ),
 }).describe("Creates a new group. Requires administrator privileges. API Status: Alpha (v2.1).");
 
 export const UpdateGroupToolSchema = UpdateGroupRequestSchema.shape.group
   .extend({
-    id: z.string().describe("The numeric ID of the group to update."),
+    id: z.union([z.string(), z.number()]).describe("The numeric ID of the group to update."),
   })
-  .describe("Updates an existing group. Requires administrator privileges. API Status: Alpha (v2.1).");
+  .describe(
+    "Updates an existing group. Requires administrator privileges. API Status: Alpha (v2.1)."
+  );
 
 export const DeleteGroupToolSchema = z.object({
-  id: z.string().describe("The numeric ID of the group to delete. Warning: This action is permanent and affects user permissions."),
+  id: z
+    .union([z.string(), z.number()])
+    .describe(
+      "The numeric ID of the group to delete. Warning: This action is permanent and affects user permissions."
+    ),
 });
 
 export const AddUserToGroupToolSchema = z.object({
-  group_id: z.string().describe("The numeric ID of the group to add the user to."),
+  group_id: z
+    .union([z.string(), z.number()])
+    .describe("The numeric ID of the group to add the user to."),
   user_id: z.number().describe("The numeric ID of the user to add to the group."),
 });
 
 export const RemoveUserFromGroupToolSchema = z.object({
-  group_id: z.string().describe("The numeric ID of the group to remove the user from."),
-  user_id: z.string().describe("The numeric ID of the user to remove from the group."),
+  group_id: z
+    .union([z.string(), z.number()])
+    .describe("The numeric ID of the group to remove the user from."),
+  user_id: z.number().describe("The numeric ID of the user to remove from the group."),
 });

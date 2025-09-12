@@ -21,14 +21,15 @@ import { McpTool } from "@/types/types";
 export const listGroupsTool: McpTool<typeof ListGroupsToolSchema.shape> = {
   name: "groups_list",
   config: {
-    description: "Retrieves a list of all groups. Requires administrator privileges. Can include group members and memberships. API Status: Alpha (v2.1).",
+    description:
+      "Retrieves a list of all groups. Supports pagination (offset, limit). Can include users and memberships. Requires administrator privileges. API Status: Alpha (v2.1).",
     inputSchema: ListGroupsToolSchema.shape,
   },
   execute: async (params) => {
     try {
       const result = await listGroups(params);
       return {
-        content: [{ type: "text", text: JSON.stringify(result.groups) }],
+        content: [{ type: "text", text: JSON.stringify(result) }],
       };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
@@ -40,7 +41,8 @@ export const listGroupsTool: McpTool<typeof ListGroupsToolSchema.shape> = {
 export const getGroupTool: McpTool<typeof GetGroupToolSchema.shape> = {
   name: "groups_get",
   config: {
-    description: "Retrieves a single group by its ID. Requires administrator privileges. Can include group members and project memberships. API Status: Alpha (v2.1).",
+    description:
+      "Retrieves a single group by its ID. Requires administrator privileges. Can include group members and project memberships. API Status: Alpha (v2.1).",
     inputSchema: GetGroupToolSchema.shape,
   },
   execute: async ({ id, include }) => {
@@ -59,7 +61,8 @@ export const getGroupTool: McpTool<typeof GetGroupToolSchema.shape> = {
 export const createGroupTool: McpTool<typeof CreateGroupToolSchema.shape> = {
   name: "groups_create",
   config: {
-    description: "Creates a new group in Redmine. Requires administrator privileges. Group name must be unique. Can add users during creation. API Status: Alpha (v2.1).",
+    description:
+      "Creates a new group in Redmine. Requires administrator privileges. Group name must be unique. Can add users during creation. API Status: Alpha (v2.1).",
     inputSchema: CreateGroupToolSchema.shape,
   },
   execute: async (groupData) => {
@@ -79,7 +82,8 @@ export const createGroupTool: McpTool<typeof CreateGroupToolSchema.shape> = {
 export const updateGroupTool: McpTool<typeof UpdateGroupToolSchema.shape> = {
   name: "groups_update",
   config: {
-    description: "Updates an existing group's information. Requires administrator privileges. All fields are optional. API Status: Alpha (v2.1).",
+    description:
+      "Updates an existing group's information. Requires administrator privileges. All fields are optional. API Status: Alpha (v2.1).",
     inputSchema: UpdateGroupToolSchema.shape,
   },
   execute: async ({ id, ...groupData }) => {
@@ -107,7 +111,8 @@ export const updateGroupTool: McpTool<typeof UpdateGroupToolSchema.shape> = {
 export const deleteGroupTool: McpTool<typeof DeleteGroupToolSchema.shape> = {
   name: "groups_delete",
   config: {
-    description: "Deletes a group from Redmine. Requires administrator privileges. Warning: Permanent action affecting user permissions. API Status: Alpha (v2.1).",
+    description:
+      "Deletes a group from Redmine. Requires administrator privileges. Warning: Permanent action affecting user permissions. API Status: Alpha (v2.1).",
     inputSchema: DeleteGroupToolSchema.shape,
   },
   execute: async ({ id }) => {
@@ -134,7 +139,8 @@ export const deleteGroupTool: McpTool<typeof DeleteGroupToolSchema.shape> = {
 export const addUserToGroupTool: McpTool<typeof AddUserToGroupToolSchema.shape> = {
   name: "groups_add_user",
   config: {
-    description: "Adds a user to a group, granting group-based permissions. Requires administrator privileges. API Status: Alpha (v2.1).",
+    description:
+      "Adds a user to a group, granting group-based permissions. Requires administrator privileges. API Status: Alpha (v2.1).",
     inputSchema: AddUserToGroupToolSchema.shape,
   },
   execute: async ({ group_id, user_id }) => {
@@ -162,7 +168,8 @@ export const addUserToGroupTool: McpTool<typeof AddUserToGroupToolSchema.shape> 
 export const removeUserFromGroupTool: McpTool<typeof RemoveUserFromGroupToolSchema.shape> = {
   name: "groups_remove_user",
   config: {
-    description: "Removes a user from a group, revoking group-based permissions. Requires administrator privileges. API Status: Alpha (v2.1).",
+    description:
+      "Removes a user from a group, revoking group-based permissions. Requires administrator privileges. API Status: Alpha (v2.1).",
     inputSchema: RemoveUserFromGroupToolSchema.shape,
   },
   execute: async ({ group_id, user_id }) => {
