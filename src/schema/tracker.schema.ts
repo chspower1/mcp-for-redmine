@@ -1,5 +1,15 @@
 import { z } from "zod";
 
+/**
+ * Redmine Tracker schema (aligned with official REST API)
+ *
+ * Reference: https://www.redmine.org/projects/redmine/wiki/Rest_Trackers
+ * Endpoint: GET /trackers.json
+ * Notes:
+ * - Items include: id, name, default_status (id, name)
+ * - description: available since Redmine v4.2.0
+ * - enabled_standard_fields: available since Redmine v5.0.0
+ */
 // Base Tracker Schema for Redmine (v1.3 Alpha)
 export const RedmineTrackerSchema = z.object({
   id: z.number().describe("Unique numeric identifier for the tracker"),
@@ -11,12 +21,22 @@ export const RedmineTrackerSchema = z.object({
     })
     .optional()
     .describe("Default issue status assigned when creating new issues with this tracker"),
-  description: z.string().optional().describe("Tracker description text (available since Redmine v4.2.0)"),
-  enabled_standard_fields: z.array(z.string()).optional().describe("List of enabled standard fields like 'assigned_to_id', 'category_id' (available since Redmine v5.0.0)"),
+  description: z
+    .string()
+    .optional()
+    .describe("Tracker description text (available since Redmine v4.2.0)"),
+  enabled_standard_fields: z
+    .array(z.string())
+    .optional()
+    .describe(
+      "List of enabled standard fields like 'assigned_to_id', 'category_id' (available since Redmine v5.0.0)"
+    ),
 });
 export type RedmineTracker = z.infer<typeof RedmineTrackerSchema>;
 
 // Tool Parameter Schemas for Trackers API (v1.3 Alpha)
-export const ListTrackersToolSchema = z.object({
-  // No parameters needed - returns all available trackers
-}).describe("Retrieve complete list of system trackers with their configuration");
+export const ListTrackersToolSchema = z
+  .object({
+    // No parameters needed - returns all available trackers
+  })
+  .describe("Retrieve complete list of system trackers with their configuration");

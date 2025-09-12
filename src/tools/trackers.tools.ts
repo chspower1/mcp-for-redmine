@@ -5,7 +5,8 @@ import { McpTool } from "@/types/types";
 export const listTrackersTool: McpTool<typeof ListTrackersToolSchema.shape> = {
   name: "trackers_list",
   config: {
-    description: "Retrieves a list of all system trackers with configuration details. Shows tracker names, default statuses, descriptions, and enabled fields. API Status: Alpha (v1.3).",
+    description:
+      "Retrieves all trackers (id, name, default_status, description, enabled_standard_fields). Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Trackers",
     inputSchema: ListTrackersToolSchema.shape,
   },
   execute: async () => {
