@@ -1,11 +1,12 @@
 import { listRoles, getRole } from "@/api/roles.api";
-import { ListRolesToolSchema, GetRoleToolSchema } from "@/schema/role.schema";
+import { ListRolesToolSchema, GetRoleToolSchema } from "@/schema/roles.schema";
 import { McpTool } from "@/types/types";
 
 export const listRolesTool: McpTool<typeof ListRolesToolSchema.shape> = {
   name: "roles_list",
   config: {
-    description: "Retrieves a list of all system roles with basic information (ID and name). API Status: Alpha (v1.4).",
+    description:
+      "Retrieves a list of all system roles (id, name). Docs: https://www.redmine.org/projects/redmine/wiki/Rest_Roles",
     inputSchema: ListRolesToolSchema.shape,
   },
   execute: async () => {
@@ -24,7 +25,8 @@ export const listRolesTool: McpTool<typeof ListRolesToolSchema.shape> = {
 export const getRoleTool: McpTool<typeof GetRoleToolSchema.shape> = {
   name: "roles_get",
   config: {
-    description: "Retrieves detailed role information including all permissions, assignability, and visibility settings. Requires Redmine v2.2.0+. API Status: Alpha (v1.4).",
+    description:
+      "Retrieves detailed role (permissions, assignable, visibility settings). Requires Redmine v2.2.0+. Docs: https://www.redmine.org/projects/redmine/wiki/Rest_Roles",
     inputSchema: GetRoleToolSchema.shape,
   },
   execute: async ({ id }) => {

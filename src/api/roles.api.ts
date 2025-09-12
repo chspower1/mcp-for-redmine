@@ -1,8 +1,8 @@
 import { axiosInstance } from "@/utils/axios.util";
-import { RedmineRole } from "@/schema/role.schema";
+import { RedmineRole } from "@/schema/roles.schema";
 
 interface RoleListResponse {
-  roles: RedmineRole[];
+  roles: Pick<RedmineRole, "id" | "name">[];
 }
 
 interface RoleResponse {
@@ -11,12 +11,15 @@ interface RoleResponse {
 
 /**
  * Retrieves a list of all roles in Redmine.
- * 
- * **Note**: 
- * - API Status: Alpha (v1.4) - Major functionality in place, may change
- * - Returns basic role information (ID and name)
- * 
- * @returns Promise containing the list of all system roles
+ *
+ * Reference: https://www.redmine.org/projects/redmine/wiki/Rest_Roles
+ * Endpoint: GET /roles.json
+ *
+ * Notes:
+ * - Returns basic role attributes only: id and name
+ * - For permissions and visibility settings, use the show endpoint (getRole)
+ *
+ * @returns Promise containing the list of all system roles (id, name)
  */
 export const listRoles = async (): Promise<RoleListResponse> => {
   const response = await axiosInstance.get("/roles.json");
@@ -25,22 +28,24 @@ export const listRoles = async (): Promise<RoleListResponse> => {
 
 /**
  * Retrieves detailed information about a single role by its ID.
- * 
- * **Note**: 
- * - API Status: Alpha (v1.4) - Major functionality in place, may change
+ *
+ * Reference: https://www.redmine.org/projects/redmine/wiki/Rest_Roles
+ * Endpoint: GET /roles/:id.json
+ *
+ * Notes:
+ * - Returns comprehensive role data including permissions and visibility settings
  * - Detailed permissions available since Redmine v2.2.0
- * - Returns comprehensive role data including all permissions
- * 
+ *
  * Response includes:
- * - Role ID and name
- * - Assignability status
- * - Visibility settings (issues, time entries, users)
- * - Complete list of permissions (view_issues, edit_issues, etc.)
- * 
+ * - id, name
+ * - assignable
+ * - visibility settings: issues_visibility, time_entries_visibility, users_visibility
+ * - permissions: string[] (e.g., "view_issues", "edit_issues")
+ *
  * @param id - The numeric ID of the role to retrieve
  * @returns Promise containing detailed role information with permissions
  */
-export const getRole = async (id: string): Promise<RoleResponse> => {
+export const getRole = async (id: number): Promise<RoleResponse> => {
   const response = await axiosInstance.get(`/roles/${id}.json`);
   return response.data;
 };
