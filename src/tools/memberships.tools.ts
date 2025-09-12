@@ -20,9 +20,9 @@ export const listProjectMembershipsTool: McpTool<typeof ListProjectMembershipsTo
     description: "Returns the list of memberships for a given project.",
     inputSchema: ListProjectMembershipsToolSchema.shape,
   },
-  execute: async ({ projectId }) => {
+  execute: async ({ projectId, offset, limit }) => {
     try {
-      const result = await listProjectMemberships(projectId);
+      const result = await listProjectMemberships(projectId, { offset, limit });
       return { content: [{ type: "text", text: JSON.stringify(result.memberships) }] };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
