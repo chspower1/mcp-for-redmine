@@ -11,17 +11,17 @@ interface IssueRelationResponse {
 
 /**
  * Retrieves a list of all relations for a given issue.
- * 
- * **Note**: 
+ *
+ * **Note**:
  * - API Status: Alpha (v1.3) - Major functionality in place, may change
  * - Returns both incoming and outgoing relationships
  * - Shows relation types, target issues, and optional delay values
- * 
+ *
  * Response includes:
  * - Relation ID and type (relates, blocks, precedes, etc.)
  * - Source and target issue IDs
  * - Optional delay value for time-based relations
- * 
+ *
  * @param issueId - The numeric ID of the issue to list relations for
  * @returns Promise containing the list of issue relationships
  */
@@ -31,27 +31,38 @@ export const listIssueRelations = async (issueId: string): Promise<IssueRelation
 };
 
 /**
+ * Retrieves a single issue relation by its ID.
+ *
+ * @param id - The numeric ID of the issue relation to retrieve
+ * @returns Promise containing detailed issue relation information
+ */
+export const getIssueRelation = async (id: string): Promise<IssueRelationResponse> => {
+  const response = await axiosInstance.get(`/relations/${id}.json`);
+  return response.data;
+};
+
+/**
  * Creates a new relationship between issues.
- * 
- * **Note**: 
+ *
+ * **Note**:
  * - API Status: Alpha (v1.3) - Major functionality in place, may change
  * - Requires edit permission on the source issue
  * - Some relation types create bidirectional relationships
- * 
+ *
  * Required fields:
  * - issue_to_id: Target issue ID for the relationship
  * - relation_type: Type of relationship (default: "relates")
- * 
+ *
  * Optional fields:
  * - delay: Days delay for precedes/follows relations
- * 
+ *
  * Relation types:
  * - relates: General association
  * - duplicates/duplicated_by: Duplicate issue markers
  * - blocks/blocked_by: Blocking dependencies
  * - precedes/follows: Sequential dependencies with optional delay
  * - copied_to/copied_from: Issue copy relationships
- * 
+ *
  * @param issueId - The numeric ID of the source issue
  * @param relationData - The relation data containing target issue and type
  * @returns Promise containing the created issue relation information
@@ -67,13 +78,13 @@ export const createIssueRelation = async (
 
 /**
  * Removes an issue relationship.
- * 
- * **Note**: 
+ *
+ * **Note**:
  * - API Status: Alpha (v1.3) - Major functionality in place, may change
  * - Requires edit permission on the source issue
  * - Removes bidirectional relationships completely
  * - Does not affect the related issues themselves
- * 
+ *
  * @param id - The numeric ID of the issue relation to delete
  * @returns Promise that resolves when the deletion is successful
  */

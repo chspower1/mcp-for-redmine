@@ -2,18 +2,21 @@ import {
   createIssueRelation,
   deleteIssueRelation,
   listIssueRelations,
+  getIssueRelation,
 } from "@/api/issue-relations.api";
 import {
   CreateIssueRelationToolSchema,
   DeleteIssueRelationToolSchema,
   ListIssueRelationsToolSchema,
+  GetIssueRelationToolSchema,
 } from "@/schema/issue-relation.schema";
 import { McpTool } from "@/types/types";
 
 export const listIssueRelationsTool: McpTool<typeof ListIssueRelationsToolSchema.shape> = {
   name: "issue_relations_list",
   config: {
-    description: "Retrieves all relationships for an issue including dependencies and associations. Shows relation types, target issues, and delay values. API Status: Alpha (v1.3).",
+    description:
+      "Retrieves all relationships for an issue including dependencies and associations. Shows relation types, target issues, and delay values. API Status: Alpha (v1.3).",
     inputSchema: ListIssueRelationsToolSchema.shape,
   },
   execute: async ({ issue_id }) => {
@@ -32,7 +35,8 @@ export const listIssueRelationsTool: McpTool<typeof ListIssueRelationsToolSchema
 export const createIssueRelationTool: McpTool<typeof CreateIssueRelationToolSchema.shape> = {
   name: "issue_relations_create",
   config: {
-    description: "Creates a new relationship between issues for dependency tracking. Supports blocks, precedes, duplicates, and other relation types. API Status: Alpha (v1.3).",
+    description:
+      "Creates a new relationship between issues for dependency tracking. Supports blocks, precedes, duplicates, and other relation types. API Status: Alpha (v1.3).",
     inputSchema: CreateIssueRelationToolSchema.shape,
   },
   execute: async ({ issue_id, ...relationData }) => {
@@ -52,7 +56,8 @@ export const createIssueRelationTool: McpTool<typeof CreateIssueRelationToolSche
 export const deleteIssueRelationTool: McpTool<typeof DeleteIssueRelationToolSchema.shape> = {
   name: "issue_relations_delete",
   config: {
-    description: "Removes an issue relationship without affecting the related issues. Deletes bidirectional relationships completely. API Status: Alpha (v1.3).",
+    description:
+      "Removes an issue relationship without affecting the related issues. Deletes bidirectional relationships completely. API Status: Alpha (v1.3).",
     inputSchema: DeleteIssueRelationToolSchema.shape,
   },
   execute: async ({ id }) => {
@@ -72,6 +77,26 @@ export const deleteIssueRelationTool: McpTool<typeof DeleteIssueRelationToolSche
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to delete issue relation: ${errorMessage}`);
+    }
+  },
+};
+
+export const getIssueRelationTool: McpTool<typeof GetIssueRelationToolSchema.shape> = {
+  name: "issue_relations_get",
+  config: {
+    description:
+      "Retrieves a single issue relation by its ID. Returns source and target issues, relation type, and optional delay. API Status: Alpha (v1.3).",
+    inputSchema: GetIssueRelationToolSchema.shape,
+  },
+  execute: async ({ id }) => {
+    try {
+      const result = await getIssueRelation(id);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.relation) }],
+      };
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
+      throw new Error(`Failed to retrieve issue relation ${id}: ${errorMessage}`);
     }
   },
 };
