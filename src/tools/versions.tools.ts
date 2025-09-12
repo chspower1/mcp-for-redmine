@@ -17,7 +17,8 @@ import { McpTool } from "@/types/types";
 export const listVersionsTool: McpTool<typeof ListVersionsToolSchema.shape> = {
   name: "versions_list",
   config: {
-    description: "Retrieves a list of versions for a project including shared versions. Shows status, due dates, and sharing scope. API Status: Alpha (v1.3).",
+    description:
+      "Retrieves a list of versions for a project including shared versions. Shows status, due dates, and sharing scope. (Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Versions)",
     inputSchema: ListVersionsToolSchema.shape,
   },
   execute: async ({ project_id }) => {
@@ -36,7 +37,8 @@ export const listVersionsTool: McpTool<typeof ListVersionsToolSchema.shape> = {
 export const getVersionTool: McpTool<typeof GetVersionToolSchema.shape> = {
   name: "versions_get",
   config: {
-    description: "Retrieves detailed information about a specific version. Shows project association, sharing settings, and timeline information. API Status: Alpha (v1.3).",
+    description:
+      "Retrieves detailed information about a specific version. Shows project association, sharing settings, and timeline information. (Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Versions)",
     inputSchema: GetVersionToolSchema.shape,
   },
   execute: async ({ id }) => {
@@ -55,7 +57,8 @@ export const getVersionTool: McpTool<typeof GetVersionToolSchema.shape> = {
 export const createVersionTool: McpTool<typeof CreateVersionToolSchema.shape> = {
   name: "versions_create",
   config: {
-    description: "Creates a new version for project milestone tracking. Requires project admin permissions. Can configure sharing scope and due dates. API Status: Alpha (v1.3).",
+    description:
+      "Creates a new version for project milestone tracking. Requires project admin permissions. Can configure sharing scope and due dates. (Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Versions)",
     inputSchema: CreateVersionToolSchema.shape,
   },
   execute: async ({ project_id, ...versionData }) => {
@@ -75,7 +78,8 @@ export const createVersionTool: McpTool<typeof CreateVersionToolSchema.shape> = 
 export const updateVersionTool: McpTool<typeof UpdateVersionToolSchema.shape> = {
   name: "versions_update",
   config: {
-    description: "Updates an existing version's status, dates, or sharing settings. Requires project admin permissions. Version name changes must remain unique. API Status: Alpha (v1.3).",
+    description:
+      "Updates an existing version's status, dates, or sharing settings. Requires project admin permissions. Version name changes must remain unique. (Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Versions)",
     inputSchema: UpdateVersionToolSchema.shape,
   },
   execute: async ({ id, ...updateData }) => {
@@ -103,7 +107,8 @@ export const updateVersionTool: McpTool<typeof UpdateVersionToolSchema.shape> = 
 export const deleteVersionTool: McpTool<typeof DeleteVersionToolSchema.shape> = {
   name: "versions_delete",
   config: {
-    description: "Deletes a version and unassigns it from all related issues. Requires project admin permissions. Warning: Affects all issues assigned to this version. API Status: Alpha (v1.3).",
+    description:
+      "Deletes a version and unassigns it from all related issues. Requires project admin permissions. Warning: Affects all issues assigned to this version. (Ref: https://www.redmine.org/projects/redmine/wiki/Rest_Versions)",
     inputSchema: DeleteVersionToolSchema.shape,
   },
   execute: async ({ id }) => {
