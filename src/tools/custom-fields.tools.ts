@@ -5,7 +5,8 @@ import { McpTool } from "@/types/types";
 export const listCustomFieldsTool: McpTool<typeof ListCustomFieldsToolSchema.shape> = {
   name: "custom_fields_list",
   config: {
-    description: "Retrieves all custom field definitions with complete configuration. Requires administrator privileges. Shows field types, validation rules, and visibility settings. API Status: Alpha (v2.4).",
+    description:
+      "Retrieves all custom field definitions. Admin rights required. Includes field formats, validation rules, visibility, role/tracker associations, and possible values. Docs: https://www.redmine.org/projects/redmine/wiki/Rest_CustomFields",
     inputSchema: ListCustomFieldsToolSchema.shape,
   },
   execute: async () => {
