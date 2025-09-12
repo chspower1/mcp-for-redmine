@@ -5,7 +5,8 @@ import { McpTool } from "@/types/types";
 export const listIssueStatusesTool: McpTool<typeof ListIssueStatusesToolSchema.shape> = {
   name: "issue_statuses_list",
   config: {
-    description: "Retrieves a list of all system issue statuses with workflow properties. Shows status names, closed state indicators, and transition rules. API Status: Alpha (v1.3).",
+    description:
+      "Retrieves all Redmine issue statuses (id, name, is_closed). Workflow transition rules are not included by this endpoint. API Status: Alpha (v1.3).",
     inputSchema: ListIssueStatusesToolSchema.shape,
   },
   execute: async () => {
