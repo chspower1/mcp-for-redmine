@@ -15,7 +15,8 @@ import { McpTool } from "@/types/types";
 export const listWikiPagesTool: McpTool<typeof ListWikiPagesToolSchema.shape> = {
   name: "wiki_pages_list",
   config: {
-    description: "Retrieves all wiki page titles for a project. Shows available documentation pages without content. API Status: Alpha (v2.2).",
+    description:
+      "Retrieves all wiki page titles for a project. Shows available documentation pages without content. API Status: Alpha (v2.2).",
     inputSchema: ListWikiPagesToolSchema.shape,
   },
   execute: async ({ project_id }) => {
@@ -34,12 +35,13 @@ export const listWikiPagesTool: McpTool<typeof ListWikiPagesToolSchema.shape> = 
 export const getWikiPageTool: McpTool<typeof GetWikiPageToolSchema.shape> = {
   name: "wiki_pages_get",
   config: {
-    description: "Retrieves a specific wiki page with full content and metadata. Can fetch historical versions and includes author information. API Status: Alpha (v2.2).",
+    description:
+      "Retrieves a specific wiki page with full content and metadata. Can fetch historical versions and includes author information. API Status: Alpha (v2.2).",
     inputSchema: GetWikiPageToolSchema.shape,
   },
-  execute: async ({ project_id, title, version }) => {
+  execute: async ({ project_id, title, version, include }) => {
     try {
-      const result = await getWikiPage(project_id, title, version);
+      const result = await getWikiPage(project_id, title, version, include);
       return {
         content: [{ type: "text", text: JSON.stringify(result.wiki_page) }],
       };
@@ -53,15 +55,21 @@ export const getWikiPageTool: McpTool<typeof GetWikiPageToolSchema.shape> = {
 export const createOrUpdateWikiPageTool: McpTool<typeof CreateOrUpdateWikiPageToolSchema.shape> = {
   name: "wiki_pages_create_or_update",
   config: {
-    description: "Creates or updates wiki page content with version control. Supports optimistic locking and change tracking. Use version parameter to prevent conflicts. API Status: Alpha (v2.2).",
+    description:
+      "Creates or updates wiki page content with version control. Supports optimistic locking and change tracking. Use version parameter to prevent conflicts. API Status: Alpha (v2.2).",
     inputSchema: CreateOrUpdateWikiPageToolSchema.shape,
   },
   execute: async ({ project_id, title, ...pageData }) => {
     const payload = { wiki_page: pageData };
     try {
-      const result = await createOrUpdateWikiPage(project_id, title, payload);
+      await createOrUpdateWikiPage(project_id, title, payload);
       return {
-        content: [{ type: "text", text: JSON.stringify(result.wiki_page) }],
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({ success: true, message: "Wiki page created or updated." }),
+          },
+        ],
       };
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
@@ -73,7 +81,8 @@ export const createOrUpdateWikiPageTool: McpTool<typeof CreateOrUpdateWikiPageTo
 export const deleteWikiPageTool: McpTool<typeof DeleteWikiPageToolSchema.shape> = {
   name: "wiki_pages_delete",
   config: {
-    description: "Permanently deletes a wiki page and all its version history. Warning: This action removes all page data and attachments irreversibly. API Status: Alpha (v2.2).",
+    description:
+      "Permanently deletes a wiki page and all its version history. Warning: This action removes all page data and attachments irreversibly. API Status: Alpha (v2.2).",
     inputSchema: DeleteWikiPageToolSchema.shape,
   },
   execute: async ({ project_id, title }) => {
