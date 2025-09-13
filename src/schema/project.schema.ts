@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { RedmineReferenceSchema } from "./reference.schema";
 import { RedmineTrackerSchema } from "./tracker.schema";
+import { RedmineIssueCategorySchema } from "./issue-category.schema";
+import { RedmineEnumerationSchema } from "./enumerations.schema";
 
 // Base Project Schema for Redmine
 export const RedmineProjectSchema = z.object({
@@ -15,6 +17,15 @@ export const RedmineProjectSchema = z.object({
   parent: RedmineReferenceSchema.optional(),
   // For 'include' parameter
   trackers: z.array(RedmineTrackerSchema).optional(),
+  issue_categories: z.array(RedmineIssueCategorySchema).optional(),
+  enabled_modules: z
+    .array(
+      z.object({
+        name: z.string().describe("Enabled module name for this project"),
+      })
+    )
+    .optional(),
+  time_entry_activities: z.array(RedmineEnumerationSchema).optional(),
 });
 export type RedmineProject = z.infer<typeof RedmineProjectSchema>;
 
