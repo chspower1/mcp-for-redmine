@@ -14,7 +14,12 @@ interface IssueListResponse {
 
 /**
  * Retrieves a list of issues with optional filtering.
- * 
+ *
+ * General notes:
+ * - Supports Redmine pagination via `offset` and `limit` (default: 25, max: 100)
+ * - Dates accept comparison operators: ">=YYYY-MM-DD" or "<=YYYY-MM-DD"
+ * - Sorting supports multiple columns separated by comma, e.g. "priority:desc,updated_on"
+ *
  * @param params - Optional query parameters for filtering and pagination
  * @param params.project_id - Filter by project (ID or identifier)
  * @param params.tracker_id - Filter by tracker ID
@@ -29,8 +34,8 @@ interface IssueListResponse {
  * @param params.closed_on - Filter by closed date ('>=' or '<=' followed by date)
  * @param params.limit - Maximum number of issues to return (default: 25, max: 100)
  * @param params.offset - Number of issues to skip (for pagination)
- * @param params.sort - Column to sort by, optionally followed by :desc (e.g., 'priority:desc,updated_on')
- * @param params.include - Comma-separated list of associations to include
+ * @param params.sort - Fields to sort by, optionally suffixed by :desc (e.g., 'priority:desc,updated_on')
+ * @param params.include - Comma-separated associations to include (e.g., 'children,attachments,relations,changesets,journals,watchers,allowed_statuses')
  * @returns Promise containing the list of issues with pagination metadata
  */
 export const listIssues = async (params?: {
@@ -56,7 +61,7 @@ export const listIssues = async (params?: {
 
 /**
  * Retrieves a single issue by its ID.
- * 
+ *
  * @param id - The numeric ID of the issue
  * @param params - Optional parameters
  * @param params.include - Comma-separated list of associations to include:
@@ -79,11 +84,17 @@ export const getIssue = async (
 
 /**
  * Creates a new issue in Redmine.
- * 
+ *
  * Required fields:
  * - project_id: The project where the issue will be created
  * - subject: The issue title/summary
- * 
+ *
+ * Optional fields of note:
+ * - custom_fields: Array of { id, value } (value can be string or string[] for multi-select)
+ * - uploads: Array of { token, filename?, description?, content_type? } — obtain token by POSTing file bytes to /uploads.json
+ * - watcher_user_ids: Array of user IDs to add as watchers
+ * - done_ratio: 0..100
+ *
  * @param issueData - The issue data payload containing required and optional fields
  * @returns Promise containing the created issue's information
  * @throws 422 Unprocessable Entity if validation fails
@@ -95,10 +106,11 @@ export const createIssue = async (issueData: CreateIssuePayload): Promise<IssueR
 
 /**
  * Updates an existing issue.
- * 
+ *
  * All fields are optional - only provide fields that need to be updated.
- * Use the 'notes' field to add a comment with the update.
- * 
+ * Use the 'notes' field to add a journal comment with the update.
+ * If 'private_notes' is true, the journal entry is marked private.
+ *
  * @param id - The numeric ID of the issue to update
  * @param issueData - The issue data payload containing fields to update
  * @returns Promise that resolves when the update is successful
@@ -110,12 +122,12 @@ export const updateIssue = async (id: string, issueData: UpdateIssuePayload): Pr
 
 /**
  * Deletes an issue from Redmine.
- * 
+ *
  * **Note**: Requires issue deletion permissions.
- * 
+ *
  * **Warning**: This action is permanent and cannot be undone.
  * All associated data (attachments, comments, time entries) will be affected.
- * 
+ *
  * @param id - The numeric ID of the issue to delete
  * @returns Promise that resolves when the deletion is successful
  */

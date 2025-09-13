@@ -12,7 +12,7 @@ const RedmineAttachmentSchema = z.object({
   filename: z.string(),
   filesize: z.number(),
   content_type: z.string(),
-  description: z.string(),
+  description: z.string().nullable(),
   content_url: z.string(),
   author: RedmineReferenceSchema,
   created_on: z.string().datetime(),
@@ -73,6 +73,22 @@ export const RedmineIssueSchema: z.ZodType<RedmineIssue> = BaseRedmineIssueSchem
   children: z.lazy(() => z.array(RedmineIssueSchema)).optional(),
 });
 
+// Input schemas for create/update payloads
+const IssueCustomFieldValueInputSchema = z.object({
+  id: z.number(),
+  value: z
+    .union([z.string(), z.array(z.string())])
+    .nullable()
+    .optional(),
+});
+
+const IssueUploadTokenSchema = z.object({
+  token: z.string(),
+  filename: z.string().optional(),
+  description: z.string().optional(),
+  content_type: z.string().optional(),
+});
+
 const CreateIssueRequestObjectSchema = z.object({
   project_id: z.union([z.string(), z.number()]),
   subject: z.string(),
@@ -86,8 +102,12 @@ const CreateIssueRequestObjectSchema = z.object({
   parent_issue_id: z.number().optional(),
   is_private: z.boolean().optional(),
   estimated_hours: z.number().optional(),
+  done_ratio: z.number().min(0).max(100).optional(),
   start_date: z.string().optional(),
   due_date: z.string().optional(),
+  custom_fields: z.array(IssueCustomFieldValueInputSchema).optional(),
+  uploads: z.array(IssueUploadTokenSchema).optional(),
+  watcher_user_ids: z.array(z.number()).optional(),
 });
 
 export const CreateIssueRequestSchema = z.object({
@@ -97,6 +117,7 @@ export const CreateIssueRequestSchema = z.object({
 export const UpdateIssueRequestSchema = z.object({
   issue: CreateIssueRequestObjectSchema.partial().extend({
     notes: z.string().optional().describe("Add a journal note to the issue update."),
+    private_notes: z.boolean().optional().describe("Mark the journal note as private."),
   }),
 });
 
