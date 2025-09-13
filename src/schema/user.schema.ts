@@ -39,6 +39,10 @@ export const CreateUserRequestSchema = z.object({
     mail: z.string().email(),
     password: z.string().min(8).optional(),
     generate_password: z.boolean().optional(),
+    auth_source_id: z.number().optional(),
+    mail_notification: z.string().optional(),
+    admin: z.boolean().optional(),
+    must_change_passwd: z.boolean().optional(),
   }),
 });
 
@@ -49,6 +53,10 @@ export const UpdateUserRequestSchema = z.object({
     lastname: z.string().optional(),
     mail: z.string().email().optional(),
     password: z.string().min(8).optional(),
+    auth_source_id: z.number().optional(),
+    mail_notification: z.string().optional(),
+    admin: z.boolean().optional(),
+    must_change_passwd: z.boolean().optional(),
   }),
 });
 
@@ -57,7 +65,9 @@ export type UpdateUserPayload = z.infer<typeof UpdateUserRequestSchema>;
 
 // Tool Parameter Schemas
 export const CreateUserToolSchema = z.object({
-  login: z.string().describe("The user's unique login name (username). This will be used for authentication."),
+  login: z
+    .string()
+    .describe("The user's unique login name (username). This will be used for authentication."),
   firstname: z.string().describe("The user's first name."),
   lastname: z.string().describe("The user's last name."),
   mail: z
@@ -100,7 +110,9 @@ export const GetUserToolSchema = z.object({
   include: z
     .string()
     .optional()
-    .describe("Comma-separated list of associations to include: 'memberships' (project memberships), 'groups' (group memberships)."),
+    .describe(
+      "Comma-separated list of associations to include: 'memberships' (project memberships), 'groups' (group memberships)."
+    ),
 });
 
 export const ListUsersToolSchema = z.object({
@@ -116,10 +128,7 @@ export const ListUsersToolSchema = z.object({
     .number()
     .optional()
     .describe("Filter users by group membership. Provide the group ID."),
-  offset: z
-    .number()
-    .optional()
-    .describe("Number of users to skip for pagination."),
+  offset: z.number().optional().describe("Number of users to skip for pagination."),
   limit: z
     .number()
     .optional()
@@ -141,27 +150,24 @@ export const UpdateUserToolSchema = z.object({
     .number()
     .optional()
     .describe("Authentication source ID for external authentication."),
-  mail_notification: z
-    .string()
-    .optional()
-    .describe("Email notification option."),
-  admin: z
-    .boolean()
-    .optional()
-    .describe("Update administrator privileges."),
-  must_change_passwd: z
-    .boolean()
-    .optional()
-    .describe("Force password change on next login."),
+  mail_notification: z.string().optional().describe("Email notification option."),
+  admin: z.boolean().optional().describe("Update administrator privileges."),
+  must_change_passwd: z.boolean().optional().describe("Force password change on next login."),
 });
 
 export const DeleteUserToolSchema = z.object({
-  id: z.string().describe("The numeric ID of the user to delete. Warning: This action is permanent and cannot be undone."),
+  id: z
+    .string()
+    .describe(
+      "The numeric ID of the user to delete. Warning: This action is permanent and cannot be undone."
+    ),
 });
 
 export const GetCurrentUserToolSchema = z.object({
   include: z
     .string()
     .optional()
-    .describe("Comma-separated list of associations to include: 'memberships' (project memberships), 'groups' (group memberships). Example: 'memberships,groups'."),
+    .describe(
+      "Comma-separated list of associations to include: 'memberships' (project memberships), 'groups' (group memberships). Example: 'memberships,groups'."
+    ),
 });
