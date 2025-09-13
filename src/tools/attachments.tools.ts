@@ -1,5 +1,9 @@
-import { getAttachment, deleteAttachment } from "@/api/attachments.api";
-import { GetAttachmentToolSchema, DeleteAttachmentToolSchema } from "@/schema/attachment.schema";
+import { getAttachment, deleteAttachment, uploadFile } from "@/api/attachments.api";
+import {
+  GetAttachmentToolSchema,
+  DeleteAttachmentToolSchema,
+  UploadAttachmentToolSchema,
+} from "@/schema/attachment.schema";
 import { McpTool } from "@/types/types";
 
 export const getAttachmentTool: McpTool<typeof GetAttachmentToolSchema.shape> = {
@@ -44,6 +48,27 @@ export const deleteAttachmentTool: McpTool<typeof DeleteAttachmentToolSchema.sha
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
       throw new Error(`Failed to delete attachment ${id}: ${errorMessage}`);
+    }
+  },
+};
+
+export const uploadAttachmentTool: McpTool<typeof UploadAttachmentToolSchema.shape> = {
+  name: "attachments_upload",
+  config: {
+    description:
+      "Uploads raw file data to obtain a token for later attachment. Docs: https://www.redmine.org/projects/redmine/wiki/Rest_api#Attaching-files",
+    inputSchema: UploadAttachmentToolSchema.shape,
+  },
+  execute: async ({ filename, file_base64, content_type }) => {
+    try {
+      const raw = Buffer.from(file_base64, "base64");
+      const result = await uploadFile(raw, filename, content_type);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.upload) }],
+      };
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.errors?.join(", ") || error.message;
+      throw new Error(`Failed to upload attachment ${filename}: ${errorMessage}`);
     }
   },
 };

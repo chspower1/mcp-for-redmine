@@ -15,10 +15,14 @@ interface AttachmentResponse {
 
 /**
  * Uploads a file to be attached to an object later.
- * The request body must be the raw file data.
+ * Source: https://www.redmine.org/projects/redmine/wiki/Rest_api#Attaching-files
+ * Endpoint: POST /uploads.json?filename=<FILENAME>
+ * Request body MUST be raw binary data, typically with Content-Type: application/octet-stream
+ * Returns: { upload: { token: string } }
+ *
  * @param fileData The raw binary data of the file.
  * @param filename The name of the file.
- * @param contentType The MIME type of the file (e.g., 'application/octet-stream').
+ * @param contentType The MIME type of the file (defaults to 'application/octet-stream').
  */
 export const uploadFile = async (
   fileData: any,
@@ -35,6 +39,8 @@ export const uploadFile = async (
 
 /**
  * Retrieves the details of an attachment.
+ * Source: https://www.redmine.org/projects/redmine/wiki/Rest_api#Attachments
+ * Endpoint: GET /attachments/:id.json
  * @param id The ID of the attachment.
  */
 export const getAttachment = async (id: string): Promise<AttachmentResponse> => {
@@ -43,7 +49,9 @@ export const getAttachment = async (id: string): Promise<AttachmentResponse> => 
 };
 
 /**
- * Deletes an attachment. (Added in Redmine 4.0.0)
+ * Deletes an attachment.
+ * Source: https://www.redmine.org/projects/redmine/wiki/Rest_api#Attachments
+ * Endpoint: DELETE /attachments/:id.json (Added in Redmine 4.0.0)
  * @param id The ID of the attachment.
  */
 export const deleteAttachment = async (id: string): Promise<void> => {
