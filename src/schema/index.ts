@@ -12,7 +12,7 @@ export * from "./my-account.schema";
 export * from "./project.schema";
 export * from "./query.schema";
 export * from "./reference.schema";
-export * from "./role.schema";
+export * from "./roles.schema";
 export * from "./search.schema";
 export * from "./time-entry.schema";
 export * from "./tracker.schema";
