@@ -34,7 +34,6 @@ File (top-left) -> Preferences -> Cursor Settings -> MCP & Integrations -> New M
 
 ```json
 {
-  // Linux / Mac
   "mcpServers": {
     "mcp-for-redmine": {
       "command": "npx",

@@ -6,7 +6,7 @@
 
 [English](./README.md) | [한국어](./README-ko_kr.md) | [日本語](./README-ja_jp.md) | 简体中文
 
-本项目是一个用于与 Redmine 交互的 Model-Context-Protocol (MCP) 服务器。通过兼容 MCP 的客户端，您可以轻松管理 Redmine 中的项目、问题、用户和工时等信息。
+本项目是一个与 Redmine 交互的 Model-Context-Protocol（MCP）服务器。配合支持 MCP 的客户端，可以轻松管理 Redmine 的项目、问题、用户与工时等。
 
 目前仅支持标准输入/输出 (`stdio`) 方式。
 
@@ -34,7 +34,6 @@ File（左上角）-> Preferences -> Cursor Settings -> MCP & Integrations -> Ne
 
 ```json
 {
-  // Linux / Mac
   "mcpServers": {
     "mcp-for-redmine": {
       "command": "npx",
@@ -213,18 +212,18 @@ REDMINE_API_KEY = "your_api_key_here"
 - `REDMINE_API_KEY` 或 `REDMINE_TOKEN` — Redmine API 密钥
 </details>
 
-### 主要功能
+## 主要功能
 
-当前可用的工具如下：
+当前可用的功能如下：
 
-Stable
+**Stable API**
 
-- **用户 (Users)**: `users_create`, `users_get`, `users_list`, `users_update`, `users_delete`
+- **用户 (Users)**: `users_create`, `users_get`, `users_current`, `users_list`, `users_update`, `users_delete`
 - **项目 (Projects)**: `projects_list`, `projects_get`, `projects_create`, `projects_update`, `projects_archive`, `projects_unarchive`, `projects_delete`
 - **问题 (Issues)**: `issues_list`, `issues_get`, `issues_create`, `issues_update`, `issues_delete`
 - **工时 (Time Entries)**: `time_entries_list`, `time_entries_get`, `time_entries_create`, `time_entries_update`, `time_entries_delete`
 
-Alpha
+**Alpha API**
 
 - **枚举 (Enumerations)**: `enumerations_issue_priorities_list`, `enumerations_time_entry_activities_list`
 - **项目成员 (Memberships)**: `memberships_list_project_memberships`, `memberships_get`, `memberships_create`, `memberships_update`, `memberships_delete`
@@ -233,6 +232,7 @@ Alpha
 - **Wiki 页面 (Wiki Pages)**: `wiki_pages_list`, `wiki_pages_get`, `wiki_pages_create_or_update`, `wiki_pages_delete`
 - **查询 (Queries)**: `queries_list`
 - **文件 (Files)**: `files_list`
+- **附件 (Attachments)**: `attachments_get`, `attachments_delete`, `attachments_upload`
 - **问题状态 (Issue Statuses)**: `issue_statuses_list`
 - **跟踪器 (Trackers)**: `trackers_list`
 - **角色 (Roles)**: `roles_list`, `roles_get`
@@ -242,47 +242,36 @@ Alpha
 - **我的账户 (My Account)**: `my_account_get`
 - **搜索 (Search)**: `search`
 
-每个功能的详细使用说明 (输入模式) 定义在 `src/schema/*.schema.ts` 文件中。执行结果将以 JSON 格式的文本返回。
+每个功能的详细用法（输入模式）定义在 `src/schema/*.schema.ts` 文件中。执行结果以 JSON 文本返回。
 
-### 参数与约定
+## 通用输入规则 (dev)
 
-- 集合分页: 大多数列表接口支持 `offset` 与 `limit` (默认 25，最大 100)
-- 关联展开: 部分 `get`/`list` 接口支持 `include` (例如 issues: `children,attachments,journals,...`)
-- 问题创建/更新扩展:
-  - `custom_fields`: `{ id, value }` 数组 (value 可以为字符串或字符串数组)
-  - `uploads`: `{ token, filename?, description?, content_type? }` 数组 (通过 `/uploads.json` 获取 token)
-  - `watcher_user_ids`: number[]
-  - `done_ratio` (0..100), `private_notes` (私有备注)
-- 工时: 支持 `user_id` 以代他人记录 (需要权限)
-- 项目成员: 列表支持 `offset`/`limit`
-- 问题类别: 删除时支持 `reassign_to_id`
+- **集合分页**：大多数列表工具支持 `offset`、`limit`（默认 25，最大 100）
+- **关联展开**：部分 `get`/`list` 工具支持 `include`（例如 issues 的 `children,attachments,journals,...`）
+- **附件上传令牌**：`attachments_upload` 会将 Base64 文件发送至 `/uploads.json` 并返回令牌。该令牌可用于 `issues_create/update` 或 `wiki_pages_create_or_update` 的 `uploads` 字段以关联附件。
+- **按工具的扩展字段/约束**：具体约束（如 issue 的 `custom_fields`、`watcher_user_ids` 等）请参考各工具的 `src/schema/*.schema.ts`。
 
-### 简单使用示例
+## 问题解决指南
 
-- 您可以从 MCP 客户端调用 `projects_list` 来获取项目列表，结果将以 JSON 格式返回。
-- 使用 `issues_create` 可以创建新问题，至少需要提供 `project_id` 和 `subject`。
-
-### 问题排查指南
-
-- **缺少环境变量错误**
-  - **错误消息示例**: `REDMINE_API_KEY environment variable is not set.`
-  - **解决方案**: 请使用 `--url` 和 `--api-key` 标志直接传递所需的值。尽管某些错误消息可能提及 `.env` 文件，但我们推荐使用 CLI 标志。
+- **配置错误**
+  - **错误消息示例**：`❌ Redmine URL is required!` 或 `❌ Redmine API key is required!`
+  - **解决方法**：请选择错误消息中显示的配置方法之一。出于安全考虑，推荐使用环境变量。
 - **Node.js/ESM 相关错误**
-  - 请确保您使用的是 Node.js 18 或更高版本。
-- **身份验证及网络错误 (如 401, 403)**
-  - 请检查您的 API 密钥权限、URL 是否正确以及网络连接是否正常。
+  - 请确认使用的是 Node.js 18 或更高版本。
+- **认证与网络错误（401、403 等）**
+  - 请检查 API 密钥权限与 URL 是否正确，以及网络连接是否正常。
 - **Windows 环境下的执行问题**
-  - 请尝试使用指南中提到的 `cmd /c npx ...` 格式来执行命令。
+  - 可尝试使用指南中的 `cmd /c npx ...` 形式执行。
 
-### 安全与权限说明
+## 安全与权限说明
 
-- API 密钥是敏感信息，请务必小心保管，避免在 Git 提交、日志或共享存储库中泄露。
-- 在执行删除项目或问题等不可逆操作时, 请再次确认您拥有相应权限，并谨慎操作。
+- API 密钥属于敏感信息，请避免在 Git 提交、日志或共享仓库中泄露。
+- 执行删除项目或问题等不可逆操作时，请再次确认权限并谨慎进行。
 
-### 路线图
+## 路线图
 
-后续将扩展 beta 端点（例如附件上传流程），增加 SSE (Server-Sent Events) 支持，并完善示例与测试。
+计划加强对 beta 端点（如附件上传流程）的支持，增加 SSE（Server‑Sent Events），并完善示例/测试。
 
-### 许可证
+## 许可证
 
 MIT
