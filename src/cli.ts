@@ -12,6 +12,8 @@ program
   .option("-u, --url <url>", "Redmine base URL")
   .option("-k, --api-key <key>", "Redmine API key")
   .option("--env-file <path>", "Path to .env file (default: .env)")
+  .option("--tls-verify", "Enable TLS verification", true)
+  .option("--no-tls-verify", "Disable TLS verification")
   .action((options) => {
     // Priority: CLI args > Environment variables > Error
     const url = options.url || process.env.REDMINE_BASE_URL || process.env.REDMINE_URL;
@@ -52,6 +54,9 @@ program
     // Set environment variables for the server
     process.env.REDMINE_BASE_URL = url;
     process.env.REDMINE_API_KEY = apiKey;
+    if (options.tlsVerify === false) {
+      process.env.REDMINE_TLS_VERIFY = "false";
+    }
 
     startMcpServerStdio();
   });

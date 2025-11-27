@@ -40,7 +40,8 @@ File (top-left) -> Preferences -> Cursor Settings -> MCP & Integrations -> New M
       "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
       "env": {
         "REDMINE_BASE_URL": "https://your.redmine.tld",
-        "REDMINE_API_KEY": "your_api_key_here"
+        "REDMINE_API_KEY": "your_api_key_here",
+        "REDMINE_TLS_VERIFY": "false"
       }
     }
   }
@@ -67,7 +68,8 @@ File (top-left) -> Preferences -> Cursor Settings -> MCP & Integrations -> New M
       "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
       "env": {
         "REDMINE_BASE_URL": "https://your.redmine.tld",
-        "REDMINE_API_KEY": "your_api_key_here"
+        "REDMINE_API_KEY": "your_api_key_here",
+        "REDMINE_TLS_VERIFY": "false"
       }
     }
   }
@@ -102,7 +104,8 @@ claude mcp add mcp-for-redmine -- npx -y @chspower1/mcp-for-redmine@latest
       "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
       "env": {
         "REDMINE_BASE_URL": "https://your.redmine.tld",
-        "REDMINE_API_KEY": "your_api_key_here"
+        "REDMINE_API_KEY": "your_api_key_here",
+        "REDMINE_TLS_VERIFY": "false"
       }
     }
   }
@@ -126,7 +129,8 @@ claude mcp add mcp-for-redmine -- npx -y @chspower1/mcp-for-redmine@latest
       "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
       "env": {
         "REDMINE_BASE_URL": "https://your.redmine.tld",
-        "REDMINE_API_KEY": "your_api_key_here"
+        "REDMINE_API_KEY": "your_api_key_here",
+        "REDMINE_TLS_VERIFY": "false"
       }
     }
   }
@@ -151,6 +155,7 @@ args = ["-y", "@chspower1/mcp-for-redmine@latest"]
 [mcp_servers.env]
 REDMINE_BASE_URL = "https://your.redmine.tld"
 REDMINE_API_KEY = "your_api_key_here"
+REDMINE_TLS_VERIFY = "false"
 ```
 
 </details>
@@ -164,6 +169,7 @@ The server reads configuration in the following priority:
 
 - `-u, --url <url>`
 - `-k, --api-key <key>`
+- `--no-tls-verify` (optional, disable TLS verification)
 - ```json
   {
     "mcpServers": {
@@ -197,7 +203,8 @@ The server reads configuration in the following priority:
         "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
         "env": {
           "REDMINE_BASE_URL": "https://your.redmine.tld",
-          "REDMINE_API_KEY": "your_api_key_here"
+          "REDMINE_API_KEY": "your_api_key_here",
+          "REDMINE_TLS_VERIFY": "false"
         }
       }
     }
@@ -213,6 +220,8 @@ The server reads configuration in the following priority:
 - `REDMINE_API_KEY` or `REDMINE_TOKEN` — Redmine API key
 - `REDMINE_TLS_VERIFY` — Set to `false` or `0` to disable TLS verification (optional)
 </details>
+
+> [!WARNING] > **Security Warning**: Disabling TLS verification (`REDMINE_TLS_VERIFY=false` or `--no-tls-verify`) makes your connection vulnerable to Man-in-the-Middle (MitM) attacks. Only use this option in trusted environments (e.g., internal networks with self-signed certificates). Never use it when connecting to public Redmine instances over the internet.
 
 ## Key Features
 

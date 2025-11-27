@@ -40,7 +40,8 @@ File（左上角）-> Preferences -> Cursor Settings -> MCP & Integrations -> Ne
       "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
       "env": {
         "REDMINE_BASE_URL": "https://your.redmine.tld",
-        "REDMINE_API_KEY": "your_api_key_here"
+        "REDMINE_API_KEY": "your_api_key_here",
+        "REDMINE_TLS_VERIFY": "false"
       }
     }
   }
@@ -67,7 +68,8 @@ File（左上角）-> Preferences -> Cursor Settings -> MCP & Integrations -> Ne
       "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
       "env": {
         "REDMINE_BASE_URL": "https://your.redmine.tld",
-        "REDMINE_API_KEY": "your_api_key_here"
+        "REDMINE_API_KEY": "your_api_key_here",
+        "REDMINE_TLS_VERIFY": "false"
       }
     }
   }
@@ -102,7 +104,8 @@ claude mcp add mcp-for-redmine -- npx -y @chspower1/mcp-for-redmine@latest
       "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
       "env": {
         "REDMINE_BASE_URL": "https://your.redmine.tld",
-        "REDMINE_API_KEY": "your_api_key_here"
+        "REDMINE_API_KEY": "your_api_key_here",
+        "REDMINE_TLS_VERIFY": "false"
       }
     }
   }
@@ -126,7 +129,8 @@ claude mcp add mcp-for-redmine -- npx -y @chspower1/mcp-for-redmine@latest
       "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
       "env": {
         "REDMINE_BASE_URL": "https://your.redmine.tld",
-        "REDMINE_API_KEY": "your_api_key_here"
+        "REDMINE_API_KEY": "your_api_key_here",
+        "REDMINE_TLS_VERIFY": "false"
       }
     }
   }
@@ -151,6 +155,7 @@ args = ["-y", "@chspower1/mcp-for-redmine@latest"]
 [mcp_servers.env]
 REDMINE_BASE_URL = "https://your.redmine.tld"
 REDMINE_API_KEY = "your_api_key_here"
+REDMINE_TLS_VERIFY = "false"
 ```
 
 </details>
@@ -164,6 +169,7 @@ REDMINE_API_KEY = "your_api_key_here"
 
 - `-u, --url <url>`
 - `-k, --api-key <key>`
+- `--no-tls-verify` (可选，禁用 TLS 验证)
 - ```json
   {
     "mcpServers": {
@@ -197,7 +203,8 @@ REDMINE_API_KEY = "your_api_key_here"
         "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
         "env": {
           "REDMINE_BASE_URL": "https://your.redmine.tld",
-          "REDMINE_API_KEY": "your_api_key_here"
+          "REDMINE_API_KEY": "your_api_key_here",
+          "REDMINE_TLS_VERIFY": "false"
         }
       }
     }
@@ -213,6 +220,8 @@ REDMINE_API_KEY = "your_api_key_here"
 - `REDMINE_API_KEY` 或 `REDMINE_TOKEN` — Redmine API 密钥
 - `REDMINE_TLS_VERIFY` — 设置为 `false` 或 `0` 以禁用 TLS 验证 (可选)
 </details>
+
+> [!WARNING] > **安全警告**：禁用 TLS 验证（`REDMINE_TLS_VERIFY=false` 或 `--no-tls-verify`）会使您的连接容易受到中间人（MitM）攻击。请仅在受信任的环境（例如使用自签名证书的内部网络）中使用此选项。切勿在通过互联网连接到公共 Redmine 实例时使用它。
 
 ## 主要功能
 

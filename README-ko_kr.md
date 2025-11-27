@@ -40,7 +40,8 @@ File(좌측 상단 탭) -> Preferences -> Cursor Settings -> MCP & Integrantions
       "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
       "env": {
         "REDMINE_BASE_URL": "https://your.redmine.tld",
-        "REDMINE_API_KEY": "your_api_key_here"
+        "REDMINE_API_KEY": "your_api_key_here",
+        "REDMINE_TLS_VERIFY": "false"
       }
     }
   }
@@ -67,7 +68,8 @@ File(좌측 상단 탭) -> Preferences -> Cursor Settings -> MCP & Integrantions
       "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
       "env": {
         "REDMINE_BASE_URL": "https://your.redmine.tld",
-        "REDMINE_API_KEY": "your_api_key_here"
+        "REDMINE_API_KEY": "your_api_key_here",
+        "REDMINE_TLS_VERIFY": "false"
       }
     }
   }
@@ -102,7 +104,8 @@ claude mcp add mcp-for-redmine -- npx -y @chspower1/mcp-for-redmine@latest
       "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
       "env": {
         "REDMINE_BASE_URL": "https://your.redmine.tld",
-        "REDMINE_API_KEY": "your_api_key_here"
+        "REDMINE_API_KEY": "your_api_key_here",
+        "REDMINE_TLS_VERIFY": "false"
       }
     }
   }
@@ -126,7 +129,8 @@ claude mcp add mcp-for-redmine -- npx -y @chspower1/mcp-for-redmine@latest
       "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
       "env": {
         "REDMINE_BASE_URL": "https://your.redmine.tld",
-        "REDMINE_API_KEY": "your_api_key_here"
+        "REDMINE_API_KEY": "your_api_key_here",
+        "REDMINE_TLS_VERIFY": "false"
       }
     }
   }
@@ -151,6 +155,7 @@ args = ["-y", "@chspower1/mcp-for-redmine@latest"]
 [mcp_servers.env]
 REDMINE_BASE_URL = "https://your.redmine.tld"
 REDMINE_API_KEY = "your_api_key_here"
+REDMINE_TLS_VERIFY = "false"
 ```
 
 </details>
@@ -164,6 +169,7 @@ REDMINE_API_KEY = "your_api_key_here"
 
 - `-u, --url <url>`
 - `-k, --api-key <key>`
+- `--no-tls-verify` (선택 사항, TLS 검증 비활성화)
 - ```json
   {
     "mcpServers": {
@@ -197,7 +203,8 @@ REDMINE_API_KEY = "your_api_key_here"
         "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
         "env": {
           "REDMINE_BASE_URL": "https://your.redmine.tld",
-          "REDMINE_API_KEY": "your_api_key_here"
+          "REDMINE_API_KEY": "your_api_key_here",
+          "REDMINE_TLS_VERIFY": "false"
         }
       }
     }
@@ -213,6 +220,8 @@ REDMINE_API_KEY = "your_api_key_here"
 - `REDMINE_API_KEY` 또는 `REDMINE_TOKEN` - Redmine API 키
 - `REDMINE_TLS_VERIFY` - TLS 검증을 비활성화하려면 `false` 또는 `0`으로 설정 (선택 사항)
 </details>
+
+> [!WARNING] > **보안 경고**: TLS 검증을 비활성화(`REDMINE_TLS_VERIFY=false` 또는 `--no-tls-verify`)하면 중간자(MitM) 공격에 취약해질 수 있습니다. 신뢰할 수 있는 환경(예: 자체 서명 인증서를 사용하는 내부 네트워크)에서만 이 옵션을 사용하세요. 인터넷을 통해 공용 Redmine 인스턴스에 연결할 때는 절대 사용하지 마세요.
 
 ## 주요 기능
 
