@@ -188,6 +188,7 @@ REDMINE_API_KEY = "your_api_key_here"
 
 - `REDMINE_BASE_URL` 或 `REDMINE_URL`
 - `REDMINE_API_KEY` 或 `REDMINE_TOKEN`
+- `REDMINE_TLS_VERIFY` (可选，设置为 `false` 或 `0` 以禁用 TLS 验证)
 - ```json
   {
     "mcpServers": {
@@ -210,6 +211,7 @@ REDMINE_API_KEY = "your_api_key_here"
 
 - `REDMINE_BASE_URL` 或 `REDMINE_URL` — Redmine 服务器 URL
 - `REDMINE_API_KEY` 或 `REDMINE_TOKEN` — Redmine API 密钥
+- `REDMINE_TLS_VERIFY` — 设置为 `false` 或 `0` 以禁用 TLS 验证 (可选)
 </details>
 
 ## 主要功能

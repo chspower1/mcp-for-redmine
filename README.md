@@ -188,6 +188,7 @@ The server reads configuration in the following priority:
 
 - `REDMINE_BASE_URL` or `REDMINE_URL`
 - `REDMINE_API_KEY` or `REDMINE_TOKEN`
+- `REDMINE_TLS_VERIFY` (optional, set to `false` or `0` to disable TLS verification)
 - ```json
   {
     "mcpServers": {
@@ -210,6 +211,7 @@ The server reads configuration in the following priority:
 
 - `REDMINE_BASE_URL` or `REDMINE_URL` — Redmine server URL
 - `REDMINE_API_KEY` or `REDMINE_TOKEN` — Redmine API key
+- `REDMINE_TLS_VERIFY` — Set to `false` or `0` to disable TLS verification (optional)
 </details>
 
 ## Key Features

@@ -188,6 +188,7 @@ REDMINE_API_KEY = "your_api_key_here"
 
 - `REDMINE_BASE_URL` 또는 `REDMINE_URL`
 - `REDMINE_API_KEY` 또는 `REDMINE_TOKEN`
+- `REDMINE_TLS_VERIFY` (선택 사항, TLS 검증을 비활성화하려면 `false` 또는 `0`으로 설정)
 - ```json
   {
     "mcpServers": {
@@ -210,6 +211,7 @@ REDMINE_API_KEY = "your_api_key_here"
 
 - `REDMINE_BASE_URL` 또는 `REDMINE_URL` - Redmine 서버 URL
 - `REDMINE_API_KEY` 또는 `REDMINE_TOKEN` - Redmine API 키
+- `REDMINE_TLS_VERIFY` - TLS 검증을 비활성화하려면 `false` 또는 `0`으로 설정 (선택 사항)
 </details>
 
 ## 주요 기능
