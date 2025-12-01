@@ -40,8 +40,7 @@ File(좌측 상단 탭) -> Preferences -> Cursor Settings -> MCP & Integrantions
       "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
       "env": {
         "REDMINE_BASE_URL": "https://your.redmine.tld",
-        "REDMINE_API_KEY": "your_api_key_here",
-        "REDMINE_TLS_VERIFY": "false"
+        "REDMINE_API_KEY": "your_api_key_here"
       }
     }
   }
@@ -68,8 +67,7 @@ File(좌측 상단 탭) -> Preferences -> Cursor Settings -> MCP & Integrantions
       "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
       "env": {
         "REDMINE_BASE_URL": "https://your.redmine.tld",
-        "REDMINE_API_KEY": "your_api_key_here",
-        "REDMINE_TLS_VERIFY": "false"
+        "REDMINE_API_KEY": "your_api_key_here"
       }
     }
   }
@@ -104,8 +102,7 @@ claude mcp add mcp-for-redmine -- npx -y @chspower1/mcp-for-redmine@latest
       "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
       "env": {
         "REDMINE_BASE_URL": "https://your.redmine.tld",
-        "REDMINE_API_KEY": "your_api_key_here",
-        "REDMINE_TLS_VERIFY": "false"
+        "REDMINE_API_KEY": "your_api_key_here"
       }
     }
   }
@@ -129,8 +126,7 @@ claude mcp add mcp-for-redmine -- npx -y @chspower1/mcp-for-redmine@latest
       "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
       "env": {
         "REDMINE_BASE_URL": "https://your.redmine.tld",
-        "REDMINE_API_KEY": "your_api_key_here",
-        "REDMINE_TLS_VERIFY": "false"
+        "REDMINE_API_KEY": "your_api_key_here"
       }
     }
   }
@@ -155,7 +151,6 @@ args = ["-y", "@chspower1/mcp-for-redmine@latest"]
 [mcp_servers.env]
 REDMINE_BASE_URL = "https://your.redmine.tld"
 REDMINE_API_KEY = "your_api_key_here"
-REDMINE_TLS_VERIFY = "false"
 ```
 
 </details>
@@ -203,8 +198,7 @@ REDMINE_TLS_VERIFY = "false"
         "args": ["-y", "@chspower1/mcp-for-redmine@latest"],
         "env": {
           "REDMINE_BASE_URL": "https://your.redmine.tld",
-          "REDMINE_API_KEY": "your_api_key_here",
-          "REDMINE_TLS_VERIFY": "false"
+          "REDMINE_API_KEY": "your_api_key_here"
         }
       }
     }
