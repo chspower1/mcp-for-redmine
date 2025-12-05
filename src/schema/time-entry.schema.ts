@@ -19,7 +19,7 @@ export type RedmineTimeEntry = z.infer<typeof RedmineTimeEntrySchema>;
 // API Request Schemas
 const TimeEntryRequestObjectSchema = z.object({
   issue_id: z.number().optional(),
-  project_id: z.union([z.string(), z.number()]).optional(),
+  project_id: z.coerce.string().optional(),
   spent_on: z.string().optional().describe("Date the time was spent, e.g., 'YYYY-MM-DD'."),
   hours: z.number(),
   activity_id: z.number().optional(),
@@ -45,12 +45,12 @@ export type UpdateTimeEntryPayload = z.infer<typeof UpdateTimeEntryRequestSchema
 
 // Tool Parameter Schemas
 export const ListTimeEntriesToolSchema = z.object({
-  project_id: z
-    .union([z.string(), z.number()])
+  project_id: z.coerce
+    .string()
     .optional()
     .describe("Filter by project ID or identifier."),
-  user_id: z
-    .union([z.string(), z.number()])
+  user_id: z.coerce
+    .string()
     .optional()
     .describe("Filter by user ID or 'me' for current user."),
   issue_id: z.string().optional().describe("Filter by issue ID."),

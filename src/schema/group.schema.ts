@@ -56,7 +56,7 @@ export const ListGroupsToolSchema = z.object({
 });
 
 export const GetGroupToolSchema = z.object({
-  id: z.union([z.string(), z.number()]).describe("The numeric ID of the group to retrieve."),
+  id: z.coerce.string().describe("The numeric ID of the group to retrieve."),
   include: z
     .string()
     .optional()
@@ -77,30 +77,30 @@ export const CreateGroupToolSchema = GroupRequestObjectSchema.extend({
 
 export const UpdateGroupToolSchema = UpdateGroupRequestSchema.shape.group
   .extend({
-    id: z.union([z.string(), z.number()]).describe("The numeric ID of the group to update."),
+    id: z.coerce.string().describe("The numeric ID of the group to update."),
   })
   .describe(
     "Updates an existing group. Requires administrator privileges. API Status: Alpha (v2.1)."
   );
 
 export const DeleteGroupToolSchema = z.object({
-  id: z
-    .union([z.string(), z.number()])
+  id: z.coerce
+    .string()
     .describe(
       "The numeric ID of the group to delete. Warning: This action is permanent and affects user permissions."
     ),
 });
 
 export const AddUserToGroupToolSchema = z.object({
-  group_id: z
-    .union([z.string(), z.number()])
+  group_id: z.coerce
+    .string()
     .describe("The numeric ID of the group to add the user to."),
   user_id: z.number().describe("The numeric ID of the user to add to the group."),
 });
 
 export const RemoveUserFromGroupToolSchema = z.object({
-  group_id: z
-    .union([z.string(), z.number()])
+  group_id: z.coerce
+    .string()
     .describe("The numeric ID of the group to remove the user from."),
   user_id: z.number().describe("The numeric ID of the user to remove from the group."),
 });

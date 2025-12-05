@@ -29,8 +29,8 @@ export type RedmineFile = z.infer<typeof RedmineFileSchema>;
 // Tool Parameter Schemas for Files API (v3.4 Alpha)
 export const ListFilesToolSchema = z
   .object({
-    project_id: z
-      .union([z.string(), z.number()])
+    project_id: z.coerce
+      .string()
       .describe("The numeric ID or string identifier of the project to list files for"),
   })
   .describe("Retrieve all files uploaded to a project's Files section with metadata");

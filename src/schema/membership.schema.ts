@@ -14,7 +14,7 @@ export type RedmineMembership = z.infer<typeof RedmineMembershipSchema>;
 
 // Tool Parameter Schemas
 export const ListProjectMembershipsToolSchema = z.object({
-  projectId: z.union([z.string(), z.number()]).describe("The ID or identifier of the project."),
+  projectId: z.coerce.string().describe("The ID or identifier of the project."),
   offset: z.number().optional().describe("Offset for pagination."),
   limit: z.number().optional().describe("Number of memberships to return (default 25, max 100)."),
 });
@@ -24,7 +24,7 @@ export const GetMembershipToolSchema = z.object({
 });
 
 export const CreateProjectMembershipToolSchema = z.object({
-  projectId: z.union([z.string(), z.number()]).describe("The ID or identifier of the project."),
+  projectId: z.coerce.string().describe("The ID or identifier of the project."),
   userId: z.number().describe("The ID of the user to add."),
   roleIds: z.array(z.number()).describe("An array of role IDs to assign to the user."),
 });

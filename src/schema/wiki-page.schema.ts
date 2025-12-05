@@ -76,16 +76,16 @@ export type CreateOrUpdateWikiPagePayload = z.infer<typeof CreateOrUpdateWikiPag
 // Tool Parameter Schemas for Wiki Pages API (v2.2 Alpha)
 export const ListWikiPagesToolSchema = z
   .object({
-    project_id: z
-      .union([z.string(), z.number()])
+    project_id: z.coerce
+      .string()
       .describe("The numeric ID or string identifier of the project to list wiki pages for"),
   })
   .describe("Retrieve all wiki page titles for a project");
 
 export const GetWikiPageToolSchema = z
   .object({
-    project_id: z
-      .union([z.string(), z.number()])
+    project_id: z.coerce
+      .string()
       .describe("The numeric ID or string identifier of the project"),
     title: z.string().describe("The title of the wiki page to retrieve"),
     version: z
@@ -100,16 +100,16 @@ export const GetWikiPageToolSchema = z
   .describe("Retrieve a specific wiki page with full content and metadata");
 
 export const CreateOrUpdateWikiPageToolSchema = WikiPageRequestObjectSchema.extend({
-  project_id: z
-    .union([z.string(), z.number()])
+  project_id: z.coerce
+    .string()
     .describe("The numeric ID or string identifier of the project"),
   title: z.string().describe("The title of the wiki page to create or update"),
 }).describe("Create a new wiki page or update existing page content with version control");
 
 export const DeleteWikiPageToolSchema = z
   .object({
-    project_id: z
-      .union([z.string(), z.number()])
+    project_id: z.coerce
+      .string()
       .describe("The numeric ID or string identifier of the project"),
     title: z.string().describe("The title of the wiki page to permanently delete"),
   })

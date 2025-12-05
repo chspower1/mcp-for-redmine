@@ -90,7 +90,7 @@ const IssueUploadTokenSchema = z.object({
 });
 
 const CreateIssueRequestObjectSchema = z.object({
-  project_id: z.union([z.string(), z.number()]),
+  project_id: z.coerce.string(),
   subject: z.string(),
   description: z.string().optional(),
   tracker_id: z.number().optional(),
@@ -133,17 +133,17 @@ export const GetIssueToolSchema = z.object({
 });
 
 export const ListIssuesToolSchema = z.object({
-  project_id: z
-    .union([z.string(), z.number()])
+  project_id: z.coerce
+    .string()
     .optional()
     .describe("Filter by project ID or identifier."),
   tracker_id: z.number().optional().describe("Filter by tracker ID."),
-  status_id: z
-    .union([z.string(), z.number()])
+  status_id: z.coerce
+    .string()
     .optional()
     .describe("Filter by status ID. Can be a specific ID or 'open', 'closed', or '*' for all."),
-  assigned_to_id: z
-    .union([z.string(), z.number()])
+  assigned_to_id: z.coerce
+    .string()
     .optional()
     .describe("Filter by assigned user ID. Can be a specific ID or 'me' for the current user."),
   priority_id: z.number().optional().describe("Filter by priority ID."),
@@ -175,8 +175,8 @@ export const ListIssuesToolSchema = z.object({
 });
 
 export const CreateIssueToolSchema = CreateIssueRequestObjectSchema.extend({
-  project_id: z
-    .union([z.string(), z.number()])
+  project_id: z.coerce
+    .string()
     .describe("The numeric ID or string identifier of the project."),
 }).describe("Creates a new issue.");
 

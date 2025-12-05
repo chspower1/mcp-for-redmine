@@ -36,8 +36,8 @@ export type UpdateIssueCategoryPayload = z.infer<typeof UpdateIssueCategoryReque
 // Tool Parameter Schemas for Issue Categories API (v1.3 Alpha)
 export const ListIssueCategoriesToolSchema = z
   .object({
-    project_id: z
-      .union([z.string(), z.number()])
+    project_id: z.coerce
+      .string()
       .describe("The numeric ID or string identifier of the project to list issue categories for"),
   })
   .describe("Retrieve all issue categories configured for a specific project");
@@ -51,8 +51,8 @@ export const GetIssueCategoryToolSchema = z
   .describe("Retrieve detailed information about a specific issue category");
 
 export const CreateIssueCategoryToolSchema = IssueCategoryRequestObjectSchema.extend({
-  project_id: z
-    .union([z.string(), z.number()])
+  project_id: z.coerce
+    .string()
     .describe("The numeric ID or string identifier of the project to create the category in"),
 }).describe("Create a new issue category for organizing and classifying project issues");
 

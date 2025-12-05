@@ -51,9 +51,7 @@ export type UpdateProjectPayload = z.infer<typeof UpdateProjectRequestSchema>;
 
 // Tool Parameter Schemas
 export const GetProjectToolSchema = z.object({
-  id: z
-    .union([z.string(), z.number()])
-    .describe("The numeric ID or string identifier of the project."),
+  id: z.coerce.string().describe("The numeric ID or string identifier of the project."),
   include: z
     .string()
     .optional()
@@ -75,19 +73,17 @@ export const CreateProjectToolSchema = CreateProjectRequestSchema.shape.project.
 });
 
 export const UpdateProjectToolSchema = CreateProjectToolSchema.partial().extend({
-  id: z.union([z.string(), z.number()]).describe("The ID or identifier of the project to update."),
+  id: z.coerce.string().describe("The ID or identifier of the project to update."),
 });
 
 export const ArchiveProjectToolSchema = z.object({
-  id: z.union([z.string(), z.number()]).describe("The ID or identifier of the project to archive."),
+  id: z.coerce.string().describe("The ID or identifier of the project to archive."),
 });
 
 export const UnarchiveProjectToolSchema = z.object({
-  id: z
-    .union([z.string(), z.number()])
-    .describe("The ID or identifier of the project to unarchive."),
+  id: z.coerce.string().describe("The ID or identifier of the project to unarchive."),
 });
 
 export const DeleteProjectToolSchema = z.object({
-  id: z.union([z.string(), z.number()]).describe("The ID or identifier of the project to delete."),
+  id: z.coerce.string().describe("The ID or identifier of the project to delete."),
 });

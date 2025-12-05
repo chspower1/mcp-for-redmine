@@ -49,21 +49,21 @@ export type UpdateVersionPayload = z.infer<typeof UpdateVersionRequestSchema>;
 // Tool Parameter Schemas for Versions API (v1.3 Alpha)
 export const ListVersionsToolSchema = z
   .object({
-    project_id: z
-      .union([z.string(), z.number()])
+    project_id: z.coerce
+      .string()
       .describe("The numeric ID or string identifier of the project to list versions for"),
   })
   .describe("Retrieve all versions for a project including shared versions from other projects");
 
 export const GetVersionToolSchema = z
   .object({
-    id: z.string().describe("The numeric ID of the version to retrieve detailed information for"),
+    id: z.coerce.string().describe("The numeric ID of the version to retrieve detailed information for"),
   })
   .describe("Retrieve detailed information about a specific version including sharing settings");
 
 export const CreateVersionToolSchema = VersionRequestObjectSchema.extend({
-  project_id: z
-    .union([z.string(), z.number()])
+  project_id: z.coerce
+    .string()
     .describe("The numeric ID or string identifier of the project to create the version in"),
 }).describe("Create a new version for project milestone tracking and issue organization");
 
